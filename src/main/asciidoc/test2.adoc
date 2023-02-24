@@ -1,0 +1,1 @@
+include::jQA:ConceptsAndConstraints[report_path = "src/main/resources/jqassistant-report.xml", filter = "jmolecules-ddd:AggregateRootExtend"]

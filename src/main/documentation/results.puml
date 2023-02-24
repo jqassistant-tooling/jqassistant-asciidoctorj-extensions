@@ -1,0 +1,57 @@
+@startuml
+
+interface ExecutableRules {
+    id
+    description
+    status
+    severity
+    duration
+}
+
+class Groups {
+
+}
+
+class Group {
+    id
+    date?
+    duration
+}
+
+class ConceptRepo {
+    Concept getConcept(id)
+    List<Concepts> getConcepts(status = "all", severity = "all")
+}
+
+class Concept {
+
+}
+
+class ConstraintRepo {
+    Constraint getConstraint(id)
+    List<Constraints> getConstraints(status = "all", severity = "all")
+}
+
+class Constraint {
+
+}
+
+class Result {
+
+}
+
+ExecutableRules <|-- Concept
+ExecutableRules <|-- Constraint
+
+
+Groups *- Group
+
+Group "1"-->"*" Group
+Group "1"-->"*" ExecutableRules
+
+ConceptRepo *- Concept
+Constraint -* ConstraintRepo
+
+ExecutableRules o-"1" Result
+
+Concept -[hidden]> Constraint

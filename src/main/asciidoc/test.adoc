@@ -1,0 +1,1 @@
+include::jQA:Summary[status = "success", report_path = "src/main/resources/jqassistant-report.xml"]

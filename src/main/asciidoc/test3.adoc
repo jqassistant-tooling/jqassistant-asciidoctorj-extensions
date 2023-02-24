@@ -1,0 +1,17 @@
+.Description 1 (Status=SUCCESS, SEVERITY=MAJOR)
+|===
+| Column 1 | Column 2
+
+| Value 1
+| Value 2
+
+|===
+
+.Description 1
+|===
+| Column 1 | Column 2
+
+| Value 1
+| Value 2
+
+|===

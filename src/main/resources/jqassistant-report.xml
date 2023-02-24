@@ -2491,7 +2491,7 @@
         <concept id="spring-component:Configuration">
           <description>Labels all types annotated with "@org.springframework.context.annotation.Configuration" with
             "Spring", "Configuration", "Component" and "Injectable".
-          </description>
+        </description>
           <result>
             <columns count="1" primary="Configuration">
               <column primary="true">Configuration</column>

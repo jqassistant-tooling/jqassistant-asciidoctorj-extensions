@@ -1,4 +1,4 @@
-package org.jqassistant.contrib.asciidoctorj;
+package org.jqassistant.contrib.asciidoctorj.xmlparsing;
 
 import java.io.File;
 import java.io.FileInputStream;

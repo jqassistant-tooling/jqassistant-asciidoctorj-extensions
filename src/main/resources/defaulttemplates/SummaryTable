@@ -1,0 +1,6 @@
+|===
+|Id |Description |Severity |Status
+<#list concepts_or_constraints as concept_or_constraint>
+    |${concept_or_constraint.id} |${concept_or_constraint.description} |${concept_or_constraint.severity} |${concept_or_constraint.status}
+</#list>
+|===
