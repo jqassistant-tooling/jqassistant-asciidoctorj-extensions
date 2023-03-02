@@ -1,6 +1,5 @@
 package org.jqassistant.contrib.asciidoctorj.xmlparsing;
 
-import org.jqassistant.contrib.asciidoctorj.reportrepo.ReportRepo;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
 import org.jqassistant.schema.report.v1.*;
 
@@ -21,33 +20,43 @@ public class ReportParser {
     /**
      * fills the given ResultRepo with data from xml
      *
-     * @param repo            the repo that will be filled
      * @param fileDestination the place where the underlying xml is located
      */
-    public void parseReportXml(ReportRepo repo, String fileDestination) {
+    public ParsedReport parseReportXml(String fileDestination) {
         ReportReader reportReader = ReportReader.getInstance();
         JqassistantReport report = reportReader.read(new File(fileDestination));
 
-        parseReport(repo, report);
+        return parseReport(report);
     }
 
-    private void parseReport(ReportRepo repo, JqassistantReport report) {
+    /**
+     * fills the given ResultRepo with data JqassistantReport
+     *
+     * @param report the from ReportReader received report
+     */
+    private ParsedReport parseReport(JqassistantReport report) {
         List<ReferencableRuleType> nodes = report.getGroupOrConceptOrConstraint();
+        ParsedReport parsedReport = new ParsedReport();
 
         for (ReferencableRuleType node : nodes) {
-            parseNode(repo, node);
+            parseNode(parsedReport, node);
         }
+
+        return parsedReport;
     }
 
-    private Rule parseNode(ReportRepo repo, ReferencableRuleType node) {
+    /**
+     * fills the given ResultRepo the content of a node
+     */
+    private Rule parseNode(ParsedReport parsedReport, ReferencableRuleType node) {
         Rule rule = null;
 
         if (node instanceof GroupType) {
 
             GroupType groupNode = (GroupType) node;
 
-            Group group = parseGroup(repo, groupNode);
-            repo.addGroup(group);
+            Group group = parseGroup(parsedReport, groupNode);
+            parsedReport.addGroup(group);
 
             rule = group;
 
@@ -55,7 +64,7 @@ public class ReportParser {
 
             Concept concept = parseConcept((ConceptType) node);
 
-            repo.addConcept(concept);
+            parsedReport.addConcept(concept);
 
             rule = concept;
 
@@ -63,7 +72,7 @@ public class ReportParser {
 
             Constraint constraint = parseConstraint((ConstraintType) node);
 
-            repo.addConstraint(constraint);
+            parsedReport.addConstraint(constraint);
 
             rule = constraint;
         }
@@ -71,12 +80,15 @@ public class ReportParser {
         return rule;
     }
 
-    private Group parseGroup(ReportRepo repo, GroupType groupNode) {
+    /**
+     * give back the parsed Result from conceptType (node)
+     */
+    private Group parseGroup(ParsedReport parsedReport, GroupType groupNode) {
         Group.GroupBuilder groupBuilder = Group.builder().id(groupNode.getId()).duration(groupNode.getDuration());
 
         List<ReferencableRuleType> childNodes = groupNode.getGroupOrConceptOrConstraint();
         for (ReferencableRuleType childNode : childNodes) {
-            Rule rule = parseNode(repo, childNode);
+            Rule rule = parseNode(parsedReport, childNode);
 
             if (rule instanceof Group) groupBuilder.subGroup((Group) rule);
             else if (rule instanceof Concept) groupBuilder.nestedConcept((Concept) rule);
@@ -86,28 +98,23 @@ public class ReportParser {
         return groupBuilder.build();
     }
 
+    /**
+     * give back the parsed Result from conceptType (node)
+     */
     private Concept parseConcept(ConceptType conceptNode) {
-        return Concept.builder()
-                .status(conceptNode.getStatus().value())
-                .severity(conceptNode.getSeverity().getValue())
-                .id(conceptNode.getId())
-                .description(conceptNode.getDescription())
-                .duration(conceptNode.getDuration())
-                .result(parseResult(conceptNode.getResult()))
-                .build();
+        return Concept.builder().status(conceptNode.getStatus().value()).severity(conceptNode.getSeverity().getValue()).id(conceptNode.getId()).description(conceptNode.getDescription()).duration(conceptNode.getDuration()).result(parseResult(conceptNode.getResult())).build();
     }
 
+    /**
+     * give back the parsed Result from constraintType (node)
+     */
     private Constraint parseConstraint(ConstraintType constraintNode) {
-        return Constraint.builder()
-                .status(constraintNode.getStatus().value())
-                .severity(constraintNode.getSeverity().getValue())
-                .id(constraintNode.getId())
-                .description(constraintNode.getDescription())
-                .duration(constraintNode.getDuration())
-                .result(parseResult(constraintNode.getResult()))
-                .build();
+        return Constraint.builder().status(constraintNode.getStatus().value()).severity(constraintNode.getSeverity().getValue()).id(constraintNode.getId()).description(constraintNode.getDescription()).duration(constraintNode.getDuration()).result(parseResult(constraintNode.getResult())).build();
     }
 
+    /**
+     * give back the parsed Result from resultType (node)
+     */
     private Result parseResult(ResultType resultNode) {
 
         if (resultNode == null) return Result.EMPTY_RESULT;

@@ -1,0 +1,9 @@
+|===
+<#list result_header as header_elem> |${header_elem} </#list>
+
+<#list result_lines as line>
+    <#list line as cell>
+        |${cell}
+    </#list>
+</#list>
+|===

@@ -1,16 +1,16 @@
 package org.jqassistant.contrib.asciidoctorj.includeprocessor;
 
 import org.jqassistant.contrib.asciidoctorj.freemarker.TemplateLoader;
+import org.jqassistant.contrib.asciidoctorj.includeprocessor.attributes.ProcessAttributes;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.ReportRepo;
-import org.jqassistant.contrib.asciidoctorj.xmlparsing.ReportParser;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SummaryTable extends AbstractIncludeProcessor {
+public class SummaryTable extends AbstractIncludeProcessor<Object> {
 
-    public SummaryTable(ReportRepo repo, ReportParser parser, TemplateLoader templateLoader) {
-        super(repo, parser, templateLoader, "jQA:Summary", "SummaryTable");
+    public SummaryTable(ReportRepo repo, TemplateLoader templateLoader) {
+        super(repo, templateLoader, "Summary", "SummaryTable");
     }
 
     /**
@@ -19,9 +19,9 @@ public class SummaryTable extends AbstractIncludeProcessor {
      * @return rootElement for structure
      */
     @Override
-    Object fillDataStructure(Map<String, Object> attributes) {
+    Object fillDataStructure(ProcessAttributes attributes) {
         Map<String, Object> root = new HashMap<>();
-        root.put("concepts_or_constraints", repo.findConstraints());
+        root.put("concepts_or_constraints", repo.findConstraints(attributes));
 
         return root;
     }

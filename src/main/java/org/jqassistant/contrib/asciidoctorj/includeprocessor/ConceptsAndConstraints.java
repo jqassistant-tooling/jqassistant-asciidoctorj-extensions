@@ -1,16 +1,18 @@
 package org.jqassistant.contrib.asciidoctorj.includeprocessor;
 
 import org.jqassistant.contrib.asciidoctorj.freemarker.TemplateLoader;
+import org.jqassistant.contrib.asciidoctorj.includeprocessor.attributes.ProcessAttributes;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.ReportRepo;
-import org.jqassistant.contrib.asciidoctorj.xmlparsing.ReportParser;
+import org.jqassistant.contrib.asciidoctorj.reportrepo.model.ExecutableRule;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class ConceptsAndConstraints extends AbstractIncludeProcessor {
+public class ConceptsAndConstraints extends AbstractIncludeProcessor<Map<String, List<ExecutableRule>>> {
 
-    public ConceptsAndConstraints(ReportRepo repo, ReportParser parser, TemplateLoader templateLoader) {
-        super(repo, parser, templateLoader, "jQA:ConceptsAndConstraints", "ConceptsAndConstraints");
+    public ConceptsAndConstraints(ReportRepo repo, TemplateLoader templateLoader) {
+        super(repo, templateLoader, "ConceptsAndConstraints", "ConceptsAndConstraints");
     }
 
     /**
@@ -19,9 +21,9 @@ public class ConceptsAndConstraints extends AbstractIncludeProcessor {
      * @return rootElement for structure
      */
     @Override
-    Object fillDataStructure(Map<String, Object> attributes) {
-        Map<String, Object> root = new HashMap<>();
-        root.put("concepts_or_constraints", repo.findConceptsAndConstraints(attributes)); //TODO: if empty, put dataset that indicates no matchings
+    Map<String, List<ExecutableRule>> fillDataStructure(ProcessAttributes attributes) {
+        Map<String, List<ExecutableRule>> root = new HashMap<>();
+        root.put("concepts_or_constraints", repo.findConceptsAndConstraints(attributes));
 
         return root;
     }

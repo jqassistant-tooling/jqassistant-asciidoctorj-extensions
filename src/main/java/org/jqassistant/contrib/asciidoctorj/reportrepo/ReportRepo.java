@@ -1,24 +1,17 @@
 package org.jqassistant.contrib.asciidoctorj.reportrepo;
 
-import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Concept;
-import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Constraint;
-import org.jqassistant.contrib.asciidoctorj.reportrepo.model.ExecutableRule;
-import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Group;
+import org.jqassistant.contrib.asciidoctorj.includeprocessor.attributes.ProcessAttributes;
+import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ReportRepo {
 
     boolean isInitialized();
 
-    void addGroup(Group group);
+    List<Constraint> findConstraints(ProcessAttributes attributes);
 
-    void addConcept(Concept concept);
+    List<ExecutableRule> findConceptsAndConstraints(ProcessAttributes attributes);
 
-    void addConstraint(Constraint constraint);
-
-    List<Constraint> findConstraints();
-
-    List<ExecutableRule> findConceptsAndConstraints(Map<String, Object> attributes);
+    Result findConceptResult(ProcessAttributes attributes);
 }
