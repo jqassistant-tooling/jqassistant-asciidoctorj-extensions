@@ -16,7 +16,7 @@ import javax.xml.stream.util.StreamReaderDelegate;
 
 import com.sun.xml.bind.api.JAXBRIContext;
 import lombok.extern.slf4j.Slf4j;
-import org.jqassistant.schema.report.v1.JqassistantReport;
+import org.jqassistant.schema.report.v2.JqassistantReport;
 
 /**
  * Reads jQA report files using JAXB.

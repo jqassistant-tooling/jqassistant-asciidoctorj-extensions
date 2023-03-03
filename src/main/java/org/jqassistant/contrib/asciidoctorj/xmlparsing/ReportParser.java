@@ -1,7 +1,7 @@
 package org.jqassistant.contrib.asciidoctorj.xmlparsing;
 
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
-import org.jqassistant.schema.report.v1.*;
+import org.jqassistant.schema.report.v2.*;
 
 import java.io.File;
 import java.util.ArrayList;
