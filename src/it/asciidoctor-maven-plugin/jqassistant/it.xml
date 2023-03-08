@@ -1,0 +1,34 @@
+<jqassistant-rules xmlns="http://schema.jqassistant.org/rule/v1.11" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://schema.jqassistant.org/rule/v1.11 https://schema.jqassistant.org/rule/jqassistant-rule-v1.11.xsd">
+
+    <group id="default">
+        <includeConcept refId="it:*"/>
+        <includeConstraint refId="it:*"/>
+    </group>
+
+    <concept id="it:Table">
+        <description>
+            Creates a result table.
+        </description>
+        <cypher><![CDATA[
+            MATCH
+                    (:Maven:Project)-[:CREATES]->(artifact:Artifact)
+            RETURN
+              artifact.group as GroupId, artifact.name as ArtifactId, artifact.version as Version, artifact.type as Type
+            ]]></cypher>
+    </concept>
+
+    <concept id="it:CSVReport">
+        <description>
+            Creates a CSV report.
+        </description>
+        <cypher><![CDATA[
+            MATCH
+                    (:Maven:Project)-[:CREATES]->(artifact:Artifact)
+            RETURN
+                    artifact.group as GroupId, artifact.name as ArtifactId, artifact.version as Version, artifact.type as Type
+            ]]></cypher>
+        <report type="csv"/>
+    </concept>
+
+</jqassistant-rules>
