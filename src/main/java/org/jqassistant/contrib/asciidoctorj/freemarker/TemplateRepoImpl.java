@@ -32,7 +32,7 @@ public class TemplateRepoImpl implements TemplateRepo {
     public Template findTemplate(ProcessAttributes attributes, String templateName) {
         if(!cfg.isTemplateLoaderExplicitlySet()) {
             if(attributes.getTemplatesPath() != null) {
-                customLoader = new ClassTemplateLoader(getClass(), attributes.getTemplatesPath());
+                customLoader = new ClassTemplateLoader(getClass().getClassLoader(), attributes.getTemplatesPath());
                 MultiTemplateLoader mtl = new MultiTemplateLoader(new TemplateLoader[] {customLoader, defaultLoader});
                 cfg.setTemplateLoader(mtl);
             }
@@ -44,7 +44,7 @@ public class TemplateRepoImpl implements TemplateRepo {
         try {
             return cfg.getTemplate(templateName);
         } catch (Exception e) {
-            throw new IllegalStateException("Template \"" + templateName + "\" couldn't neither be found in custom Template location nor in default Template location");
+            throw new IllegalStateException("No valid Template with name \"" + templateName + "\" found neither in custom template location nor in default template location");
         }
     }
 

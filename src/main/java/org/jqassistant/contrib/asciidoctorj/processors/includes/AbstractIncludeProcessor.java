@@ -56,6 +56,8 @@ public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProce
                 .templatesPath((String) document.getAttributes().get("templates-path"))
                 .build();
 
+        //System.out.println(attributes.getTemplatesPath());
+
         ROOT_STRUCT root = fillDataStructure(attributes); //TODO: generic from subclass
 
         reader.pushInclude(fillTemplates(root, attributes),

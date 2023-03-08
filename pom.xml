@@ -109,7 +109,7 @@
                 <configuration>
                     <attributes>
                         <report-path>
-                            src/test/resources/jqassistant-report.xml
+                            src/test/resources/demo-report.xml
                         </report-path>
                         <templates-path>
                             custom

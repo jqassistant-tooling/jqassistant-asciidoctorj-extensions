@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 public class RulesRoot {
     @Singular
-    List<ResultRoot> conceptResults;
+    List<RuleRoot> concepts;
     @Singular
-    List<ResultRoot> constraintResults;
+    List<RuleRoot> constraints;
 }

@@ -17,7 +17,6 @@
             </result>
             <reports>
                 <image label="Ricki Boy">test.jpeg</image>
-                <image label="other">link/to/picture</image>
                 <link label="CSV">https://youtu.be/dQw4w9WgXcQ</link>
             </reports>
             <status>success</status>

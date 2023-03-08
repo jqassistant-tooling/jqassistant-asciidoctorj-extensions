@@ -45,13 +45,13 @@ public class ReportParserTest {
 
         Reports reports = testConcept.getReports();
         assert (reports.getImages().size() == 2);
-        assert (reports.getImages().get(0).getLabel().equals("plantuml"));
+        assert (reports.getImages().get(0).getLabel().equals("Ricki Boy"));
         assert (reports.getImages().get(1).getLabel().equals("other"));
-        assert (reports.getImages().get(0).getLink().equals("test"));
+        assert (reports.getImages().get(0).getLink().equals("test.jpeg"));
         assert (reports.getImages().get(1).getLink().equals("link/to/picture"));
         assert (reports.getLinks().size() == 1);
         assert (reports.getLinks().get(0).getLabel().equals("CSV"));
-        assert (reports.getLinks().get(0).getLink().equals("test"));
+        assert (reports.getLinks().get(0).getLink().equals("https://youtu.be/dQw4w9WgXcQ"));
     }
 
     @Test
