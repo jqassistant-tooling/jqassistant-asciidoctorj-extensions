@@ -40,6 +40,11 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <attributes>
+                        <report-path>${project.build.directory}/jqassistant/jqassistant-report.xml</report-path>
+                    </attributes>
+                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>@project.groupId@</groupId>
