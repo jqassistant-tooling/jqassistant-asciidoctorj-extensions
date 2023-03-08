@@ -1,0 +1,10 @@
+= Report
+
+== Summary
+
+include::jQAssistant:Summary[]
+
+== Rules
+
+include::jQAssistant:Rules[]
+

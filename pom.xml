@@ -2,9 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <properties>
-        <asciidoctorj.version>2.5.4</asciidoctorj.version>
-    </properties>
 
     <parent>
         <groupId>org.jqassistant.contrib.common</groupId>
@@ -41,6 +38,12 @@
         <url>https://github.com/jqassistant-contrib/jqassistant-asciidoctorj-extensions</url>
     </scm>
 
+    <properties>
+        <asciidoctorj.version>2.5.4</asciidoctorj.version>
+        <asciidoctor.maven.version>2.2.2</asciidoctor.maven.version>
+        <jqassistant.version>2.0.0-M4</jqassistant.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.buschmais.jqassistant.core</groupId>
@@ -53,7 +56,7 @@
         <dependency>
             <groupId>com.buschmais.jqassistant.core</groupId>
             <artifactId>schemata</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>${jqassistant.version}</version>
         </dependency>
         <dependency>
             <groupId>org.asciidoctor</groupId>
@@ -102,6 +105,7 @@
 
     <build>
         <plugins>
+            <!--
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -133,6 +137,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -140,6 +145,31 @@
                     <source>11</source>
                     <target>11</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-invoker-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>install</goal>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+                            <localRepositoryPath>${project.build.directory}/it-repository</localRepositoryPath>
+                            <settingsFile>src/it/settings.xml</settingsFile>
+                            <mergeUserSettings>true</mergeUserSettings>
+                            <goals>
+                                <goal>verify -e</goal>
+                            </goals>
+                            <streamLogs>true</streamLogs>
+                            <postBuildHookScript>verify</postBuildHookScript>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
