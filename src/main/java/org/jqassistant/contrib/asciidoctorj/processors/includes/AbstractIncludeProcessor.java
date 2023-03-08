@@ -1,42 +1,36 @@
-package org.jqassistant.contrib.asciidoctorj.includeprocessor;
+package org.jqassistant.contrib.asciidoctorj.processors.includes;
 
-import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.PreprocessorReader;
-import org.jqassistant.contrib.asciidoctorj.freemarker.TemplateLoader;
-import org.jqassistant.contrib.asciidoctorj.includeprocessor.attributes.ProcessAttributes;
+import org.jqassistant.contrib.asciidoctorj.freemarker.TemplateRepo;
+import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.ReportRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.List;
 import java.util.Map;
 
 
 public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProcessor {
-    Logger logger = LoggerFactory.getLogger("include_processor");
-
-    public static final String PREFIX = "jQA:";
+    public static final String PREFIX = "jQAssistant:";
 
     ReportRepo repo;
 
-    TemplateLoader templateLoader;
-    Template template;
+    List<String> templateNames;
+    TemplateRepo templateRepo;
 
     String target;
-    String templateName;
 
 
-    public AbstractIncludeProcessor(ReportRepo reportRepository, TemplateLoader templateLoader, String target, String templateName) {
+    public AbstractIncludeProcessor(ReportRepo reportRepository, TemplateRepo templateRepo, String target, List<String> templateNames) {
         this.repo = reportRepository;
-        this.templateLoader = templateLoader;
-        this.template = templateLoader.loadTemplate(templateName);
+        this.templateRepo = templateRepo;
+        this.templateNames = templateNames;
         this.target = target;
-        this.templateName = templateName;
     }
 
     @Override
@@ -56,34 +50,15 @@ public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProce
         }
 
         ProcessAttributes attributes = ProcessAttributes.builder()
-                .idWildcard((String) attributeMap.get("id"))
+                .conceptIdFilter((String) attributeMap.get("concept"))
+                .constraintIdFilter((String) attributeMap.get("constraint"))
                 .reportPath((String) document.getAttributes().get("report-path"))
                 .templatesPath((String) document.getAttributes().get("templates-path"))
                 .build();
 
         ROOT_STRUCT root = fillDataStructure(attributes); //TODO: generic from subclass
 
-        if(root == null) {  //TODO: über boolean mit geben? --> Rest könnte zum Processor passende Fehlermeldung sein
-            reader.pushInclude(fillNoResultTemplate(),
-                    target,
-                    "",
-                    1,
-                    attributeMap);
-            return;
-        } //TODO: maybe use noresult template for each subclass
-
-        if (attributes.getTemplatesPath() != null) {
-            String templateLocation = attributes.getTemplatesPath();
-            templateLoader.setTemplateLocation(templateLocation);
-            try {
-                template = templateLoader.loadTemplate(templateName);
-            } catch (Exception e) {
-                logger.warn("No template with name " + templateName + " found at " + attributes.getTemplatesPath() + "! Defaulting to standard template for " + templateName);
-                //System.out.println("No template with name " + templateName + " found at " + attributeMap.get("templates-path") + "! Defaulting to standard template for " + templateName);
-            }
-        }
-
-        reader.pushInclude(fillTemplate(root),
+        reader.pushInclude(fillTemplates(root, attributes),
                 target,
                 "",
                 1,
@@ -91,20 +66,21 @@ public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProce
     }
 
     /**
-     * Fills the template with the content of root.
-     * If called for first time the to templateName corresponding Template will be loaded and stored for subsequent calls
+     * Fills all templates in "templates" with the content of root.
      *
-     * @param root the data structure the template is filled with
+     * @param root the data structure the templates are filled with
      * @return the from template and root produced String
      */
-    private String fillTemplate(Object root) {
-
+    private String fillTemplates(ROOT_STRUCT root, ProcessAttributes attributes) {
         Writer writer = new StringWriter();
 
-        try {
-            template.process(root, writer);
-        } catch (TemplateException | IOException e) {
-            throw new RuntimeException(e);
+        for (String tName : templateNames) {
+            try {
+                if(root == null) writer.append(fillNoResultTemplate(attributes));
+                else templateRepo.findTemplate(attributes, tName).process(root, writer);
+            } catch (TemplateException | IOException e) {
+                throw new RuntimeException(e); //TODO: sinvolle Fehlermeldung
+            }
         }
 
         return writer.toString();
@@ -113,15 +89,15 @@ public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProce
     /**
      * Fills the template with the content of root.
      * If called for first time the to templateName corresponding Template will be loaded and stored for subsequent calls
+     * possible to overwrite in subclass to make specific no Result
      *
      * @return the from template and root produced String
      */
-    private String fillNoResultTemplate() {
-
+    private String fillNoResultTemplate(ProcessAttributes attributes) {
         Writer writer = new StringWriter();
 
         try {
-            templateLoader.loadTemplate("NoResult").process(null, writer);
+            templateRepo.findTemplate(attributes, "NoResult").process(null, writer);
         } catch (TemplateException | IOException e) {
             throw new RuntimeException(e);
         }

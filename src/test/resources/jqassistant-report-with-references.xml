@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jqassistant-report xmlns="http://schema.jqassistant.org/report/v1.11">
+<jqassistant-report xmlns="http://schema.jqassistant.org/report/v2.0">
     <group id="default" date="2023-02-20T13:18:48">
         <concept id="image-report">
-            <description></description>
+            <description>"Description"</description>
             <result>
                 <columns count="1" primary="Column 1">
                     <column primary="true">Column 1 </column>

@@ -2,7 +2,7 @@ package org.jqassistant.contrib.asciidoctorj.reportrepo;
 
 import com.buschmais.jqassistant.core.rule.api.filter.RuleFilter;
 import lombok.Getter;
-import org.jqassistant.contrib.asciidoctorj.includeprocessor.attributes.ProcessAttributes;
+import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
 import org.jqassistant.contrib.asciidoctorj.xmlparsing.ParsedReport;
 import org.jqassistant.contrib.asciidoctorj.xmlparsing.ReportParser;
@@ -38,50 +38,40 @@ public class ReportRepoImpl implements ReportRepo{
     }
 
     @Override
-    public List<Constraint> findConstraints(ProcessAttributes attributes) {
+    public SortedSet<Concept> findConcepts(ProcessAttributes attributes) {
         initialize(attributes);
 
-        return new ArrayList<>(constraints.values());
+        SortedSet<Concept> conceptSSet = new TreeSet<>(Comparator.comparing(Rule::getId));
+
+        if(attributes.getConceptIdFilter() == null) {
+            return conceptSSet;
+        }
+
+        String id = attributes.getConceptIdFilter();
+
+        conceptSSet.addAll((Collection<Concept>) filterRulesById(concepts, id));
+
+        return conceptSSet;
     }
 
     @Override
-    public List<ExecutableRule> findConceptsAndConstraints(ProcessAttributes attributes) {
+    public SortedSet<Constraint> findConstraints(ProcessAttributes attributes) {
         initialize(attributes);
 
-        List<ExecutableRule> execRules = new ArrayList<>();
-        execRules.addAll((Collection<? extends ExecutableRule>) filterRulesById(concepts, attributes));
-        execRules.addAll((Collection<? extends ExecutableRule>) filterRulesById(constraints, attributes));
+        SortedSet<Constraint> constraintSSet = new TreeSet<>(Comparator.comparing(Rule::getId));
 
-/*      if(filter != null) {
-            Set<String> matchingConceptIds = ruleFilter.match(concepts.keySet(), filter);
-            Set<String> matchingConstraintIds = ruleFilter.match(constraints.keySet(), filter);
+        if(attributes.getConstraintIdFilter() == null) {
+            return constraintSSet;
+        }
 
-            matchingConceptIds.forEach(s -> execRules.add(concepts.get(s)));
-            matchingConstraintIds.forEach(s -> execRules.add(constraints.get(s)));
-        }
-        else {
-            execRules.addAll(concepts.values());
-            execRules.addAll(constraints.values());
-        }
-*/
-        return execRules;
+        String id = attributes.getConstraintIdFilter();
+
+        constraintSSet.addAll((Collection<Constraint>) filterRulesById(constraints, id));
+
+        return constraintSSet;
     }
 
-    @Override
-    public Result findConceptResult(ProcessAttributes attributes) { //TODO: mehrere Results möglich und filter von attributen trennen
-        initialize(attributes);
-
-        List<Concept> concepts = (List<Concept>) filterRulesById(this.concepts, attributes);
-
-        if(concepts.size() == 1) {
-            return concepts.get(0).getResult();
-        }
-
-        return Result.EMPTY_RESULT;
-    }
-
-    private Collection<? extends Rule> filterRulesById(Map<String, ? extends Rule> ruleMap, ProcessAttributes attributes) {
-        String id = attributes.getIdWildcard();
+    private Collection<? extends Rule> filterRulesById(Map<String, ? extends Rule> ruleMap, String id) {
         if(id == null) return ruleMap.values();
 
         Set<String> matchingIds = RULE_FILTER.match(ruleMap.keySet(), id);

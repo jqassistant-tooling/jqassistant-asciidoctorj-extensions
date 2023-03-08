@@ -2,11 +2,12 @@ package org.jqassistant.contrib.asciidoctorj.reportrepo.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Singular;
 
 import java.util.List;
 import java.util.Map;
 
-@Builder
+@Builder(toBuilder = true)
 @Getter
 public class Result {
 
@@ -15,8 +16,8 @@ public class Result {
      */
     public static final Result EMPTY_RESULT = Result.builder().build();
 
+    @Singular
     List<String> columnKeys;
-
+    @Singular
     List<Map<String, String>> rows;
-
 }

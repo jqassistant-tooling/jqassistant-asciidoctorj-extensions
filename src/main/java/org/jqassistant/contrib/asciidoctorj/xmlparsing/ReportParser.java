@@ -4,7 +4,6 @@ import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
 import org.jqassistant.schema.report.v2.*;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,28 +101,42 @@ public class ReportParser {
      * give back the parsed Result from conceptType (node)
      */
     private Concept parseConcept(ConceptType conceptNode) {
-        return Concept.builder().status(conceptNode.getStatus().value()).severity(conceptNode.getSeverity().getValue()).id(conceptNode.getId()).description(conceptNode.getDescription()).duration(conceptNode.getDuration()).result(parseResult(conceptNode.getResult())).build();
+        return Concept.builder()
+                .status(conceptNode.getStatus().value())
+                .severity(conceptNode.getSeverity().getValue())
+                .id(conceptNode.getId())
+                .description(conceptNode.getDescription())
+                .duration(conceptNode.getDuration())
+                .result(parseResult(conceptNode.getResult()))
+                .reports(parseReports(conceptNode.getReports()))
+                .build();
     }
 
     /**
      * give back the parsed Result from constraintType (node)
      */
     private Constraint parseConstraint(ConstraintType constraintNode) {
-        return Constraint.builder().status(constraintNode.getStatus().value()).severity(constraintNode.getSeverity().getValue()).id(constraintNode.getId()).description(constraintNode.getDescription()).duration(constraintNode.getDuration()).result(parseResult(constraintNode.getResult())).build();
+        return Constraint.builder()
+                .status(constraintNode.getStatus().value())
+                .severity(constraintNode.getSeverity().getValue())
+                .id(constraintNode.getId())
+                .description(constraintNode.getDescription())
+                .duration(constraintNode.getDuration())
+                .result(parseResult(constraintNode.getResult()))
+                .reports(parseReports(constraintNode.getReports()))
+                .build();
     }
 
     /**
      * give back the parsed Result from resultType (node)
      */
     private Result parseResult(ResultType resultNode) {
-
         if (resultNode == null) return Result.EMPTY_RESULT;
 
-        List<String> columnKeys = new ArrayList<>();
-        List<Map<String, String>> rows = new ArrayList<>();
+        Result.ResultBuilder builder = Result.builder();
 
         for (ColumnHeaderType column : resultNode.getColumns().getColumn()) {
-            columnKeys.add(column.getValue());
+            builder.columnKey(column.getValue());
         }
 
         for (RowType row : resultNode.getRows().getRow()) {
@@ -131,9 +144,30 @@ public class ReportParser {
             for (ColumnType cell : row.getColumn()) {
                 rowMap.put(cell.getName(), cell.getValue());
             }
-            rows.add(rowMap);
+            builder.row(rowMap);
         }
 
-        return Result.builder().columnKeys(columnKeys).rows(rows).build();
+        return builder.build();
+    }
+
+    /**
+     * give back the parsed Report from reportType (node)
+     */
+    private Reports parseReports(ReportsType reportsNode) {
+        if (reportsNode == null) return Reports.EMPTY_REPORTS;
+
+        Reports.ReportsBuilder reports = Reports.builder();
+
+        for (AbstractReportType imageOrLink : reportsNode.getImageOrLink()) {
+            if(imageOrLink instanceof ImageType) {
+                reports.image(URLWithLabel.builder().label(imageOrLink.getLabel()).link(imageOrLink.getValue()).build());
+            }
+            else if(imageOrLink instanceof LinkType){
+                reports.link(URLWithLabel.builder().label(imageOrLink.getLabel()).link(imageOrLink.getValue()).build());
+
+            }
+        }
+
+        return reports.build();
     }
 }

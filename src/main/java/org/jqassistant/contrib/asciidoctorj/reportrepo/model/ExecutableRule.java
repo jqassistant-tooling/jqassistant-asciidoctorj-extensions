@@ -5,4 +5,5 @@ public interface ExecutableRule extends Rule{
     String getSeverity();
 
     Result getResult();
+    Reports getReports();
 }

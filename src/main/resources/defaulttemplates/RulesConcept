@@ -1,0 +1,33 @@
+<#list conceptResults as result>
+ID: ${result.id}
+
+    <#if result.status == "success">
+icon:check[role="lime"] ${result.description}
+
+        <#if result.hasReports>
+            <#list result.reports.links as labeledLink>
+${labeledLink.link}[${labeledLink.label}]
+
+            </#list>
+            <#list result.reports.images as labeledImage>
+image::${labeledImage.link}[]
+
+            </#list>
+        </#if>
+        <#if !result.hasReports>
+|===
+            <#list result.resultColumnKeys as key>|${key} </#list>
+            <#list result.resultRows as row>
+                <#list row as cell>
+|${cell}
+                </#list>
+            </#list>
+|===
+
+        </#if>
+    </#if>
+    <#if result.status != "success">
+icon:times[role="red"] ${result.description}
+
+    </#if>
+</#list>

@@ -10,4 +10,5 @@ public abstract class AbstractExecutableRule extends AbstractRule implements Exe
     private String severity;
 
     private Result result;
+    private Reports reports;
 }

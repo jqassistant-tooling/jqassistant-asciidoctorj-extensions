@@ -1,3 +1,1 @@
-include::jQA:ConceptResult[id = "adr:ServiceComponent"]
-
-include::jQA:ConceptResult[id = "adr:ServiceCompawdsonent"]
+include::jQAssistant:Rules[concept = "*", constraint = "*"]

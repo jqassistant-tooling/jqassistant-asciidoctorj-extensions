@@ -3,10 +3,11 @@ package org.jqassistant.contrib.asciidoctorj;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
-import org.jqassistant.contrib.asciidoctorj.freemarker.TemplateLoader;
-import org.jqassistant.contrib.asciidoctorj.includeprocessor.ConceptResult;
-import org.jqassistant.contrib.asciidoctorj.includeprocessor.ConceptsAndConstraints;
-import org.jqassistant.contrib.asciidoctorj.includeprocessor.SummaryTable;
+import org.jqassistant.contrib.asciidoctorj.freemarker.TemplateRepo;
+import org.jqassistant.contrib.asciidoctorj.freemarker.TemplateRepoImpl;
+import org.jqassistant.contrib.asciidoctorj.processors.includes.Rules;
+import org.jqassistant.contrib.asciidoctorj.processors.includes.Summary;
+import org.jqassistant.contrib.asciidoctorj.processors.pre.IconEnabler;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.ReportRepo;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.ReportRepoImpl;
 import org.jqassistant.contrib.asciidoctorj.xmlparsing.ReportParser;
@@ -16,12 +17,12 @@ public class ExtensionsLoader implements ExtensionRegistry {
     public void register(Asciidoctor asciidoctor) {
 
         ReportRepo reportRepository = new ReportRepoImpl(ReportParser.getInstance());
-        TemplateLoader templateLoader = new TemplateLoader();
+        TemplateRepo templateRepo = new TemplateRepoImpl();
 
         JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
 
-        javaExtensionRegistry.includeProcessor(new SummaryTable(reportRepository, templateLoader));
-        javaExtensionRegistry.includeProcessor(new ConceptsAndConstraints(reportRepository, templateLoader));
-        javaExtensionRegistry.includeProcessor(new ConceptResult(reportRepository, templateLoader));
+        javaExtensionRegistry.preprocessor(new IconEnabler(templateRepo));
+        javaExtensionRegistry.includeProcessor(new Summary(reportRepository, templateRepo));
+        javaExtensionRegistry.includeProcessor(new Rules(reportRepository, templateRepo));
     }
 }
