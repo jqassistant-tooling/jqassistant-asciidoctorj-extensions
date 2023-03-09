@@ -1,7 +1,6 @@
 package org.jqassistant.contrib.asciidoctorj.freemarker;
 
 import freemarker.cache.ClassTemplateLoader;
-import freemarker.cache.FileTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
@@ -9,8 +8,6 @@ import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.TimeZone;
 
 public class TemplateRepoImpl implements TemplateRepo {
@@ -20,11 +17,7 @@ public class TemplateRepoImpl implements TemplateRepo {
     TemplateLoader defaultLoader;
 
     public TemplateRepoImpl() {
-        try {
-            defaultLoader = new FileTemplateLoader(new File("src/main/resources/defaulttemplates"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        defaultLoader = new ClassTemplateLoader(getClass().getClassLoader(), "defaulttemplates");
         cfg = setupFreemarker();
     }
 
