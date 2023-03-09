@@ -105,19 +105,19 @@
 
     <build>
         <plugins>
-            <!--
+
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
                 <version>2.2.2</version>
                 <configuration>
                     <attributes>
-                        <report-path>
-                            src/test/resources/demo-report.xml
-                        </report-path>
-                        <templates-path>
+                        <jqassistant-report-path>
+                            src/test/resources/jqassistant-report.xml
+                        </jqassistant-report-path>
+                        <jqassistant-templates-path>
                             custom
-                        </templates-path>
+                        </jqassistant-templates-path>
                     </attributes>
                 </configuration>
                 <executions>
@@ -137,7 +137,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -1,15 +1,5 @@
 |===
 |Id |Description |Severity |Status
-|Concepts | | |
-<#list concepts as concept>
-|${concept.id} |${concept.description} |${concept.severity}
-<#if concept.status == "SUCCESS">
-|[green]#${concept.status}#
-</#if>
-<#if concept.status == "FAILURE">
-|[red]#${concept.status}#
-</#if>
-</#list>
 |Constraints | | |
 <#list constraints as constraint>
 |${constraint.id} |${constraint.description} |${constraint.severity}
@@ -18,6 +8,22 @@
 </#if>
 <#if constraint.status == "FAILURE">
 |[red]#${constraint.status}#
+</#if>
+<#if constraint.status == "WARNING">
+|[yellow]#${constraint.status}#
+</#if>
+<#if constraint.status == "SUCCESS" && constraint.status == "FAILURE" && constraint.status != "WARNING">
+|[grey]#${constraint.status}#
+</#if>
+</#list>
+|Concepts | | |
+<#list concepts as concept>
+|${concept.id} |${concept.description} |${concept.severity}
+<#if concept.status == "SUCCESS">
+|[green]#${concept.status}#
+</#if>
+<#if concept.status == "FAILURE">
+|[red]#${concept.status}#
 </#if>
 </#list>
 |===

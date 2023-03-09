@@ -1,5 +1,6 @@
 package org.jqassistant.contrib.asciidoctorj.freemarker.templateroots;
 
+import io.smallrye.common.constraint.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
@@ -12,7 +13,9 @@ import java.util.Map;
 
 @Builder
 @Getter
-public class RuleRoot {
+public class RuleRoot implements Comparable<RuleRoot>{
+
+    private static String statSuccess = "SUCCESS", statWarn = "WARNING", statFail = "FAILURE", statSkipped = "SKIPPED";
 
     private String id;
     private String description;
@@ -54,5 +57,20 @@ public class RuleRoot {
         builder.reports(rule.getReports());
 
         return builder.build();
+    }
+
+    @Override
+    public int compareTo(@NotNull RuleRoot other) {
+        if(this.getStatus().equals(other.getStatus())) {
+            return this.id.compareTo(other.id);
+        }
+        else if(this.getStatus().equals(statFail)) return -1;
+        else if(other.getStatus().equals(statFail)) return 1;
+        else if(this.getStatus().equals(statWarn)) return -1;
+        else if(other.getStatus().equals(statWarn)) return 1;
+        else if(this.getStatus().equals(statSuccess)) return -1;
+        else if(other.getStatus().equals(statSuccess)) return 1;
+
+        throw new IllegalStateException("Rule Root should be comparable; statuses were: " + this.status + " " + other.status);
     }
 }

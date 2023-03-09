@@ -7,6 +7,7 @@ import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.PreprocessorReader;
 import org.jqassistant.contrib.asciidoctorj.freemarker.TemplateRepo;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
+import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributesFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -23,12 +24,7 @@ public class IconEnabler extends Preprocessor {
 
     @Override
     public void process(Document document, PreprocessorReader reader) {
-        if(document.getAttributes().get("templates-path") != null && !(document.getAttributes().get("templates-path") instanceof String)) {
-            throw new IllegalStateException("You're templates folder location isn't a String! Please set the destination of you're template folder to a propper String via the global document attributes for you're asciidoctor.");
-        }
-        ProcessAttributes attributes = ProcessAttributes.builder()
-                .templatesPath((String) document.getAttributes().get("templates-path"))
-                .build();
+        ProcessAttributes attributes = ProcessAttributesFactory.createProcessAttributesPre(document);
 
         Writer writer = new StringWriter();
         Template template = templateRepo.findTemplate(attributes, templateName);
@@ -36,7 +32,7 @@ public class IconEnabler extends Preprocessor {
         try {
             template.process(null, writer);
         } catch (TemplateException | IOException e) {
-            throw new RuntimeException(e); //TODO: sinvolle Fehlermeldung
+            throw new RuntimeException(e);
         }
 
         List<String> lines = reader.readLines();

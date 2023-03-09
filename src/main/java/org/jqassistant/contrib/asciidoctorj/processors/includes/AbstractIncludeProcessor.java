@@ -6,6 +6,7 @@ import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.PreprocessorReader;
 import org.jqassistant.contrib.asciidoctorj.freemarker.TemplateRepo;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
+import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributesFactory;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.ReportRepo;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 
 public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProcessor {
-    public static final String PREFIX = "jQAssistant:";
+    private static final String PREFIX = "jQAssistant:";
 
     ReportRepo repo;
 
@@ -40,25 +41,9 @@ public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProce
 
     @Override
     public void process(Document document, PreprocessorReader reader, String target, Map<String, Object> attributeMap) {
-        //System.out.println(document.getAttributes().keySet().toString() + attributeMap.keySet());
+        ProcessAttributes attributes = ProcessAttributesFactory.createProcessAttributesInclude(document, attributeMap);
 
-        if(!(document.getAttributes().get("report-path") instanceof String)) {
-            throw new IllegalStateException("You're report xml file location isn't set properly! Please set the destination of you're jqassistant-report.xml via the global document attributes for you're asciidoctor.");
-        }
-        if(document.getAttributes().get("templates-path") != null && !(document.getAttributes().get("templates-path") instanceof String)) {
-            throw new IllegalStateException("You're templates folder location isn't a String! Please set the destination of you're template folder to a propper String via the global document attributes for you're asciidoctor.");
-        }
-
-        ProcessAttributes attributes = ProcessAttributes.builder()
-                .conceptIdFilter((String) attributeMap.get("concept"))
-                .constraintIdFilter((String) attributeMap.get("constraint"))
-                .reportPath((String) document.getAttributes().get("report-path"))
-                .templatesPath((String) document.getAttributes().get("templates-path"))
-                .build();
-
-        //System.out.println(attributes.getTemplatesPath());
-
-        ROOT_STRUCT root = fillDataStructure(attributes); //TODO: generic from subclass
+        ROOT_STRUCT root = fillDataStructure(attributes);
 
         reader.pushInclude(fillTemplates(root, attributes),
                 target,
@@ -81,7 +66,7 @@ public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProce
                 if(root == null) writer.append(fillNoResultTemplate(attributes));
                 else templateRepo.findTemplate(attributes, tName).process(root, writer);
             } catch (TemplateException | IOException e) {
-                throw new RuntimeException(e); //TODO: sinvolle Fehlermeldung
+                throw new RuntimeException(e);
             }
         }
 

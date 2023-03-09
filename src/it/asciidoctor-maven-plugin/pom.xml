@@ -42,8 +42,8 @@
                 </executions>
                 <configuration>
                     <attributes>
-                        <report-path>${project.build.directory}/jqassistant/jqassistant-report.xml</report-path>
-                        <templates-path>custom</templates-path>
+                        <jqassistant-report-path>${project.build.directory}/jqassistant/jqassistant-report.xml</jqassistant-report-path>
+                        <jqassistant-templates-path>custom</jqassistant-templates-path>
                     </attributes>
                 </configuration>
                 <dependencies>
@@ -54,8 +54,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
         </plugins>
 	</build>
-
 </project>

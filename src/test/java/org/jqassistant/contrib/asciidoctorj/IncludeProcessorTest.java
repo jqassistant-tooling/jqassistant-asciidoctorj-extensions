@@ -17,7 +17,7 @@ public class IncludeProcessorTest {
     @BeforeAll
     static void init() {
         asciidoctor = Asciidoctor.Factory.create();
-        opt = Options.builder().attributes(Attributes.builder().attribute("templates-path", "testtemplates").attribute("report-path", "src/test/resources/testing-xml/test-report.xml").build()).build();
+        opt = Options.builder().attributes(Attributes.builder().attribute("jqassistant-templates-path", "testtemplates").attribute("jqassistant-report-path", "src/test/resources/testing-xml/test-report.xml").build()).build();
     }
 
     @Test

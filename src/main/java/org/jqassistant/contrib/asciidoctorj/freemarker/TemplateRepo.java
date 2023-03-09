@@ -11,6 +11,6 @@ public interface TemplateRepo {
      * @param templateName file name of the wanted template
      * @return the Template with corresponding name; either loaded from custom location or default
      */
-    Template findTemplate(ProcessAttributes attributes, String templateName); //TODO: load with custom maven dependencies
+    Template findTemplate(ProcessAttributes attributes, String templateName);
 
 }

@@ -4,13 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
 
-import java.util.List;
+import java.util.SortedSet;
 
 @Builder
 @Getter
 public class RulesRoot {
     @Singular
-    List<RuleRoot> concepts;
+    SortedSet<RuleRoot> concepts;
     @Singular
-    List<RuleRoot> constraints;
+    SortedSet<RuleRoot> constraints;
 }
