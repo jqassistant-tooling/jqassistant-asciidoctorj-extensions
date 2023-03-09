@@ -1,5 +1,5 @@
 <#list constraints as rule>
-== ${rule.id}
+=== ${rule.id}
 ${rule.description}
 
 <#if rule.status == "SUCCESS">

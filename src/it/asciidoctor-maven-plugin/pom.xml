@@ -43,6 +43,7 @@
                 <configuration>
                     <attributes>
                         <report-path>${project.build.directory}/jqassistant/jqassistant-report.xml</report-path>
+                        <templates-path>custom</templates-path>
                     </attributes>
                 </configuration>
                 <dependencies>

@@ -1,5 +1,5 @@
 <#list concepts as rule>
-== ${rule.id}
+=== ${rule.id}
 ${rule.description}
 
 <#if rule.status == "SUCCESS">
@@ -23,7 +23,7 @@ image::${labeledImage.link}[${labeledImage.label}]
 </#if>
 <#if !rule.hasReports && rule.hasResult>
 |===
-<#list rule.resultRows as key>|${key} </#list>
+<#list rule.resultColumnKeys as key>|${key} </#list>
 <#list rule.resultRows as row>
 <#list row as cell>
 |${cell}

@@ -44,6 +44,7 @@ public class ReportRepoImpl implements ReportRepo{
         SortedSet<Concept> conceptSSet = new TreeSet<>(Comparator.comparing(Rule::getId));
 
         if(attributes.getConceptIdFilter() == null) {
+            conceptSSet.addAll(concepts.values());
             return conceptSSet;
         }
 
@@ -61,6 +62,7 @@ public class ReportRepoImpl implements ReportRepo{
         SortedSet<Constraint> constraintSSet = new TreeSet<>(Comparator.comparing(Rule::getId));
 
         if(attributes.getConstraintIdFilter() == null) {
+            constraintSSet.addAll(constraints.values());
             return constraintSSet;
         }
 

@@ -10,7 +10,6 @@ import org.jqassistant.contrib.asciidoctorj.xmlparsing.ReportParser;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -48,7 +47,7 @@ public class ReportRepoTest {
 
     @Test
     void findConceptsById() {
-        ProcessAttributes attributes2 = ProcessAttributes.builder().reportPath("mock-report").conceptIdFilter("TestConceptId2").build();
+        ProcessAttributes attributes2 = ProcessAttributes.builder().reportPath("mock-report").conceptIdFilter("TestConceptId2").constraintIdFilter("").build();
 
         assert(testRepo.findConcepts(attributes2).size() == 1);
         assert(testRepo.findConcepts(attributes2).contains(tce2));
@@ -61,6 +60,6 @@ public class ReportRepoTest {
 
         assert(testRepo.findConstraints(attributes3).size() == 1);
         assert(testRepo.findConstraints(attributes3).contains(tca1));
-        assert(testRepo.findConcepts(attributes3).size() == 0);
+        assert(testRepo.findConcepts(attributes3).size() == 2);
     }
 }
