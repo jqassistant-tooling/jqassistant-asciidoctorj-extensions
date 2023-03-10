@@ -11,8 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class IncludeProcessorTest {
-    static Asciidoctor asciidoctor;
-    static Options opt;
+    private static Asciidoctor asciidoctor;
+    private static Options opt;
 
     @BeforeAll
     static void init() {

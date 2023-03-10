@@ -15,10 +15,10 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 public class ReportRepoTest {
-    static ReportRepo testRepo;
+    private static ReportRepo testRepo;
 
-    static Concept tce1, tce2;
-    static Constraint tca1;
+    private static Concept tce1, tce2;
+    private static Constraint tca1;
 
     @BeforeAll
     static void init() {

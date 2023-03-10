@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 public class ReportParserTest {
-    static ParsedReport report;
+    private static ParsedReport report;
 
     @BeforeAll
     static void init() {
