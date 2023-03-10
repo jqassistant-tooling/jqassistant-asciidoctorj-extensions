@@ -116,7 +116,7 @@
                             src/test/resources/jqassistant-report.xml
                         </jqassistant-report-path>
                         <jqassistant-templates-path>
-                            custom
+
                         </jqassistant-templates-path>
                     </attributes>
                 </configuration>

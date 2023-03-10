@@ -1,29 +1,11 @@
 |===
 |Id |Description |Severity |Status
-|Constraints | | |
 <#list constraints as constraint>
-|${constraint.id} |${constraint.description} |${constraint.severity}
-<#if constraint.status == "SUCCESS">
-|[green]#${constraint.status}#
-</#if>
-<#if constraint.status == "FAILURE">
-|[red]#${constraint.status}#
-</#if>
-<#if constraint.status == "WARNING">
-|[yellow]#${constraint.status}#
-</#if>
-<#if constraint.status == "SUCCESS" && constraint.status == "FAILURE" && constraint.status != "WARNING">
-|[grey]#${constraint.status}#
-</#if>
+|icon:wrench[] ${constraint.id} |${constraint.description} |${constraint.severity}
+<#if constraint.status == "SUCCESS">|[green]</#if><#if constraint.status == "FAILURE">|[red]</#if><#if constraint.status == "WARNING">|[yellow]</#if><#if constraint.status != "SUCCESS" && constraint.status != "FAILURE" && constraint.status != "WARNING">|[grey]</#if>#${constraint.status}#
 </#list>
-|Concepts | | |
 <#list concepts as concept>
-|${concept.id} |${concept.description} |${concept.severity}
-<#if concept.status == "SUCCESS">
-|[green]#${concept.status}#
-</#if>
-<#if concept.status == "FAILURE">
-|[red]#${concept.status}#
-</#if>
+|icon:cog[] ${concept.id} |${concept.description} |${concept.severity}
+<#if concept.status == "SUCCESS">|[green]</#if><#if concept.status == "FAILURE">|[red]</#if><#if concept.status == "WARNING">|[yellow]</#if><#if concept.status != "SUCCESS" && concept.status != "FAILURE" && concept.status != "WARNING">|[grey]</#if>#${concept.status}#
 </#list>
 |===

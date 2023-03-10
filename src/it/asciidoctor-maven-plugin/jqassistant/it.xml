@@ -31,4 +31,45 @@
         <report type="csv"/>
     </concept>
 
+    <constraint id="it:UndefinedComponentDependency">
+        <description>
+            There must be no undefined dependency between components.
+        </description>
+        <cypher><![CDATA[
+            MATCH
+                (c1:Component:Artifact)-[:DEPENDS_ON_COMPONENT]->(c2:Component:Artifact)
+            WHERE NOT
+                (c1)-[:DEFINES_DEPENDENCY]->(c2)
+            WITH
+                c1, c2
+            MATCH
+                (c1)-[:CONTAINS]->(t1:Type),
+                (c2)-[:CONTAINS]->(t2:Type),
+                (t1)-[dependsOn:DEPENDS_ON]->(t2)
+            RETURN
+                c1 as Dependent, c2 as InvalidDependency, t1 as DependentType, t2 as DependencyType, dependsOn.weight as Weight
+            ]]></cypher>
+        <report type="csv"/>
+    </constraint>
+
+    <constraint id="it:ComponentDependency">
+        <description>
+            There must be no dependency between components.
+        </description>
+        <cypher><![CDATA[
+            MATCH
+                (c:ContextMapper:ContextMap{name: 'CWAToBeMap', state: 'TO_BE'}),
+                (c)-[:SHOWS]->(cM1:ContextMapper:BoundedContext),
+                (c)-[:SHOWS]->(cM2:ContextMapper:BoundedContext),
+                (bC1:JMolecules:BoundedContext)-[:IMPLEMENTS]->(cM1),
+                (bC2:JMolecules:BoundedContext)-[:IMPLEMENTS]->(cM2),
+                (bC1)-[:DEPENDS_ON]->(bC2)
+            WHERE NOT
+                (cM1)-[:DEFINES_DEPENDENCY]->(cM2)
+            RETURN
+                bC1 AS Source, bC2 AS Target
+            ]]></cypher>
+        <report type="csv"/>
+    </constraint>
+
 </jqassistant-rules>

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Singular;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.ExecutableRule;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Reports;
+import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Result;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,6 @@ public class RuleRoot implements Comparable<RuleRoot>{
 
     private boolean hasReports, hasResult;
 
-    @Singular
     private List<String> resultColumnKeys;
     @Singular
     private List<List<String>> resultRows;
@@ -38,11 +38,13 @@ public class RuleRoot implements Comparable<RuleRoot>{
         builder.status(rule.getStatus().toUpperCase());
         builder.severity(rule.getSeverity().toUpperCase());
 
-        List<String> resultKeys = rule.getResult().getColumnKeys();
+        Result result = rule.getResult();
+        if(result == null) throw new NullPointerException("Results of rules should never be null! Instead they should be Result.EMPTY_RESULT.");
 
-        if(resultKeys != null) {
+        if(result != Result.EMPTY_RESULT) {
+            List<String> resultKeys = rule.getResult().getColumnKeys();
+
             builder.resultColumnKeys(resultKeys);
-
             for (Map<String, String> row : rule.getResult().getRows()) {
                 List<String> rowContent = new ArrayList<>();
                 for (String key : resultKeys) {
@@ -53,6 +55,7 @@ public class RuleRoot implements Comparable<RuleRoot>{
             builder.hasResult = true;
         }
 
+        if(rule.getReports() == null) throw new NullPointerException("Reports of rules should never be null! Instead they should be Reports.EMPTY_RESULT.");
         if(rule.getReports() != Reports.EMPTY_REPORTS) builder.hasReports = true;
         builder.reports(rule.getReports());
 
