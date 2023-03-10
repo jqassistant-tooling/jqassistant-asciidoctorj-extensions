@@ -30,7 +30,7 @@ public class RuleRoot implements Comparable<RuleRoot>{
 
     private Reports reports;
 
-    public static RuleRoot ruleToRuleRoot(ExecutableRule rule) {
+    public static RuleRoot createRuleRoot(ExecutableRule rule) {
         RuleRootBuilder builder = builder();
 
         builder.id(rule.getId());

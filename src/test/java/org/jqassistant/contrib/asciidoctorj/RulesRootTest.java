@@ -43,23 +43,23 @@ public class RulesRootTest {
                 .result(res).reports(reps).build();
 
         rulesRoot = RulesRoot.builder()
-                .concept(RuleRoot.ruleToRuleRoot(tce1))
-                .concept(RuleRoot.ruleToRuleRoot(tce2))
-                .concept(RuleRoot.ruleToRuleRoot(tce3))
-                .constraint(RuleRoot.ruleToRuleRoot(tca2))
-                .constraint(RuleRoot.ruleToRuleRoot(tca1))
+                .concept(RuleRoot.createRuleRoot(tce1))
+                .concept(RuleRoot.createRuleRoot(tce2))
+                .concept(RuleRoot.createRuleRoot(tce3))
+                .constraint(RuleRoot.createRuleRoot(tca2))
+                .constraint(RuleRoot.createRuleRoot(tca1))
                 .build();
     }
 
     @Test
     void testSortingInRulesRoot() {
         assert(rulesRoot.getConcepts().size() == 3);
-        assert(areRuleRootsEqual(rulesRoot.getConcepts().first(), RuleRoot.ruleToRuleRoot(tce3)));
-        assert(areRuleRootsEqual(rulesRoot.getConcepts().last(), RuleRoot.ruleToRuleRoot(tce1)));
+        assert(areRuleRootsEqual(rulesRoot.getConcepts().first(), RuleRoot.createRuleRoot(tce3)));
+        assert(areRuleRootsEqual(rulesRoot.getConcepts().last(), RuleRoot.createRuleRoot(tce1)));
 
         assert(rulesRoot.getConstraints().size() == 2);
-        assert(areRuleRootsEqual(rulesRoot.getConstraints().first(), RuleRoot.ruleToRuleRoot(tca2)));
-        assert(areRuleRootsEqual(rulesRoot.getConstraints().last(), RuleRoot.ruleToRuleRoot(tca1)));
+        assert(areRuleRootsEqual(rulesRoot.getConstraints().first(), RuleRoot.createRuleRoot(tca2)));
+        assert(areRuleRootsEqual(rulesRoot.getConstraints().last(), RuleRoot.createRuleRoot(tca1)));
     }
 
     @Test

@@ -1,15 +1,20 @@
 <#list concepts as rule>
-=== ${rule.id}
-${rule.description}
-
+.${rule.id}
+****
 <#if rule.status == "SUCCESS">
-icon:check[role="lime"] Status: ${rule.status}, Severity: ${rule.severity}
-
+TIP: ${rule.description} +
+Status: [green]#${rule.status}#, Severity: ${rule.severity}
+<#elseif rule.status == "WARNING">
+WARNING: ${rule.description} +
+Status: [yellow]#${rule.status}#, Severity: ${rule.severity}
+<#elseif rule.status == "FAILURE">
+CAUTION: ${rule.description} +
+Status: [red]#${rule.status}#, Severity: ${rule.severity}
+<#else>
+NOTE: ${rule.description} +
+Status: [grey]#${rule.status}#, Severity: ${rule.severity}
 </#if>
-<#if rule.status != "SUCCESS">
-icon:times[role="red"] Status: ${rule.status}, Severity: ${rule.severity}
 
-</#if>
 <#if rule.hasReports>
 <#list rule.reports.links as labeledLink>
 link:${labeledLink.link}[${labeledLink.label}]
@@ -20,8 +25,7 @@ link:${labeledLink.link}[${labeledLink.label}]
 image::${labeledImage.link}[${labeledImage.label}]
 
 </#list>
-</#if>
-<#if !rule.hasReports && rule.hasResult>
+<#elseif rule.hasResult>
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list>
 <#list rule.resultRows as row>
@@ -31,4 +35,5 @@ image::${labeledImage.link}[${labeledImage.label}]
 </#list>
 |===
 </#if>
+****
 </#list>

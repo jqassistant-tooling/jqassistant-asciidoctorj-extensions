@@ -27,12 +27,12 @@ public class Summary extends AbstractIncludeProcessor<RulesRoot> {
 
         for (Concept concept :
                 repo.findConcepts(attributes)) {
-            rootBuilder.concept(RuleRoot.ruleToRuleRoot(concept));
+            rootBuilder.concept(RuleRoot.createRuleRoot(concept));
         }
 
         for (Constraint constraint :
                 repo.findConstraints(attributes)) {
-            rootBuilder.constraint(RuleRoot.ruleToRuleRoot(constraint));
+            rootBuilder.constraint(RuleRoot.createRuleRoot(constraint));
         }
 
         return rootBuilder.build();
