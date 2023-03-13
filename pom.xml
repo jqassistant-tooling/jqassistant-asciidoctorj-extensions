@@ -98,7 +98,6 @@
             <groupId>org.asciidoctor</groupId>
             <artifactId>asciidoctorj</artifactId>
             <version>${asciidoctorj.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -116,11 +115,8 @@
                 <configuration>
                     <attributes>
                         <jqassistant-report-path>
-                            src/test/resources/jqassistant-report.xml
+                            src/test/resources/demo-report.xml
                         </jqassistant-report-path>
-                        <jqassistant-templates-path>
-
-                        </jqassistant-templates-path>
                     </attributes>
                 </configuration>
                 <executions>
@@ -149,6 +145,15 @@
                     <target>11</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <failOnWarnings>false</failOnWarnings>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-invoker-plugin</artifactId>

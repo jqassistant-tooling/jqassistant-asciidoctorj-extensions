@@ -1,1 +1,0 @@
-include::jQA:ConceptsAndConstraints[id = "jmolecules-ddd:AggregateRootExtend"]

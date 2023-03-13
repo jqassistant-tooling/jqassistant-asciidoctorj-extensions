@@ -12,11 +12,13 @@ import org.jqassistant.contrib.asciidoctorj.reportrepo.ReportRepo;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProcessor {
+public abstract class AbstractIncludeProcessor<T> extends IncludeProcessor {
     private static final String PREFIX = "jQAssistant:";
 
     ReportRepo repo;
@@ -27,7 +29,7 @@ public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProce
     String target;
 
 
-    public AbstractIncludeProcessor(ReportRepo reportRepository, TemplateRepo templateRepo, String target, List<String> templateNames) {
+    protected AbstractIncludeProcessor(ReportRepo reportRepository, TemplateRepo templateRepo, String target, List<String> templateNames) {
         this.repo = reportRepository;
         this.templateRepo = templateRepo;
         this.templateNames = templateNames;
@@ -43,7 +45,7 @@ public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProce
     public void process(Document document, PreprocessorReader reader, String target, Map<String, Object> attributeMap) {
         ProcessAttributes attributes = ProcessAttributesFactory.createProcessAttributesInclude(document, attributeMap);
 
-        ROOT_STRUCT root = fillDataStructure(attributes);
+        T root = fillDataStructure(attributes);
 
         reader.pushInclude(fillTemplates(root, attributes),
                 target,
@@ -58,35 +60,26 @@ public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProce
      * @param root the data structure the templates are filled with
      * @return the from template and root produced String
      */
-    private String fillTemplates(ROOT_STRUCT root, ProcessAttributes attributes) {
+    private String fillTemplates(T root, ProcessAttributes attributes) {
         Writer writer = new StringWriter();
 
-        for (String tName : templateNames) {
-            try {
-                if(root == null) writer.append(fillNoResultTemplate(attributes));
-                else templateRepo.findTemplate(attributes, tName).process(root, writer);
-            } catch (TemplateException | IOException e) {
-                throw new RuntimeException(e);
-            }
+        List<String> tNames;
+
+        if(root == null) {
+            tNames = List.of("NoResult");
+        }
+        else {
+            tNames = templateNames;
         }
 
-        return writer.toString();
-    }
-
-    /**
-     * Fills the template with the content of root.
-     * If called for first time the to templateName corresponding Template will be loaded and stored for subsequent calls
-     * possible to overwrite in subclass to make specific no Result
-     *
-     * @return the from template and root produced String
-     */
-    private String fillNoResultTemplate(ProcessAttributes attributes) {
-        Writer writer = new StringWriter();
-
-        try {
-            templateRepo.findTemplate(attributes, "NoResult").process(null, writer);
-        } catch (TemplateException | IOException e) {
-            throw new RuntimeException(e);
+        for (String tName : tNames) {
+            try {
+                templateRepo.findTemplate(attributes, tName).process(root, writer);
+            } catch (TemplateException e) {
+                throw new RuntimeException("You're \"" + tName + "\"-template seems to have an error in it's calls to the data structure! Refer to manual. " , e); //TODO: link zu manual
+            } catch (IOException e) {
+                throw new RuntimeException("You're \"" + tName + "\"-template file can not be parsed to a freemarker template!" , e);
+            }
         }
 
         return writer.toString();
@@ -98,5 +91,5 @@ public abstract class AbstractIncludeProcessor<ROOT_STRUCT> extends IncludeProce
      * @param attributes give the attributes parsed into the include call in adoc
      * @return rootElement for data-structure
      */
-    abstract ROOT_STRUCT fillDataStructure(ProcessAttributes attributes);
+    abstract T fillDataStructure(ProcessAttributes attributes);
 }

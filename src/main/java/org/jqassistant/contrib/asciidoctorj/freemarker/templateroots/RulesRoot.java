@@ -20,9 +20,6 @@ public class RulesRoot {
      * not currently functional
      */
     public void sortingStrategy() {
-        Comparator compConcepts = null;
-        Comparator compConstraints = null;
-
         concepts = new TreeSet<>(RuleRoot::compareTo);
         constraints = new TreeSet<>(RuleRoot::compareTo);
     }

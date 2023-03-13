@@ -1,5 +1,6 @@
 <#list constraints as rule>
-.${rule.id}
+[#jqassistant_${rule.id}]
+=== ${rule.id}
 ****
 <#if rule.status == "SUCCESS">
 TIP: ${rule.description} +

@@ -1,0 +1,11 @@
+|===
+|Id |Description |Severity |Status
+<#list constraints as constraint>
+|${constraint.id} |${constraint.description} |${constraint.severity}
+<#if constraint.status == "SUCCESS">|[green]<#elseif constraint.status == "FAILURE">|[red]<#elseif constraint.status == "WARNING">|[yellow]<#else>|[grey]</#if>#${constraint.status}#
+</#list>
+<#list concepts as concept>
+|${concept.id} |${concept.description} |${concept.severity}
+<#if concept.status == "SUCCESS">|[green]<#elseif concept.status == "FAILURE">|[red]<#elseif concept.status == "WARNING">|[yellow]<#else>|[grey]</#if>#${concept.status}#
+</#list>
+|===

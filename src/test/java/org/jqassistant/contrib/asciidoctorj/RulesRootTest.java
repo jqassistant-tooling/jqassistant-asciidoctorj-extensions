@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 
-public class RulesRootTest {
+class RulesRootTest {
 
     private static Concept tce1, tce3;
     private static Constraint tca1, tca2;

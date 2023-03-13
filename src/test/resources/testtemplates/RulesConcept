@@ -1,6 +1,5 @@
 <#list concepts as rule>
-[#jqassistant_${rule.id}]
-=== ${rule.id}
+.${rule.id}
 ****
 <#if rule.status == "SUCCESS">
 TIP: ${rule.description} +

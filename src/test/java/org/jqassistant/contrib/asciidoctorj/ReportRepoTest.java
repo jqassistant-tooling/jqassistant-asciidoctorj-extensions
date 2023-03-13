@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-public class ReportRepoTest {
+class ReportRepoTest {
     private static ReportRepo testRepo;
 
     private static Concept tce1, tce2;

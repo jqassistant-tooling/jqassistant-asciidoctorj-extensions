@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class IncludeProcessorTest {
+class IncludeProcessorTest {
     private static Asciidoctor asciidoctor;
     private static Options opt;
 
@@ -26,14 +26,59 @@ public class IncludeProcessorTest {
     void testRulesInclude() throws IOException {
         //System.out.println(asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept-e*\", constraint = \"*\"]", opt));
         //System.out.println(asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept\"]", opt));
-        //assert(Files.readString(Paths.get("src/test/resources/testing-xml-convert-results/IncludeProcessorTest-expected-res1.html")).equals(asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept-e*\", constraint = \"*\"]", opt)));
-        //assert(Files.readString(Paths.get("src/test/resources/testing-xml-convert-results/IncludeProcessorTest-expected-res2.html")).equals(asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept\"]", opt)));
-        assertThat(asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept\"]", opt)).contains("test-concept");
+
+        String result = asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept-e*\", constraint = \"*\"]", opt);
+
+        result = assertIsPartOfAndShorten(result, "test-concept-empty-result");
+        result = assertIsPartOfAndShorten(result, "Test description");
+        result = assertIsPartOfAndShorten(result, "Status: <span class=\"green\">SUCCESS</span>, Severity: INFO");
+        result = assertIsPartOfAndShorten(result, "test-constraint-empty-result");
+        result = assertIsPartOfAndShorten(result, "Test description 2");
+        result = assertIsPartOfAndShorten(result, "Status: <span class=\"red\">FAILURE</span>, Severity: MAJOR");
+        result = assertIsPartOfAndShorten(result, "Column 1");
+        result = assertIsPartOfAndShorten(result, "Column 2");
+        result = assertIsPartOfAndShorten(result, "test-cell 11");
+        result = assertIsPartOfAndShorten(result, "test-cell 12");
+        result = assertIsPartOfAndShorten(result, "test-cell 21");
+        assertIsPartOfAndShorten(result, "test-cell 22");
+
+        result = asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept\"]", opt);
+
+        result = assertIsPartOfAndShorten(result, "test-concept");
+        result = assertIsPartOfAndShorten(result, "Test description");
+        result = assertIsPartOfAndShorten(result, "Status: <span class=\"green\">SUCCESS</span>, Severity: INFO");
+        result = assertIsPartOfAndShorten(result, "<a href=\"https://youtu.be/dQw4w9WgXcQ\">CSV</a>");
+        result = assertIsPartOfAndShorten(result, "<img src=\"test.jpeg\" alt=\"Ricki Boy\">");
+        result = assertIsPartOfAndShorten(result, "Ricki Boy");
+        result = assertIsPartOfAndShorten(result, "<img src=\"link/to/picture\" alt=\"other\">");
+        result = assertIsPartOfAndShorten(result, "other");
+        assertIsPartOfAndShorten(result, "test-constraint-empty-result");
     }
 
     @Test
     void testSummaryInclude() throws IOException {
-        //System.out.println(asciidoctor.convert("include::jQAssistant:Summary[concept = \"test-concept\", constraint = \"*\"]" , opt));
-        assert(Files.readString(Paths.get("src/test/resources/testing-xml-convert-results/IncludeProcessorTest-expected-res3.html")).equals(asciidoctor.convert("include::jQAssistant:Summary[concept = \"test-concept\", constraint = \"*\"]" , opt)));
+        System.out.println(asciidoctor.convert("include::jQAssistant:Summary[concept = \"test-concept\", constraint = \"*\"]" , opt));
+
+        String result = asciidoctor.convert("include::jQAssistant:Summary[concept = \"test-concept\", constraint = \"*\"]" , opt);
+
+        result = assertIsPartOfAndShorten(result, "table");
+        result = assertIsPartOfAndShorten(result, "Id");
+        result = assertIsPartOfAndShorten(result, "Description");
+        result = assertIsPartOfAndShorten(result, "Severity");
+        result = assertIsPartOfAndShorten(result, "Status");
+        result = assertIsPartOfAndShorten(result, "test-constraint-empty-result");
+        result = assertIsPartOfAndShorten(result, "Test description 2");
+        result = assertIsPartOfAndShorten(result, "MAJOR");
+        result = assertIsPartOfAndShorten(result, "<span class=\"red\">FAILURE</span>");
+        result = assertIsPartOfAndShorten(result, "test-concept");
+        result = assertIsPartOfAndShorten(result, "Test description");
+        result = assertIsPartOfAndShorten(result, "INFO");
+        result = assertIsPartOfAndShorten(result, "<span class=\"green\">SUCCESS</span>");
+        assertIsPartOfAndShorten(result, "/table");
+    }
+
+    private String assertIsPartOfAndShorten(String text, String sequence) {
+        assertThat(text).contains(sequence);
+        return text.substring(text.indexOf(sequence)).substring(sequence.length());
     }
 }

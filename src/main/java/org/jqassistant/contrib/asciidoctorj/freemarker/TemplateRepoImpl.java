@@ -43,14 +43,14 @@ public class TemplateRepoImpl implements TemplateRepo {
 
     private Configuration setupFreemarker() {
         /*Setup Freemarker Configuration*/
-        Configuration cfg = new Configuration(Configuration.VERSION_2_3_32);
-        cfg.setDefaultEncoding("UTF-8");
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-        cfg.setLogTemplateExceptions(false);
-        cfg.setWrapUncheckedExceptions(true);
-        cfg.setFallbackOnNullLoopVariable(false);
-        cfg.setSQLDateAndTimeTimeZone(TimeZone.getDefault());
+        Configuration temporaryCfg = new Configuration(Configuration.VERSION_2_3_32);
+        temporaryCfg.setDefaultEncoding("UTF-8");
+        temporaryCfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+        temporaryCfg.setLogTemplateExceptions(false);
+        temporaryCfg.setWrapUncheckedExceptions(true);
+        temporaryCfg.setFallbackOnNullLoopVariable(false);
+        temporaryCfg.setSQLDateAndTimeTimeZone(TimeZone.getDefault());
 
-        return cfg;
+        return temporaryCfg;
     }
 }

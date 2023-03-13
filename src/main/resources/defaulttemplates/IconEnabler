@@ -1,2 +1,2 @@
-:icons: font
-:icon-set: fas
+:icons: image
+:iconsdir: src/main/resources/icons

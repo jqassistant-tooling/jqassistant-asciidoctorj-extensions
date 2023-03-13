@@ -31,8 +31,10 @@ public class IconEnabler extends Preprocessor {
 
         try {
             template.process(null, writer);
-        } catch (TemplateException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (TemplateException e) {
+            throw new RuntimeException("You're \"" + templateName + "\"-template seems to have an error in it's calls to the data structure! Refer to manual. " , e); //TODO: link zu manual
+        } catch (IOException e) {
+            throw new RuntimeException("You're \"" + templateName + "\"-template file can not be parsed to a freemarker template!" , e);
         }
 
         List<String> lines = reader.readLines();

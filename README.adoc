@@ -1,0 +1,85 @@
+= jqassistant-asciidoctor-extension
+
+The `jqassistant-asciidoctor-extension` is an asciidoctor extension that offers a convenient way of creating a jQAssistant report inside the asciidoctor pipeline.
+The plugin is using the https://docs.asciidoctor.org/asciidoctorj/latest/extensions/extensions-introduction/[asciidoctor extension api] to hook into the https://asciidoctor.org/[asciidoctor] pipeline.
+
+You can use it to export an jQA-report directly to html, pdf, ePub and other with asciidoctor compatible document types.
+
+== Using the jqassistant-asciidoctor-extension
+
+As an example of how to use the plugin, you can take a look at the following maven plugin configuration for the `asciidoctor-maven-plugin`.
+
+[source, xml]
+----
+<!-- Define the following inside the build part of your pom.xml -->
+
+<plugins>
+    <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <version>2.2.2</version>
+        <configuration>
+            <attributes>
+                <jqassistant-report-path>
+                    path/to/your/jqassistant-report.xml <1>
+                </jqassistant-report-path>
+                <jqassistant-templates-path>
+                    your-custom-template-jar-or-folder-name <2>
+                </jqassistant-templates-path>
+            </attributes>
+        </configuration>
+        <executions>
+            <execution>
+                <id>output-html</id>
+                <phase>verify</phase>
+                <goals>
+                    <goal>process-asciidoc</goal>
+                </goals>
+            </execution>
+        </executions>
+        <dependencies>
+            <dependency> <3>
+                <groupId>org.jqassistant.contrib.asciidoctorj</groupId>
+                <artifactId>jqassistant-asciidoctorj-extensions</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </plugin>
+</plugins>
+----
+<1> place the path to your jqassistant-report.xml here
+<2> OPTIONAL: If you want to define your own templates, put the jar or folder with your freemarker templates inside your resource folder. Add this attribute with the name of your jar or folder. For mor information refer to section <<Defining your own templates>>.
+<3> the dependency needed by asciidoctor for processing your jQAssistant includes inside your asciidoc files. (just leave it like that)
+
+== Create your report using the extension
+
+In general there are two possible macros (called includes) you can use with the `jqassistant-asciidoctor-extension`.
+
+1. `include::jQAssistant:Summary[]` will give you a summary table of all constraints and concepts with their id, description, severity and status
+2. `include::jQAssistant:Rules[]` will give you a detailed list of all constraints and concepts with all their available information
+
+For both of them you have the option to assign two additional attributes:
+
+* concept
+* constraint
+
+Both can be assigned an id or id wildcard to just get back some specific jQAssisstant concepts and constraints. This could look like this:
+
+* `include::jQAssistant:Summary[constraint=jQA:a*, concept=jQA:my:specific:concept-id]` would result in a summary table with all constraints starting with jQA:a* and at most one concept (if it exists) with  id jQA:my:specific:concept-id.
+
+* `include::jQAssistant:Rules[concept=""]` would result in a list containing all constraints with their results and no concepts.
+
+Note: Normally `include::...` 's are used to reference and display other files inside the adoc file they're written in. In our case tho these `include::...` 's are replaced by the `jqassistant-asciidoctor-extension`.
+
+== Finding your jqassistant-report.xml
+
+
+== Defining your own templates
+
+For information on how to create your own freemarker templates in general please refer to the "https://freemarker.apache.org/docs/dgui.html[Freemarker template author's guide]".
+
+If you have a basic understanding on how to reference a data model via your freemarker template you can continue here:
+
+=== Using the freemarker data model provided by the extension
+
+

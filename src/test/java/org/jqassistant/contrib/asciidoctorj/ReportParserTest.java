@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-public class ReportParserTest {
+class ReportParserTest {
     private static ParsedReport report;
 
     @BeforeAll

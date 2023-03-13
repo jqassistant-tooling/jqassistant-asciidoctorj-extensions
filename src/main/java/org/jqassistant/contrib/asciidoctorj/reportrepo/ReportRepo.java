@@ -24,6 +24,4 @@ public interface ReportRepo {
      * @return all to attributes fitting concepts; if constraintIdFilter from attributes is not set, return an empty List
      */
     SortedSet<Constraint> findConstraints(ProcessAttributes attributes);
-
-//    Result findConceptResult(ProcessAttributes attributes);
 }

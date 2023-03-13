@@ -10,7 +10,7 @@ import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Constraint;
 
 import java.util.*;
 
-public class Summary extends AbstractIncludeProcessor<RulesRoot> {
+public class Summary extends AbstractIncludeProcessor<RulesRoot> { //TODO: fix space in id breaking html hook
 
     public Summary(ReportRepo repo, TemplateRepo templateRepo) {
         super(repo, templateRepo, "Summary", List.of("Summary"));

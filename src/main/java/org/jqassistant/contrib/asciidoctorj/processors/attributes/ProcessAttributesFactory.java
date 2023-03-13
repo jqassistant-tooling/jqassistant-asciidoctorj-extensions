@@ -5,7 +5,10 @@ import org.asciidoctor.ast.Document;
 import java.util.Map;
 
 public class ProcessAttributesFactory {
-    private static final String reportPath = "jqassistant-report-path", templatesPath = "jqassistant-templates-path";
+    private static final String REPORT_PATH = "jqassistant-report-path",
+            TEMPLATES_PATH = "jqassistant-templates-path";
+
+    private ProcessAttributesFactory() {}
 
     /**
      * creates a ProcessAttributes instance from Asciidoctor Document and additional attributes for IncludeProcessor
@@ -19,8 +22,8 @@ public class ProcessAttributesFactory {
         return ProcessAttributes.builder()
                 .conceptIdFilter((String) attributeMap.get("concept"))
                 .constraintIdFilter((String) attributeMap.get("constraint"))
-                .reportPath((String) document.getAttributes().get(reportPath))
-                .templatesPath((String) document.getAttributes().get(templatesPath))
+                .reportPath((String) document.getAttributes().get(REPORT_PATH))
+                .templatesPath((String) document.getAttributes().get(TEMPLATES_PATH))
                 .build();
     }
 
@@ -33,18 +36,18 @@ public class ProcessAttributesFactory {
         checkTemplatesPathValidity(document);
 
         return ProcessAttributes.builder()
-                .templatesPath((String) document.getAttributes().get(templatesPath))
+                .templatesPath((String) document.getAttributes().get(TEMPLATES_PATH))
                 .build();
     }
 
     private static void checkReportPathValidity(Document document) throws IllegalStateException{
-        if(!(document.getAttributes().get(reportPath) instanceof String)) {
+        if(!(document.getAttributes().get(REPORT_PATH) instanceof String)) {
             throw new IllegalStateException("You're report xml file location isn't set properly! Please set the destination of you're jqassistant-report.xml via the global document attributes for you're asciidoctor.");
         }
     }
 
     private static void checkTemplatesPathValidity(Document document) {
-        if(document.getAttributes().get(templatesPath) != null && !(document.getAttributes().get(templatesPath) instanceof String)) {
+        if(document.getAttributes().get(TEMPLATES_PATH) != null && !(document.getAttributes().get(TEMPLATES_PATH) instanceof String)) {
             throw new IllegalStateException("You're templates folder location isn't a String! Please set the destination of you're template folder to a String via the global document attributes for you're asciidoctor. Or delete the attribute to use default templates");
         }
     }

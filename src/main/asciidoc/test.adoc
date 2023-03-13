@@ -1,1 +1,3 @@
-include::jQAssistant:Summary[concept = "*", constraint = "*"]
+include::jQAssistant:Summary[]
+
+include::jQAssistant:Rules[]
