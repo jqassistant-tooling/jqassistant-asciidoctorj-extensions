@@ -5,8 +5,8 @@ import org.asciidoctor.ast.Document;
 import java.util.Map;
 
 public class ProcessAttributesFactory {
-    private static final String REPORT_PATH = "jqassistant-report-path",
-            TEMPLATES_PATH = "jqassistant-templates-path";
+    private static final String REPORT_PATH = "jqassistant-report-path";
+    private static final String TEMPLATES_PATH = "jqassistant-templates-path";
 
     private ProcessAttributesFactory() {}
 
