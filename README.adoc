@@ -3,7 +3,7 @@
 The `jqassistant-asciidoctor-extension` is an asciidoctor extension that offers a convenient way of creating a jQAssistant report inside the asciidoctor pipeline.
 The plugin is using the https://docs.asciidoctor.org/asciidoctorj/latest/extensions/extensions-introduction/[asciidoctor extension api] to hook into the https://asciidoctor.org/[asciidoctor] pipeline.
 
-You can use it to export an jQA-report directly to html, pdf, ePub and other with asciidoctor compatible document types.
+You can use it to export a jQA-report directly to html, pdf, ePub and others, as long as there's an Asciidoctor converter for it.
 
 == Using the jqassistant-asciidoctor-extension
 
@@ -38,7 +38,7 @@ As an example of how to use the plugin, you can take a look at the following mav
             </execution>
         </executions>
         <dependencies>
-            <dependency> <3>
+            <dependency>
                 <groupId>org.jqassistant.contrib.asciidoctorj</groupId>
                 <artifactId>jqassistant-asciidoctorj-extensions</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
@@ -48,38 +48,91 @@ As an example of how to use the plugin, you can take a look at the following mav
 </plugins>
 ----
 <1> place the path to your jqassistant-report.xml here
-<2> OPTIONAL: If you want to define your own templates, put the jar or folder with your freemarker templates inside your resource folder. Add this attribute with the name of your jar or folder. For mor information refer to section <<Defining your own templates>>.
-<3> the dependency needed by asciidoctor for processing your jQAssistant includes inside your asciidoc files. (just leave it like that)
+<2> OPTIONAL: If not declared, the extension will use the default templates. If you want to use your templates, place the name of your custom templates location here. For more information refer to section <<Using your own template>>.
 
-== Create your report using the extension
+== Create your report
 
-In general there are two possible macros (called includes) you can use with the `jqassistant-asciidoctor-extension`.
+In general, there are two possible macros (called includes) you can use with the `jqassistant-asciidoctor-extension`.
 
-1. `include::jQAssistant:Summary[]` will give you a summary table of all constraints and concepts with their id, description, severity and status
-2. `include::jQAssistant:Rules[]` will give you a detailed list of all constraints and concepts with all their available information
+1. `include::jQAssistant:Summary[]` will give you a summary table of all constraints and concepts with their id, description, severity and status. They're sorted by Status and id name.
+2. `include::jQAssistant:Rules[]` will give you a detailed list of all constraints and concepts with additional information like result tables or graphs
 
-For both of them you have the option to assign two additional attributes:
+For both of them, you have the option to assign two additional attributes:
 
 * concept
 * constraint
 
-Both can be assigned an id or id wildcard to just get back some specific jQAssisstant concepts and constraints. This could look like this:
+You can assign an id or id wildcard to either of them. In this case, you get back some specific jQAssisstant concepts and constraints. This could look like this:
 
-* `include::jQAssistant:Summary[constraint=jQA:a*, concept=jQA:my:specific:concept-id]` would result in a summary table with all constraints starting with jQA:a* and at most one concept (if it exists) with  id jQA:my:specific:concept-id.
+* `include::jQAssistant:Summary[constraint=jQA:a*, concept=jQA:my:specific:concept-id]` would result in a summary table with all constraints starting with jQA:a* and at most one concept (if it exists) with id jQA:my:specific:concept-id.
 
-* `include::jQAssistant:Rules[concept=""]` would result in a list containing all constraints with their results and no concepts.
+* `include::jQAssistant:Rules[concept=""]` would result in a list containing all constraints (no filter applied) with their results and no concepts (there can not be a concept with an empty id).
 
-Note: Normally `include::...` 's are used to reference and display other files inside the adoc file they're written in. In our case tho these `include::...` 's are replaced by the `jqassistant-asciidoctor-extension`.
+Note: Normally `include::...` 's are used to reference and display other files inside the adoc file they're written in. In our case, tho these `include::...` 's are replaced by the `jqassistant-asciidoctor-extension`.
 
 == Finding your jqassistant-report.xml
 
 
-== Defining your own templates
 
-For information on how to create your own freemarker templates in general please refer to the "https://freemarker.apache.org/docs/dgui.html[Freemarker template author's guide]".
+== Using your own template
 
-If you have a basic understanding on how to reference a data model via your freemarker template you can continue here:
+This extension uses freemarker templates to personalize your report. The basic idea behind a freemarker template is, to fill a template with the data contained in a root element. Normally there are default templates already provided with this extension. If you want to declare your own templates, put the jar or folder with your freemarker templates inside your resource folder. All templates that are not defined will use the default templates. Add the name of the jar or folder to your configuration as described in <<Using the jqassistant-asciidoctor-extension>>.
 
-=== Using the freemarker data model provided by the extension
+=== Fill your template with data from the root element
 
+For this part you need to have a basic understanding of how to write a freemarker template and how to reference the data from your root element. For information on how to write your freemarker template please refer to the https://freemarker.apache.org/docs/dgui.html[Freemarker template author's guide].
 
+The `jqassistant-asciidoctor-extension` provides a root element, that is then combined with your freemarker template to create the finished report. You can take a look at the following example template to understand the data structure provided by the extension.
+
+[source, text]
+----
+<#list concepts as rule>  <1>
+[#jqassistant_${rule.id}]
+=== ${rule.id} <2>
+****
+<#if rule.status == "SUCCESS"> <2>
+TIP: ${rule.description} + <2>
+Status: [green]#${rule.status}#, Severity: ${rule.severity} <2>
+<#elseif rule.status == "WARNING">
+WARNING: ${rule.description} +
+Status: [yellow]#${rule.status}#, Severity: ${rule.severity}
+<#elseif rule.status == "FAILURE">
+CAUTION: ${rule.description} +
+Status: [red]#${rule.status}#, Severity: ${rule.severity}
+<#else>
+NOTE: ${rule.description} +
+Status: [grey]#${rule.status}#, Severity: ${rule.severity}
+</#if>
+
+<#if rule.hasReports> <3>
+<#list rule.reports.links as labeledLink> <5>
+link:${labeledLink.link}[${labeledLink.label}] <6>
+
+</#list>
+<#list rule.reports.images as labeledImage> <5>
+[caption="", title=${labeledImage.label}] <6>
+image::${labeledImage.link}[${labeledImage.label}]
+
+</#list>
+<#elseif rule.hasResult> <4>
+|===
+<#list rule.resultColumnKeys as key>|${key} </#list> <7>
+<#list rule.resultRows as row> <8>
+<#list row as cell> <9>
+|${cell}
+</#list>
+</#list>
+|===
+</#if>
+****
+</#list>
+----
+<1> You can refer to you're returned constraints and concepts via the `constraints` or `concepts` identifiers. Specifically each of them is internally handled as a sorted set (primarily sorted by status from failure to warning to success to skipped and secondarily by id in alphabetical order).
+<2> For each concept and constraint (here represented by `rule`) you can refer to their id, description, status and severity simply by noting `rule.id`, `rule.description`, `rule.status` and `rule.severity`.
+<3> Via `rule.hasReports` you can check whether the corresponding concept or constraint generated any pictures (f.e. graphs) or external files (f.e. CSV's) to display.
+<4> Via `rule.hasResult` you can check whether the corresponding concept or constraint generated a result table to display. This table may contain things like dependencies or other related information.
+<5> `rule.reports` gives you access to the list of external files (via `rule.reports.links`) and to a list of generated pictures (via `rule.reports.images`)
+<6> Both external files and images use the same internal type (namely an URLWithLabel) to give access to the location (`labeledLink.link` or `labeledImage.link` depending on the naming in the `<#list>` block) and to the label (`labeledLink.label` or `labeledImage.label`). (consider to use `hasReports` beforehand, see (5))
+<7> You can access the header of your table using the `resultColumnKeys` identifier. This gives you a list of the column names for the table. (consider to use `hasResult` beforehand, see (5))
+<8> You can access a list of all rows via `resultRows`
+<9> You can access each individual cell (containing a string value) of one row from your assigned row (each row itself is a list of Strings). In our example we listed each row via `<#list rule.resultRows as row>` and for each listed their cells (strings) via `<#list row as cell>`.

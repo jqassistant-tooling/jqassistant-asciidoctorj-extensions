@@ -16,18 +16,18 @@ import java.util.Map;
 @Getter
 public class RuleRoot implements Comparable<RuleRoot>{
 
-    private static String statSuccess = "SUCCESS",
-            statWarn = "WARNING",
-            statFail = "FAILURE",
-            statSkipped = "SKIPPED";
+    private static String statSuccess = "SUCCESS";
+    private static String statWarn = "WARNING";
+    private static String statFail = "FAILURE";
+    private static String statSkipped = "SKIPPED";
 
     private String id;
     private String description;
-    private String status,
-            severity;
+    private String status;
+    private String severity;
 
-    private boolean hasReports,
-            hasResult;
+    private boolean hasReports;
+    private boolean hasResult;
 
     private List<String> resultColumnKeys;
     @Singular
@@ -80,10 +80,5 @@ public class RuleRoot implements Comparable<RuleRoot>{
         else if(other.getStatus().equals(statSuccess)) return 1;
 
         throw new IllegalStateException("Rule Root should be comparable; statuses were: " + this.status + " " + other.status);
-    }
-
-    @Override
-    public boolean equals(@NotNull Object other) {
-        return super.equals(other);
     }
 }

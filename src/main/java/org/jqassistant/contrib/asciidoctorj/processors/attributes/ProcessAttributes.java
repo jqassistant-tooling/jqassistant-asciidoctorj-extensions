@@ -6,9 +6,9 @@ import lombok.Getter;
 @Builder
 @Getter
 public class ProcessAttributes {
-    private String conceptIdFilter,
-            constraintIdFilter;
+    private String conceptIdFilter;
+    private String constraintIdFilter;
 
-    private String reportPath,
-            templatesPath;
+    private String reportPath;
+    private String templatesPath;
 }

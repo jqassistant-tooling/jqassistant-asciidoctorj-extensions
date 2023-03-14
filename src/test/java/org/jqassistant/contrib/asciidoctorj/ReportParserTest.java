@@ -28,7 +28,7 @@ class ReportParserTest {
         assert (report.getConcepts().containsKey("test-concept-empty-result"));
 
         assert (report.getConstraints().keySet().size() == 1);
-        assert (report.getConstraints().containsKey("test-constraint-empty-result"));
+        assert (report.getConstraints().containsKey("test-constraint"));
     }
 
     @Test
@@ -79,7 +79,7 @@ class ReportParserTest {
 
     @Test
     void parseResultConstraint() {
-        Constraint testConstraint = report.getConstraints().get("test-constraint-empty-result");
+        Constraint testConstraint = report.getConstraints().get("test-constraint");
         assert (testConstraint.getDescription().equals("Test description 2"));
         assert (testConstraint.getSeverity().equals("major"));
         assert (testConstraint.getStatus().equals("failure"));

@@ -35,7 +35,7 @@
         </concept>
         <duration>140</duration>
     </group>
-    <constraint id="test-constraint-empty-result">
+    <constraint id="test-constraint">
         <description>Test description 2</description>
         <result>
             <columns count="2" primary="Column 1">

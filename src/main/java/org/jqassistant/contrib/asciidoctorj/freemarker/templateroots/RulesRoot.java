@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
 
-import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
