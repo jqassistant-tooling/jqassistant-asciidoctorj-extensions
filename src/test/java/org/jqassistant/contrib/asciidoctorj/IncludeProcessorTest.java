@@ -15,7 +15,13 @@ class IncludeProcessorTest {
     @BeforeAll
     static void init() {
         asciidoctor = Asciidoctor.Factory.create();
-        opt = Options.builder().attributes(Attributes.builder().attribute("jqassistant-templates-path", "testtemplates").attribute("jqassistant-report-path", "src/test/resources/testing-xml/test-report.xml").build()).build();
+        opt = Options.builder().attributes(
+                Attributes.builder()
+                        .attribute("jqassistant-templates-path", "testtemplates")
+                        .attribute("jqassistant-report-path", "src/test/resources/testing-xml/test-report.xml")
+                        .build())
+                .build();
+        //opt.setToDir(IncludeProcessorTest.class.getResource(IncludeProcessorTest.class.getSimpleName() + ".class").getPath().replace(IncludeProcessorTest.class.getSimpleName() + ".class", ""));
     }
 
     @Test
@@ -46,13 +52,13 @@ class IncludeProcessorTest {
         result = assertIsPartOfAndShorten(result, "<a href=\"https://youtu.be/dQw4w9WgXcQ\">CSV</a>");
         result = assertIsPartOfAndShorten(result, "<img src=\"test.jpeg\" alt=\"Ricki Boy\">");
         result = assertIsPartOfAndShorten(result, "Ricki Boy");
-        result = assertIsPartOfAndShorten(result, "<img src=\"link/to/picture\" alt=\"other\">");
+        result = assertIsPartOfAndShorten(result, "<img src=\"asciidoctorj/picture\" alt=\"other\">");
         assertIsPartOfAndShorten(result, "other");
     }
 
     @Test
     void testSummaryInclude() {
-        System.out.println(asciidoctor.convert("include::jQAssistant:Summary[concept = \"test-concept\", constraint = \"*\"]" , opt));
+        //System.out.println(asciidoctor.convert("include::jQAssistant:Summary[concept = \"test-concept\", constraint = \"*\"]" , opt));
 
         String result = asciidoctor.convert("include::jQAssistant:Summary[concept = \"test-concept\", constraint = \"*\"]" , opt);
 
