@@ -2,6 +2,7 @@ package org.jqassistant.contrib.asciidoctorj.processors.attributes;
 
 import org.asciidoctor.ast.Document;
 
+import java.io.File;
 import java.util.Map;
 
 public class ProcessAttributesFactory {
@@ -18,12 +19,13 @@ public class ProcessAttributesFactory {
     public static ProcessAttributes createProcessAttributesInclude(Document document, Map<String, Object> attributeMap) {
         checkReportPathValidity(document);
         checkTemplatesPathValidity(document);
-
+        System.out.println(document.getOptions());
         return ProcessAttributes.builder()
                 .conceptIdFilter((String) attributeMap.get("concept"))
                 .constraintIdFilter((String) attributeMap.get("constraint"))
                 .reportPath((String) document.getAttributes().get(REPORT_PATH))
                 .templatesPath((String) document.getAttributes().get(TEMPLATES_PATH))
+                .outputDirectory(new File((String) document.getOptions().get("to_dir"))) //TODO: check validity
                 .build();
     }
 

@@ -98,12 +98,12 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
 
         for (Concept concept :
                 repo.findConcepts(attributes)) {
-            rootBuilder.concept(RuleRoot.createRuleRoot(concept));
+            rootBuilder.concept(RuleRoot.createRuleRoot(concept, attributes.getOutputDirectory()));
         }
 
         for (Constraint constraint :
                 repo.findConstraints(attributes)) {
-            rootBuilder.constraint(RuleRoot.createRuleRoot(constraint));
+            rootBuilder.constraint(RuleRoot.createRuleRoot(constraint, attributes.getOutputDirectory()));
         }
 
         return rootBuilder.build();

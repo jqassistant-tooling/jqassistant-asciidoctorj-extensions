@@ -2,8 +2,14 @@ package org.jqassistant.contrib.asciidoctorj.xmlparsing;
 
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
 import org.jqassistant.schema.report.v2.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

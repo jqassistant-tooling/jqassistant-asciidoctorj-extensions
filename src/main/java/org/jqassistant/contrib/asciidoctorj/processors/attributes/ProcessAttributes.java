@@ -3,6 +3,8 @@ package org.jqassistant.contrib.asciidoctorj.processors.attributes;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.io.File;
+
 @Builder
 @Getter
 public class ProcessAttributes {
@@ -11,4 +13,5 @@ public class ProcessAttributes {
 
     private String reportPath;
     private String templatesPath;
+    private File outputDirectory;
 }
