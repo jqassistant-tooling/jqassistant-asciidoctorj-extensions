@@ -6,11 +6,14 @@ import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttribu
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
 import org.jqassistant.contrib.asciidoctorj.xmlparsing.ParsedReport;
 import org.jqassistant.contrib.asciidoctorj.xmlparsing.ReportParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 @Getter
 public class ReportRepoImpl implements ReportRepo{
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportParser.class);
 
     private boolean initialized = false;
 
@@ -28,12 +31,14 @@ public class ReportRepoImpl implements ReportRepo{
 
     private void initialize(ProcessAttributes attributes) {
         if (!isInitialized()) {
+            LOGGER.info("initializing reportRepo");
             ParsedReport report = reportParser.parseReportXml(attributes.getReportPath());
             this.groups = report.getGroups();
             this.concepts = report.getConcepts();
             this.constraints = report.getConstraints();
 
             initialized = true;
+            LOGGER.info("successfully initialized reportRepo");
         }
     }
 

@@ -28,7 +28,6 @@ public class ProcessAttributesFactory {
         fillTemplatesPathValidity(document, builder);
         fillOutputPathValidity(document, builder);
 
-        //System.out.println(document.getAttributes());
         return builder
                 .conceptIdFilter((String) attributeMap.get("concept"))
                 .constraintIdFilter((String) attributeMap.get("constraint"))
@@ -67,9 +66,6 @@ public class ProcessAttributesFactory {
     }
 
     private static void fillOutputPathValidity(Document document, ProcessAttributes.ProcessAttributesBuilder builder) {
-        //System.out.println(((Map) document.getOptions().get("attributes")).get("to_dir"));
-        //System.out.println(document.getAttributes());
-        //System.out.println(document.getOptions());
         if(!(document.getOptions().get(OUTPUT_DIR) instanceof String)) {
             LOGGER.warn("You're output directory isn't a String! This should only occur during testing.");
             builder.outputDirectory(new File(""));

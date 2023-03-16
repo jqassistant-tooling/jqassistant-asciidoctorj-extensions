@@ -106,12 +106,12 @@ public class RuleRoot implements Comparable<RuleRoot>{
         try {
             uri = new URI(absolute);
         } catch (URISyntaxException e) {
-            LOGGER.warn("Cannot create URI from " + absolute);
+            LOGGER.warn("Cannot create URI from {}", absolute);
             return absolute;
         }
 
         if(uri.getScheme() == null) {
-            LOGGER.warn("URI '" + uri + "' has no scheme. JQA should not produce a URI without a scheme. Please contact developer!");
+            LOGGER.warn("URI '{}' has no scheme. JQA should not produce a URI without a scheme. Please contact developer!", uri);
             return absolute;
         }
 

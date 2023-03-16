@@ -6,15 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ReportParser {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportParser.class);
 
     private static final ReportParser INSTANCE = new ReportParser();
 
@@ -29,7 +26,10 @@ public class ReportParser {
      */
     public ParsedReport parseReportXml(String fileDestination) {
         ReportReader reportReader = ReportReader.getInstance();
+
+        LOGGER.info("Parsing xml-report from {}", fileDestination);
         JqassistantReport report = reportReader.read(new File(fileDestination));
+        LOGGER.info("Successfully parsed xml-report from {}", fileDestination);
 
         return parseReport(report);
     }

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class ReportParserTest {
     private static ParsedReport report;
 
@@ -23,46 +25,50 @@ class ReportParserTest {
 
     @Test
     void testRepoStructure() {
-        assert (report.getConcepts().keySet().size() == 2);
-        assert (report.getConcepts().containsKey("test-concept"));
-        assert (report.getConcepts().containsKey("test-concept-empty-result"));
+        assertThat(report.getConcepts().keySet().size()).isEqualTo(2);
+        assertThat(report.getConcepts()).containsKey("test-concept");
+        assertThat(report.getConcepts()).containsKey("test-concept-empty-result");
 
-        assert (report.getConstraints().keySet().size() == 1);
-        assert (report.getConstraints().containsKey("test-constraint"));
+        assertThat(report.getConstraints().keySet().size()).isEqualTo(1);
+        assertThat(report.getConstraints()).containsKey("test-constraint");
     }
 
     @Test
     void testConceptStructure() {
         Concept testConcept = report.getConcepts().get("test-concept");
-        assert (testConcept.getDescription().equals("Test description"));
-        assert (testConcept.getSeverity().equals("info"));
-        assert (testConcept.getStatus().equals("success"));
-        assert (testConcept.getDuration() == 140);
+        assertThat(testConcept.getDescription()).isEqualTo("Test description");
+        assertThat(testConcept.getSeverity()).isEqualTo("info");
+        assertThat(testConcept.getStatus()).isEqualTo("success");
+        assertThat(testConcept.getDuration()).isEqualTo(140);
 
         Result result = testConcept.getResult();
-        assert (result.getColumnKeys().size() == 1 && result.getColumnKeys().get(0).equals("Column 1"));
-        assert (result.getRows().size() == 1 && result.getRows().get(0).equals(Map.of("Column 1", "test-cell")));
+        assertThat(result.getColumnKeys().size()).isEqualTo(1);
+        assertThat(result.getColumnKeys().get(0)).isEqualTo("Column 1");
+        assertThat(result.getRows().size()).isEqualTo(1);
+        assertThat(result.getRows().get(0)).isEqualTo(Map.of("Column 1", "test-cell"));
 
         Reports reports = testConcept.getReports();
-        assert (reports.getImages().size() == 2);
-        assert (reports.getImages().get(0).getLabel().equals("Ricki Boy"));
-        assert (reports.getImages().get(1).getLabel().equals("other"));
-        assert (reports.getImages().get(0).getLink().equals("test.jpeg"));
-        assert (reports.getImages().get(1).getLink().equals("asciidoctorj/picture"));
-        assert (reports.getLinks().size() == 1);
-        assert (reports.getLinks().get(0).getLabel().equals("CSV"));
-        assert (reports.getLinks().get(0).getLink().equals("https://youtu.be/dQw4w9WgXcQ"));
+        assertThat (reports.getImages().size()).isEqualTo(2);
+        assertThat (reports.getImages().get(0).getLabel()).isEqualTo("Ricki Boy");
+        assertThat (reports.getImages().get(1).getLabel()).isEqualTo("other");
+        assertThat (reports.getImages().get(0).getLink()).isEqualTo("test.jpeg");
+        assertThat (reports.getImages().get(1).getLink()).isEqualTo("asciidoctorj/picture");
+
+        assertThat(reports.getLinks().size()).isEqualTo(1);
+        assertThat (reports.getLinks().get(0).getLabel()).isEqualTo("CSV");
+        assertThat (reports.getLinks().get(0).getLink()).isEqualTo("https://youtu.be/dQw4w9WgXcQ");
     }
 
     @Test
     void testGroupStructure() {
-        assert (report.getGroups().size() == 2);
-        assert (report.getGroups().get("test-group").getId().equals("test-group"));
-        assert (report.getGroups().get("test-group 2").getId().equals("test-group 2"));
-        assert (report.getGroups().get("test-group").getDuration() == 140);
-        assert (report.getGroups().get("test-group").getSubGroups().size() == 0);
-        assert (report.getGroups().get("test-group").getNestedConstraints().size() == 0);
-        assert (report.getGroups().get("test-group").getNestedConcepts().size() == 1 && report.getGroups().get("test-group").getNestedConcepts().get(0).getId().equals("test-concept"));
+        assertThat(report.getGroups().size()).isEqualTo(2);
+        assertThat(report.getGroups().get("test-group").getId()).isEqualTo("test-group");
+        assertThat(report.getGroups().get("test-group 2").getId()).isEqualTo("test-group 2");
+        assertThat(report.getGroups().get("test-group").getDuration()).isEqualTo(140);
+        assertThat(report.getGroups().get("test-group").getSubGroups().size()).isEqualTo(0);
+        assertThat(report.getGroups().get("test-group").getNestedConstraints().size()).isEqualTo(0);
+        assertThat(report.getGroups().get("test-group").getNestedConcepts().size()).isEqualTo(1);
+        assertThat(report.getGroups().get("test-group").getNestedConcepts().get(0).getId()).isEqualTo("test-concept");
     }
 
     @Test
