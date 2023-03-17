@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.TimeZone;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 class TemplateRepoTest {
     private static TemplateRepo repo;
     private static Configuration cfg;
@@ -33,7 +35,7 @@ class TemplateRepoTest {
 
         Template templateLoaded = repo.findTemplate(attributes, "RulesConcept");
         Template templateExpected = cfg.getTemplate("RulesConcept");
-        assert(templateExpected.toString().equals(templateLoaded.toString()));
+        assertThat(templateExpected.toString()).isEqualTo(templateLoaded.toString());
     }
 
     @Test
@@ -46,14 +48,14 @@ class TemplateRepoTest {
 
         Template templateLoaded = repo.findTemplate(attributes, "IconEnabler");
         Template templateExpected = cfg.getTemplate("IconEnabler");
-        assert(templateExpected.toString().equals(templateLoaded.toString()));
+        assertThat(templateExpected.toString()).isEqualTo(templateLoaded.toString());
 
         //test fallback if custom does not exist
         setLoadingDestination("src/main/resources/defaulttemplates");
 
         templateLoaded = repo.findTemplate(attributes, "Summary");
         templateExpected = cfg.getTemplate("Summary");
-        assert(templateExpected.toString().equals(templateLoaded.toString()));
+        assertThat(templateExpected.toString()).isEqualTo(templateLoaded.toString());
     }
 
     private static Configuration setupFreemarker() {
