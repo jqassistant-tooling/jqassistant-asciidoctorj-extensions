@@ -17,7 +17,7 @@ public class Result {
     public static final Result EMPTY_RESULT = Result.builder().build();
 
     @Singular
-    List<String> columnKeys; //TODO: possible two columns with same name?
+    List<String> columnKeys;
     @Singular
     List<Map<String, String>> rows;
 }

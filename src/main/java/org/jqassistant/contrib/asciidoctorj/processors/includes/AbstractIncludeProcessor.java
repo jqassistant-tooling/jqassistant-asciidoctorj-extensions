@@ -12,6 +12,8 @@ import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttribu
 import org.jqassistant.contrib.asciidoctorj.reportrepo.ReportRepo;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Concept;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Constraint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -21,6 +23,8 @@ import java.util.Map;
 
 
 public abstract class AbstractIncludeProcessor extends IncludeProcessor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIncludeProcessor.class);
+
     private static final String PREFIX = "jQAssistant:";
 
     ReportRepo repo;
@@ -45,6 +49,8 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
 
     @Override
     public void process(Document document, PreprocessorReader reader, String target, Map<String, Object> attributeMap) {
+        LOGGER.info("Starting to process include for {}", target);
+
         ProcessAttributes attributes = ProcessAttributesFactory.createProcessAttributesInclude(document, attributeMap);
 
         RulesRoot root = fillDataStructure(attributes);
@@ -54,12 +60,15 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
                 "",
                 1,
                 attributeMap);
+
+        LOGGER.info("Finished to process include for {}", target);
     }
 
     /**
      * Fills all templates in "templates" with the content of root.
      *
      * @param root the data structure the templates are filled with
+     * @param attributes the ProcessAttribute instance. May optionally be filled with: templatesPath
      * @return the from template and root produced String
      */
     private String fillTemplates(RulesRoot root, ProcessAttributes attributes) {
@@ -90,7 +99,7 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
     /**
      * build the data structure needed to fill the template
      *
-     * @param attributes give the attributes parsed into the include call in adoc
+     * @param attributes the ProcessAttribute instance. Should at least contain: reportPath, outputDirectory! May optionally be filled with: conceptIdFilter, constraintIdFilter
      * @return rootElement for data-structure
      */
     RulesRoot fillDataStructure(ProcessAttributes attributes) {

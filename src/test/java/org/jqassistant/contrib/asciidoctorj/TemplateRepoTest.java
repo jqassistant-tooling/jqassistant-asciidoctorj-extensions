@@ -35,7 +35,7 @@ class TemplateRepoTest {
 
         Template templateLoaded = repo.findTemplate(attributes, "RulesConcept");
         Template templateExpected = cfg.getTemplate("RulesConcept");
-        assertThat(templateExpected.toString()).isEqualTo(templateLoaded.toString());
+        assertThat(templateExpected).hasToString(templateLoaded.toString());
     }
 
     @Test
@@ -48,14 +48,14 @@ class TemplateRepoTest {
 
         Template templateLoaded = repo.findTemplate(attributes, "IconEnabler");
         Template templateExpected = cfg.getTemplate("IconEnabler");
-        assertThat(templateExpected.toString()).isEqualTo(templateLoaded.toString());
+        assertThat(templateExpected).hasToString(templateLoaded.toString());
 
         //test fallback if custom does not exist
         setLoadingDestination("src/main/resources/defaulttemplates");
 
         templateLoaded = repo.findTemplate(attributes, "Summary");
         templateExpected = cfg.getTemplate("Summary");
-        assertThat(templateExpected.toString()).isEqualTo(templateLoaded.toString());
+        assertThat(templateExpected).hasToString(templateLoaded.toString());
     }
 
     private static Configuration setupFreemarker() {

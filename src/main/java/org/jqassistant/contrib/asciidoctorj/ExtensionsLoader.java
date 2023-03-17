@@ -27,10 +27,11 @@ public class ExtensionsLoader implements ExtensionRegistry {
 
         LOGGER.info("creating and registering Processors");
         javaExtensionRegistry.preprocessor(new IconEnabler(templateRepo));
-        LOGGER.info("registered {}", IconEnabler.class);
+        String registeredMessage = "registered {}";
+        LOGGER.info(registeredMessage, IconEnabler.class);
         javaExtensionRegistry.includeProcessor(new Summary(reportRepository, templateRepo));
-        LOGGER.info("registered {}", Summary.class);
+        LOGGER.info(registeredMessage, Summary.class);
         javaExtensionRegistry.includeProcessor(new Rules(reportRepository, templateRepo));
-        LOGGER.info("registered {}", Rules.class);
+        LOGGER.info(registeredMessage, Rules.class);
     }
 }

@@ -65,8 +65,8 @@ class ReportParserTest {
         assertThat(report.getGroups().get("test-group").getId()).isEqualTo("test-group");
         assertThat(report.getGroups().get("test-group 2").getId()).isEqualTo("test-group 2");
         assertThat(report.getGroups().get("test-group").getDuration()).isEqualTo(140);
-        assertThat(report.getGroups().get("test-group").getSubGroups()).hasSize(0);
-        assertThat(report.getGroups().get("test-group").getNestedConstraints()).hasSize(0);
+        assertThat(report.getGroups().get("test-group").getSubGroups()).isEmpty();
+        assertThat(report.getGroups().get("test-group").getNestedConstraints()).isEmpty();
         assertThat(report.getGroups().get("test-group").getNestedConcepts()).hasSize(1);
         assertThat(report.getGroups().get("test-group").getNestedConcepts().get(0).getId()).isEqualTo("test-concept");
     }

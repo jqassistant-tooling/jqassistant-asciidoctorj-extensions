@@ -1,3 +1,0 @@
-include::jQAssistant:Summary[]
-
-include::jQAssistant:Rules[]

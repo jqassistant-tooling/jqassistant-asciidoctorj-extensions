@@ -16,6 +16,8 @@ import java.nio.file.Paths;
 public class RuleRootParserUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(RuleRootParserUtil.class);
 
+    private RuleRootParserUtil() {}
+
     /**
      * Parses all attachments from original reports to relative paths and copies the resources to the outputDirectory
      * @param reports the reports that will be parsed

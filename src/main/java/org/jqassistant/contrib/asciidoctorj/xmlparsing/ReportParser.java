@@ -20,9 +20,10 @@ public class ReportParser {
     }
 
     /**
-     * fills the given ResultRepo with data from xml
+     * creates a ParsedReport instance from a report-xml
      *
      * @param fileDestination the place where the underlying xml is located
+     * @return a ParsedReport created from xml file
      */
     public ParsedReport parseReportXml(String fileDestination) {
         ReportReader reportReader = ReportReader.getInstance();
@@ -35,9 +36,10 @@ public class ReportParser {
     }
 
     /**
-     * fills the given ResultRepo with data JqassistantReport
+     * creates a ParsedReport instance from a JqassistantReport instance
      *
-     * @param report the from ReportReader received report
+     * @param report the from ReportReader received JqassistantReport
+     * @return a ParsedReport created from JqassistantReport instance
      */
     private ParsedReport parseReport(JqassistantReport report) {
         List<ReferencableRuleType> nodes = report.getGroupOrConceptOrConstraint();
@@ -51,7 +53,11 @@ public class ReportParser {
     }
 
     /**
-     * fills the given ResultRepo the content of a node
+     * Adds the Rule that is generated from the node to the ParsedReport and returns it.
+     *
+     * @param parsedReport the ParsedReport that will be amended
+     * @param node the node that will be parsed
+     * @return the Rule that is generated from the node
      */
     private Rule parseNode(ParsedReport parsedReport, ReferencableRuleType node) {
         Rule rule = null;
@@ -86,7 +92,11 @@ public class ReportParser {
     }
 
     /**
-     * give back the parsed Result from conceptType (node)
+     * Adds the given Group to the ParsedReport. Also parses sub-rules of the groupNode. These will be added to the ParsedReport and filled into the corresponding place in a Group that will be returned.
+     *
+     * @param parsedReport the ParsedReport that will be amended
+     * @param groupNode the GroupNode that will be parsed
+     * @return the Group that is generated from the node
      */
     private Group parseGroup(ParsedReport parsedReport, GroupType groupNode) {
         Group.GroupBuilder groupBuilder = Group.builder().id(groupNode.getId()).duration(groupNode.getDuration());
@@ -103,8 +113,12 @@ public class ReportParser {
         return groupBuilder.build();
     }
 
+
     /**
-     * give back the parsed Result from conceptType (node)
+     * adds the given Concept to the ParsedReport. Also returns the parsed Concept
+     *
+     * @param conceptNode the Node from which the Concept will be generated
+     * @return the Concept that is generated from the node
      */
     private Concept parseConcept(ConceptType conceptNode) {
         return Concept.builder()
@@ -119,7 +133,10 @@ public class ReportParser {
     }
 
     /**
-     * give back the parsed Result from constraintType (node)
+     * Adds the given Constraint to the ParsedReport. Also returns the parsed Constraint
+     *
+     * @param constraintNode the Node from which the Constraint will be generated
+     * @return the Constraint that is generated from the node
      */
     private Constraint parseConstraint(ConstraintType constraintNode) {
         return Constraint.builder()
@@ -135,6 +152,9 @@ public class ReportParser {
 
     /**
      * give back the parsed Result from resultType (node)
+     *
+     * @param resultNode the Node from which the Result will be generated
+     * @return the Result that is generated from the node
      */
     private Result parseResult(ResultType resultNode) {
         if (resultNode == null) return Result.EMPTY_RESULT;
@@ -157,7 +177,10 @@ public class ReportParser {
     }
 
     /**
-     * give back the parsed Report from reportType (node)
+     * give back the parsed Reports from reportsType (node)
+     *
+     * @param reportsNode the Node from which the Reports will be generated
+     * @return the Reports that is generated from the node
      */
     private Reports parseReports(ReportsType reportsNode) {
         if (reportsNode == null) return Reports.EMPTY_REPORTS;

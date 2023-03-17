@@ -38,7 +38,8 @@ public class IconEnabler extends Preprocessor {
         }
 
         List<String> lines = reader.readLines();
-        lines.add(0, writer.toString());
+        String[] addedLines = writer.toString().split("\n");
+        lines.addAll(0, List.of(addedLines));
         reader.restoreLines(lines);
     }
 }

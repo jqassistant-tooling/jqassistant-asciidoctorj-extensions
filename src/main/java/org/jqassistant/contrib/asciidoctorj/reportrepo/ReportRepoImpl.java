@@ -57,6 +57,8 @@ public class ReportRepoImpl implements ReportRepo{
 
         conceptSSet.addAll((Collection<Concept>) filterRulesById(concepts, id));
 
+        LOGGER.info("Found all concepts matching {}", attributes.getConceptIdFilter());
+
         return conceptSSet;
     }
 
@@ -74,6 +76,8 @@ public class ReportRepoImpl implements ReportRepo{
         String id = attributes.getConstraintIdFilter();
 
         constraintSSet.addAll((Collection<Constraint>) filterRulesById(constraints, id));
+
+        LOGGER.info("Found all constraints matching {}", attributes.getConstraintIdFilter());
 
         return constraintSSet;
     }

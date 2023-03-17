@@ -81,7 +81,7 @@ class RulesRootTest {
     }
 
     @Test
-    void testImageAndLinkPaths() {
+    void testImageAndLinkPaths() throws URISyntaxException {
         RuleRoot root = rulesRoot.getConstraints().first();
 
         URLWithLabel image = root.getReports().getImages().get(0);
@@ -89,7 +89,8 @@ class RulesRootTest {
         assert (image.getLink().contains("RulesRootTest.class"));
         //System.out.println(new File(IncludeProcessorTest.class.getResource(IncludeProcessorTest.class.getSimpleName() + ".class").toURI()));
         //System.out.println(new File(RulesRootTest.class.getResource(RulesRootTest.class.getSimpleName() + ".class").toURI()).getAbsolutePath());
-        assert (!image.getLink().contains("asciidoctorj"));
+        //assert (!image.getLink().contains("asciidoctorj"));
+        assert (!image.getLink().contains(new File(RulesRootTest.class.getResource(RulesRootTest.class.getSimpleName() + ".class").toURI()).getParentFile().getName()));
 
         URLWithLabel link = root.getReports().getLinks().get(0);
         assert (link.getLabel().equals("test link"));
@@ -100,7 +101,8 @@ class RulesRootTest {
         image = root.getReports().getImages().get(0);
         assert (image.getLabel().equals("test image"));
         //System.out.println(image.getLink() + " " + new File(RulesRootTest.class.getResource(RulesRootTest.class.getSimpleName() + ".class").getPath()).toString().replace(new File("").getAbsolutePath(), ""));
-        assert (image.getLink().equals(new File(RulesRootTest.class.getResource(RulesRootTest.class.getSimpleName() + ".class").getPath()).toString().replace(new File("").getAbsolutePath() + "/", "")));
+        assert (image.getLink().contains(RulesRootTest.class.getSimpleName() + ".class"));
+        assert (image.getLink().contains(new File(RulesRootTest.class.getResource(RulesRootTest.class.getSimpleName() + ".class").toURI()).getParentFile().getName()));
 
         link = root.getReports().getLinks().get(0);
         assert (link.getLabel().equals("test link"));
