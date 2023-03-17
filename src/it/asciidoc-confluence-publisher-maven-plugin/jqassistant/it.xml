@@ -1,0 +1,70 @@
+<jqassistant-rules xmlns="http://schema.jqassistant.org/rule/v1.11"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://schema.jqassistant.org/rule/v1.11 https://schema.jqassistant.org/rule/jqassistant-rule-v1.11.xsd">
+
+    <group id="default">
+        <includeConcept refId="it:*"/>
+        <includeConstraint refId="it:*"/>
+    </group>
+
+    <concept id="it:Table">
+        <description>
+            Creates a result table.
+        </description>
+        <cypher><![CDATA[
+            MATCH
+                    (:Maven:Project)-[:CREATES]->(artifact:Artifact)
+            RETURN
+              artifact.group as GroupId, artifact.name as ArtifactId, artifact.version as Version, artifact.type as Type
+            ]]></cypher>
+    </concept>
+
+    <concept id="it:CSVReport">
+        <description>
+            Creates a CSV report.
+        </description>
+        <cypher><![CDATA[
+            MATCH
+                    (:Maven:Project)-[:CREATES]->(artifact:Artifact)
+            RETURN
+                    artifact.group as GroupId, artifact.name as ArtifactId, artifact.version as Version, artifact.type as Type
+            ]]></cypher>
+        <report type="csv"/>
+    </concept>
+
+    <concept id="it:ToBeContextMapReport">
+        <description>
+            The defined dependencies contexts and dependencies.
+        </description>
+        <cypher><![CDATA[
+            MATCH
+                (:Project:Maven)-[:CREATES]->(a:Artifact)
+            OPTIONAL MATCH
+                (a)-[d:DEPENDS_ON]->()
+            RETURN
+                a,d
+            ]]></cypher>
+        <report type="plantuml-component-diagram"/>
+    </concept>
+
+    <constraint id="it:UndefinedComponentDependency">
+        <description>
+            There must be no undefined dependency between components.
+        </description>
+        <cypher><![CDATA[
+            MATCH
+                (c1:Component:Artifact)-[:DEPENDS_ON_COMPONENT]->(c2:Component:Artifact)
+            WHERE NOT
+                (c1)-[:DEFINES_DEPENDENCY]->(c2)
+            WITH
+                c1, c2
+            MATCH
+                (c1)-[:CONTAINS]->(t1:Type),
+                (c2)-[:CONTAINS]->(t2:Type),
+                (t1)-[dependsOn:DEPENDS_ON]->(t2)
+            RETURN
+                c1 as Dependent, c2 as InvalidDependency, t1 as DependentType, t2 as DependencyType, dependsOn.weight as Weight
+            ]]></cypher>
+        <report type="csv"/>
+    </constraint>
+</jqassistant-rules>

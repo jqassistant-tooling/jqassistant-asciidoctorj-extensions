@@ -1,0 +1,5 @@
+jqassistant:
+  plugins:
+    - group-id: org.jqassistant.plugin
+      artifact-id: jqassistant-asciidoc-report-plugin
+      version: 2.0.0-M1
