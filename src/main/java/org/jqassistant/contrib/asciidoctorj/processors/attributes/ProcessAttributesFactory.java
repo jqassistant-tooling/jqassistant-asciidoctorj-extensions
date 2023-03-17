@@ -70,21 +70,22 @@ public class ProcessAttributesFactory {
     }
 
     private static void fillOutputPath(Document document, ProcessAttributes.ProcessAttributesBuilder builder) {
+        String optionsAttributesKey = "attributes";
         String outDirectory = "";
 
         for(String location : OUTPUT_DIRS) {
             if(document.getOptions().get(location) instanceof String) {
                 outDirectory = (String) document.getOptions().get(location);
             }
-            else if (document.getOptions().get("attributes") instanceof Map && ((Map) document.getOptions().get("attributes")).get(location) instanceof String) {
-                outDirectory = (String) ((Map) document.getOptions().get("attributes")).get(location);
+            else if (document.getOptions().get(optionsAttributesKey) instanceof Map && ((Map) document.getOptions().get(optionsAttributesKey)).get(location) instanceof String) {
+                outDirectory = (String) ((Map) document.getOptions().get(optionsAttributesKey)).get(location);
             }
         }
         if(!outDirectory.isEmpty()) {
             builder.outputDirectory(new File(outDirectory));
         }
         else {
-            LOGGER.warn("Output directory neither found in document options nor in document option attributes! This should only occur during testing. Checked for \n {} \n in \n {} \n and \n {}", OUTPUT_DIRS, document.getOptions(), document.getOptions().get("attributes"));
+            LOGGER.warn("Output directory neither found in document options nor in document option attributes! This should only occur during testing. Checked for \n {} \n in \n {} \n and \n {}", OUTPUT_DIRS, document.getOptions(), document.getOptions().get(optionsAttributesKey));
             builder.outputDirectory(new File(""));
         }
     }

@@ -1,4 +1,5 @@
 :icons: text
-:caution-caption: 🔥
-:tip-caption: ✅
-:warning-caption: ⚠
+:caution-caption: 🔥 ERROR
+:tip-caption: ✅ SUCCESS
+:warning-caption: ⚠ WARNING
+:note-caption: ⚡ SKIPPED
