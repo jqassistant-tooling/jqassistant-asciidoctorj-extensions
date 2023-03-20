@@ -3,7 +3,7 @@
 The `jqassistant-asciidoctor-extension` is an asciidoctor extension that offers a convenient way of creating a jQAssistant report inside the asciidoctor pipeline.
 The plugin is using the https://docs.asciidoctor.org/asciidoctorj/latest/extensions/extensions-introduction/[asciidoctor extension api] to hook into the https://asciidoctor.org/[asciidoctor] pipeline.
 
-You can use it to export a jQA-report directly to html, pdf, ePub and others, as long as there's an Asciidoctor converter for it.
+You can use it to convert your jqassistant-report.xml (jQAssistant generates this for you) directly to html, pdf, ePub and others, as long as there's an Asciidoctor converter for it.
 
 == Using the jqassistant-asciidoctor-extension
 
@@ -66,9 +66,11 @@ You can assign an id or id wildcard to either of them. In this case, you get bac
 
 * `include::jQAssistant:Summary[concept=""]` would result in a summary table containing all constraints (no filter applied) and no concepts (there can not be a concept with an empty id).
 
-* `include::jQAssistant:Rules[constraint=jQA:a*, concept=jQA:my:specific:concept-id]` would result in a list containing all constraints starting with jQA:a* with their results and at exactly one concept (if it exists) with id jQA:my:specific:concept-id.
+* `include::jQAssistant:Rules[constraint=jQA:a*, concept=jQA:my:specific:concept-id]` would result in a list containing all constraints with their details that start with jQA:a*. Also, it will contain exactly one concept (if it exists) with id jQA:my:specific:concept-id (this concept will also display its details).
 
-Note: Normally `include::...` 's are used to reference and display other files inside the adoc file they're written in. In our case, tho these `include::...` 's are replaced by the `jqassistant-asciidoctor-extension`.
+NOTE: The described behavior only holds if you use the default templates. If you assign custom templates, these includes may display different things.
+
+NOTE: Normally `include::...` 's are used to reference and display other files inside the adoc file they're written in. In our case, tho these `include::...` 's are replaced by the `jqassistant-asciidoctor-extension`.
 
 == Finding your jqassistant-report.xml
 
@@ -84,13 +86,13 @@ For this part you need to have a basic understanding of how to write a freemarke
 
 There are five templates assignable by you.
 
-* `IconEnabler` This template is used to assign your own document attributes for the asciidoctor processing. Its content is placed at the beginning of each adoc. This happens before the processing of all your includes you are using with this extension. See <<IconEnabler>> for the structure of the default IconEnabler.
-* `Summary` This template is used for the `include::jQAssistant:Summary[]`
-* `RulesConcept` This template is used for the concepts part of the `include::jQAssistant:Rules[]` call
+* `IconEnabler` This template is used to assign your own document attributes for the asciidoctor processing. Its content is placed at the beginning of each adoc. This happens before the processing of your includes. See <<IconEnabler>> for the structure of the default IconEnabler.
+* `Summary` This template is used for the `include::jQAssistant:Summary[]` call.
+* `RulesConcept` This template is used for the concepts part of the `include::jQAssistant:Rules[]` call.
 * `RulesConstraint` This template is used for the constraints part of the `include::jQAssistant:Rules[]` call.
-* `NoResult` This template is used in case of no matching concepts or constraints (both in `include::jQAssistant:Summary[]` and `include::jQAssistant:Rules[]`)
+* `NoResult` This template is used in case of no matching concepts or constraints (both in `include::jQAssistant:Summary[]` and `include::jQAssistant:Rules[]`). It's manly meant to signalize a wrong id filter.
 
-For templates 2-5 the RuleRoot object is used to enrich the template with information. See <<RuleRoot usage>> for more information.
+NOTE: For templates 2-5 the RuleRoot object is used to enrich the template with information. See <<RuleRoot usage>> for more information.
 
 ==== IconEnabler
 .Default "IconEnabler" template
@@ -150,15 +152,15 @@ image::${labeledImage.link}[${labeledImage.label}]
 ****
 </#list>
 ----
-<1> You can refer to you're returned constraints and concepts via the `constraints` or `concepts` identifiers. Specifically each of them is internally handled as a sorted set (primarily sorted by status from failure to warning to success to skipped and secondarily by id in alphabetical order).
-<2> For each concept and constraint (here represented by `rule`) you can refer to their id, description, status and severity simply by noting `rule.id`, `rule.description`, `rule.status` and `rule.severity`.
+<1> You can refer to you're returned constraints and concepts via the `constraints` or `concepts` identifiers. Specifically each of them is internally handled as a sorted set (primarily sorted by status from failure to warning to success to skipped and secondarily by id in alphabetical order). In case the `NoResult` template is used, the RuleRoot object holds an empty list of concepts and constraints.
+<2> For each concept and constraint (here represented by `rule`) you can refer to their id, description, status or severity by noting `rule.id`, `rule.description`, `rule.status` or `rule.severity`.
 <3> Via `rule.hasReports` you can check whether the corresponding concept or constraint generated any pictures (f.e. graphs) or external files (f.e. CSV's) to display.
 <4> Via `rule.hasResult` you can check whether the corresponding concept or constraint generated a result table to display. This table may contain things like dependencies or other related information.
 <5> `rule.reports` gives you access to the list of external files (via `rule.reports.links`) and to a list of generated pictures (via `rule.reports.images`)
-<6> Both external files and images use the same internal type (namely an URLWithLabel) to give access to the location (`labeledLink.link` or `labeledImage.link` depending on the naming in the `<#list>` block) and to the label (`labeledLink.label` or `labeledImage.label`). (consider to use `hasReports` beforehand, see (5))
-<7> You can access the header of your table using the `resultColumnKeys` identifier. This gives you a list of the column names for the table. (consider to use `hasResult` beforehand, see (5))
+<6> Both external files and images use the same internal type (namely URLWithLabel) to give access to the location (`labeledLink.link` or `labeledImage.link` depending on the naming in the `<#list>` block) and to the label (`labeledLink.label` or `labeledImage.label`). (Consider to use `hasReports` beforehand. See (5))
+<7> You can access the header of your table using the `resultColumnKeys` identifier. This gives you a list of the column names for the table. (Consider to use `hasResult` beforehand. See (4))
 <8> You can access a list of all rows via `resultRows`
-<9> You can access each individual cell (containing a string value) of one row from your assigned row (each row itself is a list of Strings). In our example we listed each row via `<#list rule.resultRows as row>` and for each listed their cells (strings) via `<#list row as cell>`.
+<9> You can access each individual cell (containing a string value) of one row via `<#list row as cell>` (each row itself is a list of Strings). In our example we listed each row via `<#list rule.resultRows as row>` and for each listed their cells (strings) via `<#list row as cell>`.
 
 .Default "Summary" template:
 [source, text]
