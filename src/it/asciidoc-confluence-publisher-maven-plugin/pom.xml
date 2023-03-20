@@ -53,6 +53,12 @@
                             <attributes>
                                 <jqassistant-report-path>${project.build.directory}/jqassistant/jqassistant-report.xml</jqassistant-report-path>
                             </attributes>
+                            <logHandler>
+                                <outputToConsole>true</outputToConsole>
+                                <failIf>
+                                    <severity>WARN</severity>
+                                </failIf>
+                            </logHandler>
                         </configuration>
                     </execution>
                 </executions>
