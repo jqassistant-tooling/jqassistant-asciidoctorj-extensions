@@ -16,7 +16,7 @@ public class RulesRoot {
     SortedSet<RuleRoot> constraints;
 
     /**
-     * not currently functional
+     * not currently functional; describes a concept for custom sorting of RuleRoots
      */
     public void sortingStrategy() {
         concepts = new TreeSet<>(RuleRoot::compareTo);

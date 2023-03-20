@@ -76,11 +76,14 @@ public class ProcessAttributesFactory {
         for(String location : OUTPUT_DIRS) {
             if(document.getOptions().get(location) instanceof String) {
                 outDirectory = (String) document.getOptions().get(location);
+                break;
             }
-            else if (document.getOptions().get(optionsAttributesKey) instanceof Map && ((Map) document.getOptions().get(optionsAttributesKey)).get(location) instanceof String) {
+            if (document.getOptions().get(optionsAttributesKey) instanceof Map && ((Map) document.getOptions().get(optionsAttributesKey)).get(location) instanceof String) {
                 outDirectory = (String) ((Map) document.getOptions().get(optionsAttributesKey)).get(location);
+                break;
             }
         }
+        LOGGER.debug(outDirectory);
         if(!outDirectory.isEmpty()) {
             builder.outputDirectory(new File(outDirectory));
         }

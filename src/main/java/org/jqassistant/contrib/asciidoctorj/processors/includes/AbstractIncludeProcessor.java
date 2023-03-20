@@ -1,11 +1,12 @@
 package org.jqassistant.contrib.asciidoctorj.processors.includes;
 
 import freemarker.template.TemplateException;
+import io.smallrye.common.constraint.NotNull;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.IncludeProcessor;
 import org.asciidoctor.extension.PreprocessorReader;
 import org.jqassistant.contrib.asciidoctorj.freemarker.TemplateRepo;
-import org.jqassistant.contrib.asciidoctorj.freemarker.templateroots.RuleRoot;
+import org.jqassistant.contrib.asciidoctorj.freemarker.templateroots.RuleRootParser;
 import org.jqassistant.contrib.asciidoctorj.freemarker.templateroots.RulesRoot;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributesFactory;
@@ -71,16 +72,18 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
      * @param attributes the ProcessAttribute instance. May optionally be filled with: templatesPath
      * @return the from template and root produced String
      */
-    private String fillTemplates(RulesRoot root, ProcessAttributes attributes) {
+    private String fillTemplates(@NotNull RulesRoot root, @NotNull ProcessAttributes attributes) {
         Writer writer = new StringWriter();
 
         List<String> tNames;
 
-        if(root == null) {
+        if(root.getConcepts().size() == 0 && root.getConstraints().size() == 0) {
             tNames = List.of("NoResult");
+            LOGGER.info("Filters for concepts {} and constraints {} return matching Rules!", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
         }
         else {
             tNames = templateNames;
+            LOGGER.info("Starting to fill templates {}", tNames);
         }
 
         for (String tName : tNames) {
@@ -102,17 +105,18 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
      * @param attributes the ProcessAttribute instance. Should at least contain: reportPath, outputDirectory! May optionally be filled with: conceptIdFilter, constraintIdFilter
      * @return rootElement for data-structure
      */
-    RulesRoot fillDataStructure(ProcessAttributes attributes) {
+    RulesRoot fillDataStructure(@NotNull ProcessAttributes attributes) {
         RulesRoot.RulesRootBuilder rootBuilder = RulesRoot.builder();
 
+        LOGGER.info("Starting to fill RulesRoot with for {} matching concepts and for {} constraints.", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
         for (Concept concept :
                 repo.findConcepts(attributes)) {
-            rootBuilder.concept(RuleRoot.createRuleRoot(concept, attributes.getOutputDirectory()));
+            rootBuilder.concept(RuleRootParser.createRuleRoot(concept, attributes.getOutputDirectory()));
         }
 
         for (Constraint constraint :
                 repo.findConstraints(attributes)) {
-            rootBuilder.constraint(RuleRoot.createRuleRoot(constraint, attributes.getOutputDirectory()));
+            rootBuilder.constraint(RuleRootParser.createRuleRoot(constraint, attributes.getOutputDirectory()));
         }
 
         return rootBuilder.build();

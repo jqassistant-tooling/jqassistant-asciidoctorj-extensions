@@ -12,16 +12,16 @@ public interface ReportRepo {
     /**
      * finds and returns all fitting concepts for an id filter
      *
-     * @param attributes contains at least conceptIdFilter for filtering and reportPath for lazy initialize
-     * @return all to attributes fitting concepts; if conceptIdFilter from attributes is not set, return an empty List
+     * @param attributes Should at least contain: reportPath! May optionally be filled with: conceptIdFilter
+     * @return all to attributes fitting concepts; if conceptIdFilter from attributes is null, return all concepts; if conceptIdFilter from attributes is "", return empty Set
      */
     SortedSet<Concept> findConcepts(ProcessAttributes attributes);
 
     /**
      * finds and returns all fitting constraints for an id filter
      *
-     * @param attributes contains at least constraintIdFilter for filtering and reportPath for lazy initialize
-     * @return all to attributes fitting concepts; if constraintIdFilter from attributes is not set, return an empty List
+     * @param attributes Should at least contain: reportPath! May optionally be filled with: constraintIdFilter
+     * @return all to attributes fitting constraints; if constraintIdFilter from attributes is null, return all constraints; if constraintIdFilter from attributes is "", return empty Set
      */
     SortedSet<Constraint> findConstraints(ProcessAttributes attributes);
 }

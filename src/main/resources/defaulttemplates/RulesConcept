@@ -27,6 +27,7 @@ image::${labeledImage.link}[${labeledImage.label}]
 
 </#list>
 <#elseif rule.hasResult>
+[opts="header"]
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list>
 <#list rule.resultRows as row>

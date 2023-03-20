@@ -50,6 +50,7 @@ public class ReportRepoImpl implements ReportRepo{
 
         if(attributes.getConceptIdFilter() == null) {
             conceptSSet.addAll(concepts.values());
+            LOGGER.info("Giving back all concepts due to empty conceptIdFilter");
             return conceptSSet;
         }
 
@@ -57,7 +58,7 @@ public class ReportRepoImpl implements ReportRepo{
 
         conceptSSet.addAll((Collection<Concept>) filterRulesById(concepts, id));
 
-        LOGGER.info("Found all concepts matching {}", attributes.getConceptIdFilter());
+        LOGGER.info("Giving back all concepts matching {}", attributes.getConceptIdFilter());
 
         return conceptSSet;
     }
@@ -70,6 +71,7 @@ public class ReportRepoImpl implements ReportRepo{
 
         if(attributes.getConstraintIdFilter() == null) {
             constraintSSet.addAll(constraints.values());
+            LOGGER.info("Giving back all constraints due to empty constraintIdFilter");
             return constraintSSet;
         }
 
@@ -77,11 +79,17 @@ public class ReportRepoImpl implements ReportRepo{
 
         constraintSSet.addAll((Collection<Constraint>) filterRulesById(constraints, id));
 
-        LOGGER.info("Found all constraints matching {}", attributes.getConstraintIdFilter());
+        LOGGER.info("Giving back all constraints matching {}", attributes.getConstraintIdFilter());
 
         return constraintSSet;
     }
 
+    /**
+     * filters all given rules by their id
+     * @param ruleMap a map for all given rules: 1. element = id; 2. element = rule
+     * @param id the id(-wildcard) to match against
+     * @return all matching rules
+     */
     private Collection<? extends Rule> filterRulesById(Map<String, ? extends Rule> ruleMap, String id) {
         if(id == null) return ruleMap.values();
 

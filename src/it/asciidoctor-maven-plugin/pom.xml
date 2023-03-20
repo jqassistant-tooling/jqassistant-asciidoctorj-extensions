@@ -42,14 +42,6 @@
                         <attributes>
                             <jqassistant-report-path>${project.build.directory}/jqassistant/jqassistant-report.xml</jqassistant-report-path>
                             <jqassistant-templates-path>custom</jqassistant-templates-path>
-                            <source-highlighter>rouge</source-highlighter>
-                            <imagesdir>./images</imagesdir>
-                            <toc>left</toc>
-                            <sectanchors>true</sectanchors>
-                            <!-- set the idprefix to blank -->
-                            <idprefix/>
-                            <idseparator>-</idseparator>
-                            <docinfo1>true</docinfo1>
                         </attributes>
                         <logHandler>
                             <outputToConsole>true</outputToConsole>
@@ -72,8 +64,6 @@
                                 <jqassistant-templates-path>custom</jqassistant-templates-path>
                                 <source-highlighter>rouge</source-highlighter>
                                 <pagenums/>
-                                <toc/>
-                                <idprefix/>
                                 <idseparator>-</idseparator>
                             </attributes>
                             <logHandler>

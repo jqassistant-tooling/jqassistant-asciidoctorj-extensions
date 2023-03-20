@@ -7,10 +7,13 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.TimeZone;
 
 public class TemplateRepoImpl implements TemplateRepo {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateRepoImpl.class);
 
     Configuration cfg;
     TemplateLoader customLoader;
@@ -28,17 +31,22 @@ public class TemplateRepoImpl implements TemplateRepo {
                 customLoader = new ClassTemplateLoader(getClass().getClassLoader(), attributes.getTemplatesPath());
                 MultiTemplateLoader mtl = new MultiTemplateLoader(new TemplateLoader[] {customLoader, defaultLoader});
                 cfg.setTemplateLoader(mtl);
+                LOGGER.info("Template loading location set to {}. If template is not defined in this location, the extension will default to the respective default template.", attributes.getTemplatesPath());
             }
             else {
                 cfg.setTemplateLoader(defaultLoader);
+                LOGGER.info("Template loading is set default templates. If you want to define your own templates, check the README.md for this extension");
             }
         }
 
+        Template template;
         try {
-            return cfg.getTemplate(templateName);
+            template = cfg.getTemplate(templateName);
         } catch (Exception e) {
             throw new IllegalStateException("No valid Template with name \"" + templateName + "\" found neither in custom template location nor in default template location");
         }
+        LOGGER.info("Template {} loaded", templateName);
+        return template;
     }
 
     private Configuration setupFreemarker() {

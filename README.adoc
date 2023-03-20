@@ -64,9 +64,9 @@ For both of them, you have the option to assign two additional attributes:
 
 You can assign an id or id wildcard to either of them. In this case, you get back some specific jQAssisstant concepts and constraints. This could look like this:
 
-* `include::jQAssistant:Summary[constraint=jQA:a*, concept=jQA:my:specific:concept-id]` would result in a summary table with all constraints starting with jQA:a* and at most one concept (if it exists) with id jQA:my:specific:concept-id.
+* `include::jQAssistant:Summary[concept=""]` would result in a summary table containing all constraints (no filter applied) and no concepts (there can not be a concept with an empty id).
 
-* `include::jQAssistant:Rules[concept=""]` would result in a list containing all constraints (no filter applied) with their results and no concepts (there can not be a concept with an empty id).
+* `include::jQAssistant:Rules[constraint=jQA:a*, concept=jQA:my:specific:concept-id]` would result in a list containing all constraints starting with jQA:a* with their results and at exactly one concept (if it exists) with id jQA:my:specific:concept-id.
 
 Note: Normally `include::...` 's are used to reference and display other files inside the adoc file they're written in. In our case, tho these `include::...` 's are replaced by the `jqassistant-asciidoctor-extension`.
 
@@ -82,8 +82,30 @@ This extension uses freemarker templates to personalize your report. The basic i
 
 For this part you need to have a basic understanding of how to write a freemarker template and how to reference the data from your root element. For information on how to write your freemarker template please refer to the https://freemarker.apache.org/docs/dgui.html[Freemarker template author's guide].
 
+There are five templates assignable by you.
+
+* `IconEnabler` This template is used to assign your own document attributes for the asciidoctor processing. Its content is placed at the beginning of each adoc. This happens before the processing of all your includes you are using with this extension. See <<IconEnabler>> for the structure of the default IconEnabler.
+* `Summary` This template is used for the `include::jQAssistant:Summary[]`
+* `RulesConcept` This template is used for the concepts part of the `include::jQAssistant:Rules[]` call
+* `RulesConstraint` This template is used for the constraints part of the `include::jQAssistant:Rules[]` call.
+* `NoResult` This template is used in case of no matching concepts or constraints (both in `include::jQAssistant:Summary[]` and `include::jQAssistant:Rules[]`)
+
+For templates 2-5 the RuleRoot object is used to enrich the template with information. See <<RuleRoot usage>> for more information.
+
+==== IconEnabler
+[source, text]
+----
+:caution-caption: 🔥 ERROR
+:tip-caption: ✅ SUCCESS
+:warning-caption: ⚠ WARNING
+:note-caption: ⚡ SKIPPED
+----
+One possibility here is to add the `:icons:` attribute and set it to `font`. This allows you to use icons in your other templates. Another possibility is to remove all the content in the IconEnabler. This allows you to use the standard asciidoctor icons for the admonition blocks.
+
+==== RuleRoot usage
 The `jqassistant-asciidoctor-extension` provides a root element, that is then combined with your freemarker template to create the finished report. You can take a look at the following example template to understand the data structure provided by the extension.
 
+.Default "RulesConcept" template
 [source, text]
 ----
 <#list concepts as rule>  <1>
@@ -136,3 +158,20 @@ image::${labeledImage.link}[${labeledImage.label}]
 <7> You can access the header of your table using the `resultColumnKeys` identifier. This gives you a list of the column names for the table. (consider to use `hasResult` beforehand, see (5))
 <8> You can access a list of all rows via `resultRows`
 <9> You can access each individual cell (containing a string value) of one row from your assigned row (each row itself is a list of Strings). In our example we listed each row via `<#list rule.resultRows as row>` and for each listed their cells (strings) via `<#list row as cell>`.
+
+.Default "Summary" template:
+[source, text]
+----
+[opts="header"]
+|===
+|Id |Description |Severity |Status
+<#list constraints as constraint>
+|<<jqassistant_${constraint.id}>> |${constraint.description} |${constraint.severity}
+|[<#if constraint.status == "SUCCESS">green<#elseif constraint.status == "FAILURE">red<#elseif constraint.status == "WARNING">yellow<#else>grey</#if>]#${constraint.status}#
+</#list>
+<#list concepts as concept>
+|<<jqassistant_${concept.id}>> |${concept.description} |${concept.severity}
+|[<#if concept.status == "SUCCESS">green<#elseif concept.status == "FAILURE">red<#elseif concept.status == "WARNING">yellow<#else>grey</#if>]#${concept.status}#
+</#list>
+|===
+----

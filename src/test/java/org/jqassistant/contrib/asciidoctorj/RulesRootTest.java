@@ -1,6 +1,7 @@
 package org.jqassistant.contrib.asciidoctorj;
 
 import org.jqassistant.contrib.asciidoctorj.freemarker.templateroots.RuleRoot;
+import org.jqassistant.contrib.asciidoctorj.freemarker.templateroots.RuleRootParser;
 import org.jqassistant.contrib.asciidoctorj.freemarker.templateroots.RulesRoot;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
 import org.junit.jupiter.api.BeforeAll;
@@ -44,11 +45,11 @@ class RulesRootTest {
                 .result(res).reports(reps).build();
 
         rulesRoot = RulesRoot.builder()
-                .concept(RuleRoot.createRuleRoot(tce1, new File("")))
-                .concept(RuleRoot.createRuleRoot(tce2, new File("")))
-                .concept(RuleRoot.createRuleRoot(tce3, new File("")))
-                .constraint(RuleRoot.createRuleRoot(tca2, new File(IncludeProcessorTest.class.getResource(IncludeProcessorTest.class.getSimpleName() + ".class").toURI())))
-                .constraint(RuleRoot.createRuleRoot(tca1, new File("")))
+                .concept(RuleRootParser.createRuleRoot(tce1, new File("")))
+                .concept(RuleRootParser.createRuleRoot(tce2, new File("")))
+                .concept(RuleRootParser.createRuleRoot(tce3, new File("")))
+                .constraint(RuleRootParser.createRuleRoot(tca2, new File(IncludeProcessorTest.class.getResource(IncludeProcessorTest.class.getSimpleName() + ".class").toURI())))
+                .constraint(RuleRootParser.createRuleRoot(tca1, new File("")))
                 .build();
     }
 
