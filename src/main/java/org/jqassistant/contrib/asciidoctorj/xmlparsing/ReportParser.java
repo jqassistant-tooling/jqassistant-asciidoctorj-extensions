@@ -1,5 +1,6 @@
 package org.jqassistant.contrib.asciidoctorj.xmlparsing;
 
+import io.smallrye.common.constraint.NotNull;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
 import org.jqassistant.schema.report.v2.*;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class ReportParser {
      * @param fileDestination the place where the underlying xml is located
      * @return a ParsedReport created from xml file
      */
-    public ParsedReport parseReportXml(String fileDestination) {
+    public ParsedReport parseReportXml(@NotNull String fileDestination) {
         ReportReader reportReader = ReportReader.getInstance();
 
         LOGGER.info("Parsing xml-report from {}", fileDestination);
@@ -41,7 +42,7 @@ public class ReportParser {
      * @param report the from ReportReader received JqassistantReport
      * @return a ParsedReport created from JqassistantReport instance
      */
-    private ParsedReport parseReport(JqassistantReport report) {
+    private ParsedReport parseReport(@NotNull JqassistantReport report) {
         List<ReferencableRuleType> nodes = report.getGroupOrConceptOrConstraint();
         ParsedReport parsedReport = new ParsedReport();
 
@@ -59,7 +60,7 @@ public class ReportParser {
      * @param node the node that will be parsed
      * @return the Rule that is generated from the node
      */
-    private Rule parseNode(ParsedReport parsedReport, ReferencableRuleType node) {
+    private Rule parseNode(@NotNull ParsedReport parsedReport, @NotNull ReferencableRuleType node) {
         Rule rule = null;
 
         if (node instanceof GroupType) {
@@ -98,7 +99,7 @@ public class ReportParser {
      * @param groupNode the GroupNode that will be parsed
      * @return the Group that is generated from the node
      */
-    private Group parseGroup(ParsedReport parsedReport, GroupType groupNode) {
+    private Group parseGroup(@NotNull ParsedReport parsedReport, @NotNull GroupType groupNode) {
         Group.GroupBuilder groupBuilder = Group.builder().id(groupNode.getId()).duration(groupNode.getDuration());
 
         List<ReferencableRuleType> childNodes = groupNode.getGroupOrConceptOrConstraint();
@@ -120,7 +121,7 @@ public class ReportParser {
      * @param conceptNode the Node from which the Concept will be generated
      * @return the Concept that is generated from the node
      */
-    private Concept parseConcept(ConceptType conceptNode) {
+    private Concept parseConcept(@NotNull ConceptType conceptNode) {
         return Concept.builder()
                 .status(conceptNode.getStatus().value())
                 .severity(conceptNode.getSeverity().getValue())
@@ -138,7 +139,7 @@ public class ReportParser {
      * @param constraintNode the Node from which the Constraint will be generated
      * @return the Constraint that is generated from the node
      */
-    private Constraint parseConstraint(ConstraintType constraintNode) {
+    private Constraint parseConstraint(@NotNull ConstraintType constraintNode) {
         return Constraint.builder()
                 .status(constraintNode.getStatus().value())
                 .severity(constraintNode.getSeverity().getValue())
@@ -156,7 +157,7 @@ public class ReportParser {
      * @param resultNode the Node from which the Result will be generated
      * @return the Result that is generated from the node
      */
-    private Result parseResult(ResultType resultNode) {
+    private Result parseResult(@NotNull ResultType resultNode) {
         if (resultNode == null) return Result.EMPTY_RESULT;
 
         Result.ResultBuilder builder = Result.builder();
@@ -182,7 +183,7 @@ public class ReportParser {
      * @param reportsNode the Node from which the Reports will be generated
      * @return the Reports that is generated from the node
      */
-    private Reports parseReports(ReportsType reportsNode) {
+    private Reports parseReports(@NotNull ReportsType reportsNode) {
         if (reportsNode == null) return Reports.EMPTY_REPORTS;
 
         Reports.ReportsBuilder reports = Reports.builder();

@@ -1,5 +1,6 @@
 package org.jqassistant.contrib.asciidoctorj.processors.attributes;
 
+import io.smallrye.common.constraint.NotNull;
 import org.asciidoctor.ast.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class ProcessAttributesFactory {
      * @return returns generated ProcessAttributes
      * @throws IllegalStateException if jqassistant-report-path not found or not a valid String or jqassistatn-templaes-path not a valid String
      */
-    public static ProcessAttributes createProcessAttributesInclude(Document document, Map<String, Object> attributeMap) {
+    public static ProcessAttributes createProcessAttributesInclude(@NotNull Document document, @NotNull Map<String, Object> attributeMap) {
         ProcessAttributes.ProcessAttributesBuilder builder = ProcessAttributes.builder();
 
         fillReportPath(document, builder);
@@ -43,7 +44,7 @@ public class ProcessAttributesFactory {
      * @return returns generated ProcessAttributes
      * @throws IllegalStateException if jqassistant-templaes-path not a valid String
      */
-    public static ProcessAttributes createProcessAttributesPre(Document document) {
+    public static ProcessAttributes createProcessAttributesPre(@NotNull Document document) {
         ProcessAttributes.ProcessAttributesBuilder builder = ProcessAttributes.builder();
 
         fillTemplatesPath(document, builder);
@@ -51,7 +52,7 @@ public class ProcessAttributesFactory {
         return builder.build();
     }
 
-    private static void fillReportPath(Document document, ProcessAttributes.ProcessAttributesBuilder builder) {
+    private static void fillReportPath(@NotNull Document document, @NotNull ProcessAttributes.ProcessAttributesBuilder builder) {
         if(!(document.getAttributes().get(REPORT_PATH) instanceof String)) {
             throw new IllegalStateException("You're report xml file location isn't set properly! Please set the destination of you're jqassistant-report.xml via the global document attributes for you're asciidoctor.");
         }
@@ -60,16 +61,16 @@ public class ProcessAttributesFactory {
         }
     }
 
-    private static void fillTemplatesPath(Document document, ProcessAttributes.ProcessAttributesBuilder builder) {
+    private static void fillTemplatesPath(@NotNull Document document, @NotNull ProcessAttributes.ProcessAttributesBuilder builder) {
         if(document.getAttributes().get(TEMPLATES_PATH) != null && !(document.getAttributes().get(TEMPLATES_PATH) instanceof String)) {
-            throw new IllegalStateException("You're templates folder location isn't a String! Please set the destination of you're template folder to a String via the global document attributes for you're asciidoctor. Or delete the attribute to use default templates. For questions, refer to the README.md");
+            throw new IllegalStateException("You're templates folder location isn't a String! Please set the destination of you're template folder to a String via the global document attributes for you're asciidoctor. Or delete the attribute to use default templates. For questions, refer to the README.adoc");
         }
         else {
             builder.templatesPath((String) document.getAttributes().get(TEMPLATES_PATH));
         }
     }
 
-    private static void fillOutputPath(Document document, ProcessAttributes.ProcessAttributesBuilder builder) {
+    private static void fillOutputPath(@NotNull Document document, @NotNull ProcessAttributes.ProcessAttributesBuilder builder) {
         String optionsAttributesKey = "attributes";
         String outDirectory = "";
 

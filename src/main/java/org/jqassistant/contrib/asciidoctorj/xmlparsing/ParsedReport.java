@@ -1,5 +1,6 @@
 package org.jqassistant.contrib.asciidoctorj.xmlparsing;
 
+import io.smallrye.common.constraint.NotNull;
 import lombok.Getter;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Concept;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Constraint;
@@ -18,15 +19,15 @@ public class ParsedReport {
     private final Map<String, Concept> concepts = new HashMap<>();
     private final Map<String, Constraint> constraints = new HashMap<>();
 
-    public void addGroup(Group group) {
+    public void addGroup(@NotNull Group group) {
         groups.put(group.getId(), group);
     }
 
-    public void addConcept(Concept concept) {
+    public void addConcept(@NotNull Concept concept) {
         concepts.put(concept.getId(), concept);
     }
 
-    public void addConstraint(Constraint constraint) {
+    public void addConstraint(@NotNull Constraint constraint) {
         constraints.put(constraint.getId(), constraint);
     }
 

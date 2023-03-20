@@ -1,5 +1,6 @@
 package org.jqassistant.contrib.asciidoctorj.freemarker.templateroots;
 
+import io.smallrye.common.constraint.NotNull;
 import org.apache.commons.io.FileUtils;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
 import org.slf4j.Logger;
@@ -26,7 +27,7 @@ public class RuleRootParser {
      * @param outputDirectory the directory where the attachments from the rule reports are copied to
      * @return a by freemarker readable RuleRoot instance
      */
-    public static RuleRoot createRuleRoot(ExecutableRule rule, File outputDirectory) {
+    public static RuleRoot createRuleRoot(@NotNull ExecutableRule rule, @NotNull File outputDirectory) {
         RuleRoot.RuleRootBuilder builder = RuleRoot.builder();
 
         builder.id(rule.getId());
@@ -35,7 +36,6 @@ public class RuleRootParser {
         builder.severity(rule.getSeverity().toUpperCase());
 
         Result result = rule.getResult();
-        if(result == null) throw new NullPointerException("Results of rules should never be null! Instead they should be Result.EMPTY_RESULT.");
 
         if(result != Result.EMPTY_RESULT) {
             List<String> resultKeys = rule.getResult().getColumnKeys();
@@ -51,10 +51,13 @@ public class RuleRootParser {
             builder.hasResult(true);
         }
 
-        if(rule.getReports() == null) throw new NullPointerException("Reports of rules should never be null! Instead they should be Reports.EMPTY_RESULT.");
-        if(rule.getReports() != Reports.EMPTY_REPORTS) builder.hasReports(true);
-
-        builder.reports(RuleRootParser.parseReports(rule.getReports(), outputDirectory));
+        if(rule.getReports() != Reports.EMPTY_REPORTS){
+            builder.hasReports(true);
+            builder.reports(RuleRootParser.parseReports(rule.getReports(), outputDirectory));
+        }
+        else {
+            builder.reports(Reports.EMPTY_REPORTS);
+        }
 
         if(rule instanceof Concept) {
             LOGGER.info("Successfully parsed Concept {}.", rule.getId());
@@ -76,7 +79,7 @@ public class RuleRootParser {
      * @param outputDirectory the location the attachments are copied to
      * @return the parse report with adapted links
      */
-    private static Reports parseReports(Reports reports, File outputDirectory) {
+    private static Reports parseReports(@NotNull Reports reports, @NotNull File outputDirectory) {
         Reports.ReportsBuilder repBuilder = Reports.builder();
 
         for(URLWithLabel image : reports.getImages()) {
@@ -89,7 +92,7 @@ public class RuleRootParser {
         return repBuilder.build();
     }
 
-    private static String copyAttachmentAndRelativizePath(String link, File outputDirectory){
+    private static String copyAttachmentAndRelativizePath(@NotNull String link, @NotNull File outputDirectory){
         URI uri;
         try {
             uri = new URI(link);

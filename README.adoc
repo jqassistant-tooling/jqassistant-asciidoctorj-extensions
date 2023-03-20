@@ -47,7 +47,7 @@ As an example of how to use the plugin, you can take a look at the following mav
     </plugin>
 </plugins>
 ----
-<1> place the path to your jqassistant-report.xml here
+<1> place the path to your jqassistant-report.xml here. Check <<Finding your jqassistant-report.xml>> for information.
 <2> OPTIONAL: If not declared, the extension will use the default templates. If you want to use your templates, place the name of your custom templates location here. For more information refer to section <<Using your own template>>.
 
 == Create your report
@@ -72,7 +72,7 @@ Note: Normally `include::...` 's are used to reference and display other files i
 
 == Finding your jqassistant-report.xml
 
-
+Normally you can refer to your jqassistant-report.xml via `${project.build.directory}/jqassistant/jqassistant-report.xml`. You can check the exact location by searching `jqassistant-report.xml` in your project structure.
 
 == Using your own template
 
@@ -93,6 +93,7 @@ There are five templates assignable by you.
 For templates 2-5 the RuleRoot object is used to enrich the template with information. See <<RuleRoot usage>> for more information.
 
 ==== IconEnabler
+.Default "IconEnabler" template
 [source, text]
 ----
 :caution-caption: 🔥 ERROR

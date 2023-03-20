@@ -1,6 +1,7 @@
 package org.jqassistant.contrib.asciidoctorj.reportrepo;
 
 import com.buschmais.jqassistant.core.rule.api.filter.RuleFilter;
+import io.smallrye.common.constraint.NotNull;
 import lombok.Getter;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
@@ -25,11 +26,11 @@ public class ReportRepoImpl implements ReportRepo{
     private Map<String, Concept> concepts = new HashMap<>();
     private Map<String, Constraint> constraints = new HashMap<>();
 
-    public ReportRepoImpl(ReportParser reportParser) {
+    public ReportRepoImpl(@NotNull ReportParser reportParser) {
         this.reportParser = reportParser;
     }
 
-    private void initialize(ProcessAttributes attributes) {
+    private void initialize(@NotNull ProcessAttributes attributes) {
         if (!isInitialized()) {
             LOGGER.info("initializing reportRepo");
             ParsedReport report = reportParser.parseReportXml(attributes.getReportPath());
@@ -43,7 +44,7 @@ public class ReportRepoImpl implements ReportRepo{
     }
 
     @Override
-    public SortedSet<Concept> findConcepts(ProcessAttributes attributes) {
+    public SortedSet<Concept> findConcepts(@NotNull ProcessAttributes attributes) {
         initialize(attributes);
 
         SortedSet<Concept> conceptSSet = new TreeSet<>(Comparator.comparing(Rule::getId));
@@ -64,7 +65,7 @@ public class ReportRepoImpl implements ReportRepo{
     }
 
     @Override
-    public SortedSet<Constraint> findConstraints(ProcessAttributes attributes) {
+    public SortedSet<Constraint> findConstraints(@NotNull ProcessAttributes attributes) {
         initialize(attributes);
 
         SortedSet<Constraint> constraintSSet = new TreeSet<>(Comparator.comparing(Rule::getId));
@@ -90,7 +91,7 @@ public class ReportRepoImpl implements ReportRepo{
      * @param id the id(-wildcard) to match against
      * @return all matching rules
      */
-    private Collection<? extends Rule> filterRulesById(Map<String, ? extends Rule> ruleMap, String id) {
+    private Collection<? extends Rule> filterRulesById(@NotNull Map<String, ? extends Rule> ruleMap, String id) {
         if(id == null) return ruleMap.values();
 
         Set<String> matchingIds = RULE_FILTER.match(ruleMap.keySet(), id);

@@ -38,7 +38,7 @@ class ReportRepoTest {
     }
 
     @Test
-    void findConceptsByIdWildcard() {
+    void testFindConceptsByIdWildcard() {
         ProcessAttributes attributes1 = ProcessAttributes.builder().reportPath("mock-report").conceptIdFilter("Test*").build();
 
         assert(testRepo.findConcepts(attributes1).size() == 2);
@@ -46,7 +46,7 @@ class ReportRepoTest {
     }
 
     @Test
-    void findConceptsById() {
+    void testFindConceptsById() {
         ProcessAttributes attributes2 = ProcessAttributes.builder().reportPath("mock-report").conceptIdFilter("TestConceptId2").constraintIdFilter("").build();
 
         assert(testRepo.findConcepts(attributes2).size() == 1);
@@ -55,7 +55,7 @@ class ReportRepoTest {
     }
 
     @Test
-    void findConstraintsById() {
+    void testFindConstraintsById() {
         ProcessAttributes attributes3 = ProcessAttributes.builder().reportPath("mock-report").constraintIdFilter("TestConstraintId").build();
 
         assert(testRepo.findConstraints(attributes3).size() == 1);

@@ -1,5 +1,6 @@
 package org.jqassistant.contrib.asciidoctorj.reportrepo;
 
+import io.smallrye.common.constraint.NotNull;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
 import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
 
@@ -15,7 +16,7 @@ public interface ReportRepo {
      * @param attributes Should at least contain: reportPath! May optionally be filled with: conceptIdFilter
      * @return all to attributes fitting concepts; if conceptIdFilter from attributes is null, return all concepts; if conceptIdFilter from attributes is "", return empty Set
      */
-    SortedSet<Concept> findConcepts(ProcessAttributes attributes);
+    SortedSet<Concept> findConcepts(@NotNull ProcessAttributes attributes);
 
     /**
      * finds and returns all fitting constraints for an id filter
@@ -23,5 +24,5 @@ public interface ReportRepo {
      * @param attributes Should at least contain: reportPath! May optionally be filled with: constraintIdFilter
      * @return all to attributes fitting constraints; if constraintIdFilter from attributes is null, return all constraints; if constraintIdFilter from attributes is "", return empty Set
      */
-    SortedSet<Constraint> findConstraints(ProcessAttributes attributes);
+    SortedSet<Constraint> findConstraints(@NotNull ProcessAttributes attributes);
 }

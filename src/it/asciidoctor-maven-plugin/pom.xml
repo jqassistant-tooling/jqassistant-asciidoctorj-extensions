@@ -59,6 +59,7 @@
                         </goals>
                         <configuration>
                             <backend>pdf</backend>
+                            <encoding>UTF-8</encoding>
                             <attributes>
                                 <jqassistant-report-path>${project.build.directory}/jqassistant/jqassistant-report.xml</jqassistant-report-path>
                                 <jqassistant-templates-path>custom</jqassistant-templates-path>

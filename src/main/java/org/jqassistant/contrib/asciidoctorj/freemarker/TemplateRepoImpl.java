@@ -6,6 +6,7 @@ import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
+import io.smallrye.common.constraint.NotNull;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class TemplateRepoImpl implements TemplateRepo {
     }
 
     @Override
-    public Template findTemplate(ProcessAttributes attributes, String templateName) {
+    public Template findTemplate(@NotNull ProcessAttributes attributes, @NotNull String templateName) {
         if(!cfg.isTemplateLoaderExplicitlySet()) {
             if(attributes.getTemplatesPath() != null) {
                 customLoader = new ClassTemplateLoader(getClass().getClassLoader(), attributes.getTemplatesPath());
@@ -35,7 +36,7 @@ public class TemplateRepoImpl implements TemplateRepo {
             }
             else {
                 cfg.setTemplateLoader(defaultLoader);
-                LOGGER.info("Template loading is set default templates. If you want to define your own templates, check the README.md for this extension");
+                LOGGER.info("Template loading is set default templates. If you want to define your own templates, check the README.adoc for this extension");
             }
         }
 

@@ -36,7 +36,7 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
     String target;
 
 
-    protected AbstractIncludeProcessor(ReportRepo reportRepository, TemplateRepo templateRepo, String target, List<String> templateNames) {
+    protected AbstractIncludeProcessor(@NotNull ReportRepo reportRepository, @NotNull TemplateRepo templateRepo, @NotNull String target, @NotNull List<String> templateNames) {
         this.repo = reportRepository;
         this.templateRepo = templateRepo;
         this.templateNames = templateNames;
@@ -79,7 +79,7 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
 
         if(root.getConcepts().size() == 0 && root.getConstraints().size() == 0) {
             tNames = List.of("NoResult");
-            LOGGER.info("Filters for concepts {} and constraints {} return matching Rules!", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
+            LOGGER.info("Filters for concepts {} and constraints {} returned no matching Rules!", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
         }
         else {
             tNames = templateNames;
@@ -108,7 +108,7 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
     RulesRoot fillDataStructure(@NotNull ProcessAttributes attributes) {
         RulesRoot.RulesRootBuilder rootBuilder = RulesRoot.builder();
 
-        LOGGER.info("Starting to fill RulesRoot with for {} matching concepts and for {} constraints.", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
+        LOGGER.info("Starting to fill RulesRoot with for {} matching concepts and for {} matching constraints.", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
         for (Concept concept :
                 repo.findConcepts(attributes)) {
             rootBuilder.concept(RuleRootParser.createRuleRoot(concept, attributes.getOutputDirectory()));

@@ -2,6 +2,7 @@ package org.jqassistant.contrib.asciidoctorj.processors.pre;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import io.smallrye.common.constraint.NotNull;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.PreprocessorReader;
@@ -22,7 +23,7 @@ public class IconEnabler extends Preprocessor {
     String templateName = "IconEnabler";
     TemplateRepo templateRepo;
 
-    public IconEnabler(TemplateRepo templateRepo) {
+    public IconEnabler(@NotNull TemplateRepo templateRepo) {
         this.templateRepo = templateRepo;
     }
 

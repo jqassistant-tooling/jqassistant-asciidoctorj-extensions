@@ -1,6 +1,7 @@
 package org.jqassistant.contrib.asciidoctorj.freemarker;
 
 import freemarker.template.Template;
+import io.smallrye.common.constraint.NotNull;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
 
 public interface TemplateRepo {
@@ -15,6 +16,6 @@ public interface TemplateRepo {
      * @param templateName file name of the wanted template
      * @return the Template with corresponding name; either loaded from custom or default location
      */
-    Template findTemplate(ProcessAttributes attributes, String templateName);
+    Template findTemplate(@NotNull ProcessAttributes attributes, @NotNull String templateName);
 
 }
