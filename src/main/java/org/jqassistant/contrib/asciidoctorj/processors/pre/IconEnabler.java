@@ -9,7 +9,6 @@ import org.asciidoctor.extension.PreprocessorReader;
 import org.jqassistant.contrib.asciidoctorj.freemarker.TemplateRepo;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributesFactory;
-import org.jqassistant.contrib.asciidoctorj.processors.includes.AbstractIncludeProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +18,7 @@ import java.io.Writer;
 import java.util.List;
 
 public class IconEnabler extends Preprocessor {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIncludeProcessor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IconEnabler.class);
     String templateName = "IconEnabler";
     TemplateRepo templateRepo;
 

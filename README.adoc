@@ -72,7 +72,7 @@ Note: Normally `include::...` 's are used to reference and display other files i
 
 == Finding your jqassistant-report.xml
 
-Normally you can refer to your jqassistant-report.xml via `${project.build.directory}/jqassistant/jqassistant-report.xml`. You can check the exact location by searching `jqassistant-report.xml` in your project structure.
+Normally you can refer to your jqassistant-report.xml via `${project.build.directory}/jqassistant/jqassistant-report.xml`. You can check the exact location by searching for `jqassistant-report.xml` in your project.
 
 == Using your own template
 

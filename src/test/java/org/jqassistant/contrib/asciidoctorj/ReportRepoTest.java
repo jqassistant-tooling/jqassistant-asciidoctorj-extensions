@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class ReportRepoTest {
     private static ReportRepo testRepo;
@@ -41,25 +42,25 @@ class ReportRepoTest {
     void testFindConceptsByIdWildcard() {
         ProcessAttributes attributes1 = ProcessAttributes.builder().reportPath("mock-report").conceptIdFilter("Test*").build();
 
-        assert(testRepo.findConcepts(attributes1).size() == 2);
-        assert(testRepo.findConcepts(attributes1).containsAll(List.of(tce1, tce2)));
+        assertThat(testRepo.findConcepts(attributes1).toArray()).hasSize(2);
+        assertThat(testRepo.findConcepts(attributes1).toArray()).containsAll(List.of(tce1, tce2));
     }
 
     @Test
     void testFindConceptsById() {
         ProcessAttributes attributes2 = ProcessAttributes.builder().reportPath("mock-report").conceptIdFilter("TestConceptId2").constraintIdFilter("").build();
 
-        assert(testRepo.findConcepts(attributes2).size() == 1);
-        assert(testRepo.findConcepts(attributes2).contains(tce2));
-        assert(testRepo.findConstraints(attributes2).size() == 0);
+        assertThat (testRepo.findConcepts(attributes2).toArray()).hasSize(1);
+        assertThat (testRepo.findConcepts(attributes2).toArray()).contains(tce2);
+        assertThat (testRepo.findConstraints(attributes2).toArray()).isEmpty();
     }
 
     @Test
     void testFindConstraintsById() {
         ProcessAttributes attributes3 = ProcessAttributes.builder().reportPath("mock-report").constraintIdFilter("TestConstraintId").build();
 
-        assert(testRepo.findConstraints(attributes3).size() == 1);
-        assert(testRepo.findConstraints(attributes3).contains(tca1));
-        assert(testRepo.findConcepts(attributes3).size() == 2);
+        assertThat (testRepo.findConstraints(attributes3).toArray()).hasSize(1);
+        assertThat (testRepo.findConstraints(attributes3).toArray()).contains(tca1);
+        assertThat (testRepo.findConcepts(attributes3).toArray()).hasSize(2);
     }
 }

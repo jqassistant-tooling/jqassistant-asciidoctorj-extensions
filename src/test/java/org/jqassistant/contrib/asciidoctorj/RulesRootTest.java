@@ -19,18 +19,26 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class RulesRootTest {
 
+    private static ProcessAttributes attributes;
+
     private static Constraint tca2;
 
     private static RulesRoot rulesRoot;
 
     @BeforeAll
     static void init() throws URISyntaxException {
+        attributes = ProcessAttributes.builder()
+                .outputDirectory(Paths.get(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv").toURI()).getParent().getParent().resolve("testoutputdirectory").toFile())
+                .build();
+
         Result res = Result.builder().columnKeys(List.of("Col1", "Col2"))
                 .row(Map.of("Col1", "Cell11", "Col2", "Cell12"))
                 .row(Map.of("Col1", "Cell21", "Col2", "Cell22"))
                 .build();
         Reports reps = Reports.builder().link(URLWithLabel.builder().label("test link").link("https://youtu.be").build())
-                .image(URLWithLabel.builder().label("test image").link("file:" + new File(RulesRootTest.class.getResource(RulesRootTest.class.getSimpleName() + ".class").toURI()).getAbsolutePath()).build())
+                .image(URLWithLabel.builder().label("test image").link(RulesRootTest.class.getResource("/testattachments/it_ToBeContextMapReport.svg").toString()).build())
+                .build();
+        Reports reps2 = Reports.builder().link(URLWithLabel.builder().label("test csv").link(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv").toString()).build())
                 .build();
 
         Concept tce1 = Concept.builder().id("TestConceptId").description("Test Description")
@@ -42,6 +50,9 @@ class RulesRootTest {
         Concept tce3 = Concept.builder().id("TestConceptId 2").description("Test Description 2")
                 .status("failure").severity("info").duration(1451)
                 .result(Result.EMPTY_RESULT).reports(Reports.EMPTY_REPORTS).build();
+        Concept tce4 = Concept.builder().id("TestConceptId 4").description("Test Description 5")
+                .status("success").severity("info").duration(69)
+                .result(Result.EMPTY_RESULT).reports(reps2).build();
         Constraint tca1 = Constraint.builder().id("TestConstraintId").description("Test Description 3")
                 .status("warning").severity("minor").duration(42)
                 .result(res).reports(Reports.EMPTY_REPORTS).build();
@@ -53,83 +64,74 @@ class RulesRootTest {
                 .concept(RuleRootParser.createRuleRoot(tce1, new File("")))
                 .concept(RuleRootParser.createRuleRoot(tce2, new File("")))
                 .concept(RuleRootParser.createRuleRoot(tce3, new File("")))
-                .constraint(RuleRootParser.createRuleRoot(tca2, new File(IncludeProcessorTest.class.getResource(IncludeProcessorTest.class.getSimpleName() + ".class").toURI())))
+                .concept(RuleRootParser.createRuleRoot(tce4, attributes.getOutputDirectory()))
+                .constraint(RuleRootParser.createRuleRoot(tca2, attributes.getOutputDirectory()))
                 .constraint(RuleRootParser.createRuleRoot(tca1, new File("")))
                 .build();
     }
 
     @Test
     void testSortingInRulesRoot() {
-        assert (rulesRoot.getConcepts().size() == 3);
-        assert (rulesRoot.getConcepts().first().getId().equals("TestConceptId 2"));
-        assert (rulesRoot.getConcepts().last().getId().equals("TestConceptId"));
+        assertThat(rulesRoot.getConcepts().toArray()).hasSize(4);
+        assertThat(rulesRoot.getConcepts().first().getId()).isEqualTo("TestConceptId 2");
+        assertThat(rulesRoot.getConcepts().last().getId()).isEqualTo("TestConceptId 4");
 
-        assert (rulesRoot.getConstraints().size() == 2);
-        assert (rulesRoot.getConstraints().first().getId().equals("TestConstraintId 2"));
-        assert (rulesRoot.getConstraints().last().getId().equals("TestConstraintId"));
+        assertThat(rulesRoot.getConstraints().toArray()).hasSize(2);
+        assertThat(rulesRoot.getConstraints().first().getId()).isEqualTo("TestConstraintId 2");
+        assertThat(rulesRoot.getConstraints().last().getId()).isEqualTo("TestConstraintId");
     }
 
     @Test
     void testRuleToRuleRoot() {
         RuleRoot root = rulesRoot.getConstraints().first();
 
-        assert (root.getId().equals(tca2.getId()));
-        assert (root.getDescription().equals(tca2.getDescription()));
-        assert (root.getStatus().equals(tca2.getStatus().toUpperCase()));
-        assert (root.getSeverity().equals(tca2.getSeverity().toUpperCase()));
+        assertThat (root.getId()).isEqualTo(tca2.getId());
+        assertThat (root.getDescription()).isEqualTo(tca2.getDescription());
+        assertThat (root.getStatus()).isEqualTo(tca2.getStatus().toUpperCase());
+        assertThat (root.getSeverity()).isEqualTo(tca2.getSeverity().toUpperCase());
 
-        assert (root.isHasResult());
-        assert (root.isHasReports());
+        assertThat (root.isHasResult()).isTrue();
+        assertThat (root.isHasReports()).isTrue();
 
-        assert (root.getResultColumnKeys().equals(tca2.getResult().getColumnKeys()));
-        assert (root.getResultRows().get(0).equals(List.of("Cell11", "Cell12")));
-        assert (root.getResultRows().get(1).equals(List.of("Cell21", "Cell22")));
+        assertThat (root.getResultColumnKeys()).isEqualTo(tca2.getResult().getColumnKeys());
+        assertThat (root.getResultRows().get(0)).isEqualTo(List.of("Cell11", "Cell12"));
+        assertThat (root.getResultRows().get(1)).isEqualTo(List.of("Cell21", "Cell22"));
     }
 
     @Test
-    void testImageAndLinkPaths() throws URISyntaxException {
+    void testImageAndLinkPaths() {
         RuleRoot root = rulesRoot.getConstraints().first();
 
         URLWithLabel image = root.getReports().getImages().get(0);
-        assert (image.getLabel().equals("test image"));
-        assert (image.getLink().contains("RulesRootTest.class"));
-        assert (!image.getLink().contains(new File(RulesRootTest.class.getResource(RulesRootTest.class.getSimpleName() + ".class").toURI()).getParentFile().getName()));
+        assertThat (image.getLabel()).isEqualTo("test image");
+        assertThat (image.getLink()).isEqualTo("it_ToBeContextMapReport.svg");
 
         URLWithLabel link = root.getReports().getLinks().get(0);
-        assert (link.getLabel().equals("test link"));
-        assert (link.getLink().equals("https://youtu.be"));
+        assertThat (link.getLabel()).isEqualTo("test link");
+        assertThat (link.getLink()).isEqualTo("https://youtu.be");
 
         root = rulesRoot.getConcepts().last();
 
-        image = root.getReports().getImages().get(0);
-        assert (image.getLabel().equals("test image"));
-        assert (image.getLink().contains(RulesRootTest.class.getSimpleName() + ".class"));
-        assert (image.getLink().contains(new File(RulesRootTest.class.getResource(RulesRootTest.class.getSimpleName() + ".class").toURI()).getParentFile().getName()));
-
         link = root.getReports().getLinks().get(0);
-        assert (link.getLabel().equals("test link"));
-        assert (link.getLink().equals("https://youtu.be"));
+        assertThat (link.getLabel()).isEqualTo("test csv");
+        assertThat (link.getLink()).isEqualTo("it_CSVReport.csv");
     }
 
     @Test
     void testHasResultAndReports() {
-        assert (rulesRoot.getConstraints().last().isHasResult());
-        assert (!rulesRoot.getConstraints().last().isHasReports());
+        assertThat (rulesRoot.getConstraints().last().isHasResult()).isTrue();
+        assertThat (rulesRoot.getConstraints().last().isHasReports()).isFalse();
 
-        assert (!rulesRoot.getConcepts().last().isHasResult());
-        assert (rulesRoot.getConcepts().last().isHasReports());
+        assertThat (rulesRoot.getConcepts().last().isHasResult()).isFalse();
+        assertThat (rulesRoot.getConcepts().last().isHasReports()).isTrue();
 
-        assert (!rulesRoot.getConcepts().first().isHasResult());
-        assert (!rulesRoot.getConcepts().first().isHasReports());
+        assertThat (rulesRoot.getConcepts().first().isHasResult()).isFalse();
+        assertThat (rulesRoot.getConcepts().first().isHasReports()).isFalse();
     }
 
 
     @Test
-    void testCopyingOfResources() throws URISyntaxException, IOException {
-        ProcessAttributes attributes = ProcessAttributes.builder()
-                .outputDirectory(Paths.get(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv").toURI()).getParent().getParent().resolve("testoutputdirectory").toFile())
-                .build();
-
+    void testCopyingOfResources() throws IOException {
         Reports reps = Reports.builder().link(URLWithLabel.builder().label("test csv").link(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv").toString()).build())
                 .image(URLWithLabel.builder().label("test image").link(RulesRootTest.class.getResource("/testattachments/it_ToBeContextMapReport.svg").toString()).build())
                 .build();
