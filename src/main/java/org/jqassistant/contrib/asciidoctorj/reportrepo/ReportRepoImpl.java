@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 @Getter
-public class ReportRepoImpl implements ReportRepo{
+public class ReportRepoImpl implements ReportRepo {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportRepoImpl.class);
 
     private boolean initialized = false;

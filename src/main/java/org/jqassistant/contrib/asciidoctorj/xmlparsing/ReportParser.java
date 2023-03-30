@@ -39,7 +39,7 @@ public class ReportParser {
     /**
      * creates a ParsedReport instance from a JqassistantReport instance
      *
-     * @param report the from ReportReader received JqassistantReport
+     * @param report a JqassistantReport (received from a ReportReader)
      * @return a ParsedReport created from JqassistantReport instance
      */
     private ParsedReport parseReport(@NotNull JqassistantReport report) {
@@ -54,11 +54,11 @@ public class ReportParser {
     }
 
     /**
-     * Adds the Rule that is generated from the node to the ParsedReport and returns it.
+     * Adds the Rule that is generated from a node to a ParsedReport and returns it.
      *
      * @param parsedReport the ParsedReport that will be amended
      * @param node the node that will be parsed
-     * @return the Rule that is generated from the node
+     * @return the Rule that was generated from the node
      */
     private Rule parseNode(@NotNull ParsedReport parsedReport, @NotNull ReferencableRuleType node) {
         Rule rule = null;
@@ -100,7 +100,7 @@ public class ReportParser {
      * @return the Group that is generated from the node
      */
     private Group parseGroup(@NotNull ParsedReport parsedReport, @NotNull GroupType groupNode) {
-        Group.GroupBuilder groupBuilder = Group.builder().id(groupNode.getId()).duration(groupNode.getDuration());
+        var groupBuilder = Group.builder().id(groupNode.getId()).duration(groupNode.getDuration());
 
         List<ReferencableRuleType> childNodes = groupNode.getGroupOrConceptOrConstraint();
         for (ReferencableRuleType childNode : childNodes) {
@@ -116,7 +116,7 @@ public class ReportParser {
 
 
     /**
-     * adds the given Concept to the ParsedReport. Also returns the parsed Concept
+     * Adds the given Concept to the ParsedReport. Also returns the parsed Concept
      *
      * @param conceptNode the Node from which the Concept will be generated
      * @return the Concept that is generated from the node

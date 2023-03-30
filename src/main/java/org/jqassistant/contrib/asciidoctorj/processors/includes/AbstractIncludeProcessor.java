@@ -45,7 +45,7 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
 
     @Override
     public boolean handles(String target) {
-        return (PREFIX+this.target).equals(target);
+        return (PREFIX + this.target).equals(target);
     }
 
     @Override

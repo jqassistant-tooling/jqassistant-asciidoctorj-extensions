@@ -19,7 +19,7 @@ public class ProcessAttributesFactory {
     private ProcessAttributesFactory() {}
 
     /**
-     * creates a ProcessAttributes instance from Asciidoctor Document and additional attributes for IncludeProcessor
+     * creates a ProcessAttributes instance from an Asciidoctor Document and additional attributes for the IncludeProcessor
      * @param document the document passed into IncludeProcessor
      * @param attributeMap the attributes passed into IncludeProcessor
      * @return returns generated ProcessAttributes
