@@ -4,7 +4,10 @@ import com.buschmais.jqassistant.core.rule.api.filter.RuleFilter;
 import io.smallrye.common.constraint.NotNull;
 import lombok.Getter;
 import org.jqassistant.contrib.asciidoctorj.processors.attributes.ProcessAttributes;
-import org.jqassistant.contrib.asciidoctorj.reportrepo.model.*;
+import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Concept;
+import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Constraint;
+import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Group;
+import org.jqassistant.contrib.asciidoctorj.reportrepo.model.Rule;
 import org.jqassistant.contrib.asciidoctorj.xmlparsing.ParsedReport;
 import org.jqassistant.contrib.asciidoctorj.xmlparsing.ReportParser;
 import org.slf4j.Logger;
@@ -14,11 +17,10 @@ import java.util.*;
 
 @Getter
 public class ReportRepoImpl implements ReportRepo {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportRepoImpl.class);
 
     private boolean initialized = false;
-
-    private static final RuleFilter RULE_FILTER = RuleFilter.getInstance();
 
     private final ReportParser reportParser;
 
@@ -49,7 +51,7 @@ public class ReportRepoImpl implements ReportRepo {
 
         SortedSet<Concept> conceptSSet = new TreeSet<>(Comparator.comparing(Rule::getId));
 
-        if(attributes.getConceptIdFilter() == null) {
+        if (attributes.getConceptIdFilter() == null) {
             conceptSSet.addAll(concepts.values());
             LOGGER.info("Giving back all concepts due to empty conceptIdFilter");
             return conceptSSet;
@@ -70,7 +72,7 @@ public class ReportRepoImpl implements ReportRepo {
 
         SortedSet<Constraint> constraintSSet = new TreeSet<>(Comparator.comparing(Rule::getId));
 
-        if(attributes.getConstraintIdFilter() == null) {
+        if (attributes.getConstraintIdFilter() == null) {
             constraintSSet.addAll(constraints.values());
             LOGGER.info("Giving back all constraints due to empty constraintIdFilter");
             return constraintSSet;
@@ -87,14 +89,17 @@ public class ReportRepoImpl implements ReportRepo {
 
     /**
      * filters all given rules by their id
+     *
      * @param ruleMap a map for all given rules: 1. element = id; 2. element = rule
-     * @param id the id(-wildcard) to match against
+     * @param id      the id(-wildcard) to match against
      * @return all matching rules
      */
     private Collection<? extends Rule> filterRulesById(@NotNull Map<String, ? extends Rule> ruleMap, String id) {
-        if(id == null) return ruleMap.values();
+        if (id == null) {
+            return ruleMap.values();
+        }
 
-        Set<String> matchingIds = RULE_FILTER.match(ruleMap.keySet(), id);
+        Set<String> matchingIds = RuleFilter.match(ruleMap.keySet(), id);
 
         List<Rule> matchingRules = new ArrayList<>();
         matchingIds.forEach(s -> matchingRules.add(ruleMap.get(s)));

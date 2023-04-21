@@ -100,7 +100,7 @@ public class ReportParser {
      * @return the Group that is generated from the node
      */
     private Group parseGroup(@NotNull ParsedReport parsedReport, @NotNull GroupType groupNode) {
-        var groupBuilder = Group.builder().id(groupNode.getId()).duration(groupNode.getDuration());
+        Group.GroupBuilder<?, ?> groupBuilder = Group.builder().id(groupNode.getId()).duration(groupNode.getDuration());
 
         List<ReferencableRuleType> childNodes = groupNode.getGroupOrConceptOrConstraint();
         for (ReferencableRuleType childNode : childNodes) {
@@ -162,9 +162,7 @@ public class ReportParser {
 
         Result.ResultBuilder builder = Result.builder();
 
-        for (ColumnHeaderType column : resultNode.getColumns().getColumn()) {
-            builder.columnKey(column.getValue());
-        }
+        builder.columnKeys(resultNode.getColumns().getColumn());
 
         for (RowType row : resultNode.getRows().getRow()) {
             Map<String, String> rowMap = new HashMap<>();
