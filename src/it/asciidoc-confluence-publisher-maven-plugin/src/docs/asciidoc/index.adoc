@@ -1,10 +1,3 @@
 = Report
 
-== Summary
-
-include::jQAssistant:Summary[]
-
-== Rules
-
-include::jQAssistant:Rules[]
-
+* <<index/debt.adoc#, Technische Schulden>>

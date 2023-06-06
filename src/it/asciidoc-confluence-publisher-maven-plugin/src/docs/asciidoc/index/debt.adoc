@@ -1,0 +1,9 @@
+= Debt
+
+== Summary
+
+include::jQAssistant:Summary[]
+
+== Rules
+
+include::jQAssistant:Rules[]
