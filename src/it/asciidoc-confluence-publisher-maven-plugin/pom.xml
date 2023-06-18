@@ -44,7 +44,7 @@
                         </goals>
                         <phase>verify</phase>
                         <configuration>
-                            <asciidocRootFolder>${project.basedir}/src/docs/asciidoc</asciidocRootFolder>
+                            <asciidocRootFolder>${project.build.directory}/jqassistant/jqassistant-report.xml</asciidocRootFolder>
                             <sourceEncoding>UTF-8</sourceEncoding>
                             <spaceKey>TEST</spaceKey>
                             <ancestorId>0000</ancestorId>

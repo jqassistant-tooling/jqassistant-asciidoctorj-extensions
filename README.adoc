@@ -21,7 +21,7 @@ As an example of how to use the plugin, you can take a look at the following mav
         <configuration>
             <attributes>
                 <jqassistant-report-path>
-                    path/to/your/jqassistant-report.xml <1>
+                    ${project.build.directory}/jqassistant/jqassistant-report.xml <1>
                 </jqassistant-report-path>
                 <jqassistant-templates-path>
                     your-custom-template-jar-or-folder-name <2>
@@ -74,7 +74,7 @@ NOTE: Normally `include::...` 's are used to reference and display other files i
 
 == Finding your jqassistant-report.xml
 
-Normally you can refer to your jqassistant-report.xml via `${project.build.directory}/jqassistant/jqassistant-report.xml`. You can check the exact location by searching for `jqassistant-report.xml` in your project.
+Normally you can refer to your jqassistant-report.xml via `${project.build.directory}/jqassistant/jqassistant-report.xml`. You can check the exact location by searching for `jqassistant-report.xml` in your jQA output directory (this xml is created by jQA at runtime).
 
 == Using your own template
 

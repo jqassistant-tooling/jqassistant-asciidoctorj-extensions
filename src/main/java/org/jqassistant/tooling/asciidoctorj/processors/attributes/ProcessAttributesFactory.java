@@ -54,7 +54,7 @@ public class ProcessAttributesFactory {
 
     private static void fillReportPath(@NotNull Document document, @NotNull ProcessAttributes.ProcessAttributesBuilder builder) {
         if(!(document.getAttributes().get(REPORT_PATH) instanceof String)) {
-            throw new IllegalStateException("Your report xml file location isn't set properly! Please set the destination of your jqassistant-report.xml via the global document attributes for your asciidoctor.");
+            throw new IllegalStateException("Your report xml file location isn't set properly! Please set the destination of your jqassistant-report.xml via the global document attributes for your asciidoctor. " + document.getAttributes().get(REPORT_PATH));
         }
         else {
             builder.reportPath((String) document.getAttributes().get(REPORT_PATH));
