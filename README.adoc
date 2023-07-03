@@ -44,7 +44,7 @@ As an example of how to use the plugin, you can take a look at the following mav
             <dependency>
                 <groupId>org.jqassistant.tooling.asciidoctorj</groupId>
                 <artifactId>jqassistant-asciidoctorj-extensions</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
+                <version>${jqassistant-asciidoctorj-extension.version}</version>
             </dependency>
         </dependencies>
     </plugin>
@@ -121,7 +121,7 @@ The `jqassistant-asciidoctor-extension` provides a root element, that is then co
 ----
 <#list concepts as rule>  <1>
 [#jqassistant_${rule.id}]
-=== ${rule.id} <2>
+= ${rule.id} <2>
 ****
 <#if rule.status == "SUCCESS"> <2>
 TIP: ${rule.description} + <2>
