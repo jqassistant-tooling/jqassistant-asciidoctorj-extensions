@@ -78,7 +78,7 @@ NOTE: The described behavior only applies if you use the default templates. If y
 
 NOTE: Normally `include::...` 's are used to reference and display other files inside the adoc file they're written in. In our case, tho these `include::...` 's are replaced by the `jqassistant-asciidoctor-extension`.
 
-NOTE: The standard behavior of the default templates is to render Rule-Ids in the `include::jQAssistant:Rules[]` with level 2 headings (`===`). If you want to change that, use may use the leveloffset attribute. F.e. `include::jQAssistant:Rules[leveloffset=-1]`: This would yield an output with all Rule-Ids having a level 1 heading instead of level 2 (in adoc that corresponds to `===` -> `==`). `include::jQAssistant:Rules[leveloffset=+1]` would result in level 3 headings (`===` -> `====`).
+NOTE: The standard behavior of the default templates is to render Rule-Ids in the `include::jQAssistant:Rules[]` with level 0 headings (adoc notation: `=`). If you want to change that, you may use the leveloffset attribute. F.e. `include::jQAssistant:Rules[leveloffset=+1]`: This would yield an output with all Rule-Ids having a level 1 heading instead of level 0 (adoc notation: `=` -> `==`).
 
 == Finding your jqassistant-report.xml
 

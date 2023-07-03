@@ -8,5 +8,5 @@ include::jQAssistant:Summary[]
 
 == Rules
 
-include::jQAssistant:Rules[]
+include::jQAssistant:Rules[leveloffset=+2]
 
