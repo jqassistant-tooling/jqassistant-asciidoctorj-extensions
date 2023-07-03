@@ -41,6 +41,8 @@
     <properties>
         <asciidoctorj.version>2.5.9</asciidoctorj.version>
         <asciidoctor.maven.version>2.2.4</asciidoctor.maven.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -136,6 +138,11 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sahli.asciidoc.confluence.publisher</groupId>
+                <artifactId>asciidoc-confluence-publisher-maven-plugin</artifactId>
+                <version>0.17.1</version>
             </plugin>
         </plugins>
     </build>

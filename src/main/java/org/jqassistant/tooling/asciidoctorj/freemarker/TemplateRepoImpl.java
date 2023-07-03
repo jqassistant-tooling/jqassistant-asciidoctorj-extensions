@@ -46,7 +46,7 @@ public class TemplateRepoImpl implements TemplateRepo {
         } catch (Exception e) {
             throw new IllegalStateException("No valid Template with name \"" + templateName + "\" found neither in custom template location nor in default template location");
         }
-        LOGGER.info("Template {} loaded", templateName);
+        LOGGER.debug("Template {} loaded", templateName);
         return template;
     }
 

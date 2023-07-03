@@ -9,13 +9,15 @@ public class ProcessAttributes {
     private final String reportPath;
     private final String templatesPath;
     private final File outputDirectory;
+    private final File imagesDirectory;
 
-    ProcessAttributes(String conceptIdFilter, String constraintIdFilter, String reportPath, String templatesPath, File outputDirectory) {
+    private ProcessAttributes(String conceptIdFilter, String constraintIdFilter, String reportPath, String templatesPath, File outputDirectory, File imagesDirectory) {
         this.conceptIdFilter = conceptIdFilter;
         this.constraintIdFilter = constraintIdFilter;
         this.reportPath = reportPath;
         this.templatesPath = templatesPath;
         this.outputDirectory = outputDirectory;
+        this.imagesDirectory = imagesDirectory;
     }
 
     public static ProcessAttributesBuilder builder() {
@@ -42,12 +44,17 @@ public class ProcessAttributes {
         return this.outputDirectory;
     }
 
+    public File getImagesDirectory() {
+        return this.imagesDirectory;
+    }
+
     public static class ProcessAttributesBuilder {
         private String conceptIdFilter;
         private String constraintIdFilter;
         private String reportPath;
         private String templatesPath;
         private File outputDirectory;
+        private File imagesDirectory;
 
         ProcessAttributesBuilder() {
         }
@@ -77,12 +84,17 @@ public class ProcessAttributes {
             return this;
         }
 
+        public ProcessAttributesBuilder imagesDirectory(File imagesDirectory) {
+            this.imagesDirectory = imagesDirectory;
+            return this;
+        }
+
         public ProcessAttributes build() {
-            return new ProcessAttributes(conceptIdFilter, constraintIdFilter, reportPath, templatesPath, outputDirectory);
+            return new ProcessAttributes(this.conceptIdFilter, this.constraintIdFilter, this.reportPath, this.templatesPath, this.outputDirectory, this.imagesDirectory);
         }
 
         public String toString() {
-            return "ProcessAttributes.ProcessAttributesBuilder(conceptIdFilter=" + this.conceptIdFilter + ", constraintIdFilter=" + this.constraintIdFilter + ", reportPath=" + this.reportPath + ", templatesPath=" + this.templatesPath + ", outputDirectory=" + this.outputDirectory + ")";
+            return "ProcessAttributes.ProcessAttributesBuilder(conceptIdFilter=" + this.conceptIdFilter + ", constraintIdFilter=" + this.constraintIdFilter + ", reportPath=" + this.reportPath + ", templatesPath=" + this.templatesPath + ", outputDirectory=" + this.outputDirectory + ", imagesDirectory=" + this.imagesDirectory + ")";
         }
     }
 }

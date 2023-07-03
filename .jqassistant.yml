@@ -1,5 +1,4 @@
 jqassistant:
-  skip: true
   plugins:
     - group-id: org.jqassistant.plugin
       artifact-id: jqassistant-plantuml-report-plugin

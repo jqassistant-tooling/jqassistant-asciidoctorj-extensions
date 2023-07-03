@@ -30,7 +30,7 @@
             <plugin>
                 <groupId>org.sahli.asciidoc.confluence.publisher</groupId>
                 <artifactId>asciidoc-confluence-publisher-maven-plugin</artifactId>
-                <version>0.17.1</version>
+                <version>0.19.0</version>
                 <configuration>
                     <rootConfluenceUrl>https://my-confluence</rootConfluenceUrl>
                     <username>username</username>
@@ -44,7 +44,7 @@
                         </goals>
                         <phase>verify</phase>
                         <configuration>
-                            <asciidocRootFolder>${project.build.directory}/jqassistant/jqassistant-report.xml</asciidocRootFolder>
+                            <asciidocRootFolder>${project.basedir}/src/docs/asciidoc</asciidocRootFolder>
                             <sourceEncoding>UTF-8</sourceEncoding>
                             <spaceKey>TEST</spaceKey>
                             <ancestorId>0000</ancestorId>
@@ -53,13 +53,13 @@
                             <attributes>
                                 <jqassistant-report-path>${project.build.directory}/jqassistant/jqassistant-report.xml</jqassistant-report-path>
                             </attributes>
-                            <logHandler>
+<!--                            <logHandler>
                                 <outputToConsole>true</outputToConsole>
                                 <failIf>
                                     <severity>WARN</severity>
                                 </failIf>
                             </logHandler>
-                        </configuration>
+-->                        </configuration>
                     </execution>
                 </executions>
                 <dependencies>
@@ -67,6 +67,11 @@
                         <groupId>@project.groupId@</groupId>
                         <artifactId>@project.artifactId@</artifactId>
                         <version>@project.version@</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj</artifactId>
+                        <version>2.5.9</version>
                     </dependency>
                 </dependencies>
             </plugin>

@@ -29,6 +29,7 @@ class RulesRootTest {
     static void init() throws URISyntaxException {
         attributes = ProcessAttributes.builder()
                 .outputDirectory(Paths.get(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv").toURI()).getParent().getParent().resolve("testoutputdirectory").toFile())
+                .imagesDirectory(Paths.get(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv").toURI()).getParent().getParent().resolve("testoutputdirectory").resolve("images").toFile())
                 .build();
 
         Result res = Result.builder().columnKeys(List.of("Col1", "Col2"))
@@ -61,12 +62,12 @@ class RulesRootTest {
                 .result(res).reports(reps).build();
 
         rulesRoot = RulesRoot.builder()
-                .concept(RuleRootParser.createRuleRoot(tce1, new File("")))
-                .concept(RuleRootParser.createRuleRoot(tce2, new File("")))
-                .concept(RuleRootParser.createRuleRoot(tce3, new File("")))
-                .concept(RuleRootParser.createRuleRoot(tce4, attributes.getOutputDirectory()))
-                .constraint(RuleRootParser.createRuleRoot(tca2, attributes.getOutputDirectory()))
-                .constraint(RuleRootParser.createRuleRoot(tca1, new File("")))
+                .concept(RuleRootParser.createRuleRoot(tce1, new File(""),  new File("")))
+                .concept(RuleRootParser.createRuleRoot(tce2, new File(""),  new File("")))
+                .concept(RuleRootParser.createRuleRoot(tce3, new File(""),  new File("")))
+                .concept(RuleRootParser.createRuleRoot(tce4, attributes.getOutputDirectory(),  attributes.getImagesDirectory()))
+                .constraint(RuleRootParser.createRuleRoot(tca2, attributes.getOutputDirectory(),  attributes.getImagesDirectory()))
+                .constraint(RuleRootParser.createRuleRoot(tca1, new File(""),  new File("")))
                 .build();
     }
 
@@ -141,9 +142,9 @@ class RulesRootTest {
 
         FileUtils.forceMkdir(attributes.getOutputDirectory());
 
-        RuleRootParser.createRuleRoot(tce4, attributes.getOutputDirectory());
+        RuleRootParser.createRuleRoot(tce4, attributes.getOutputDirectory(),  attributes.getImagesDirectory());
 
         assertThat(Paths.get(attributes.getOutputDirectory().toURI()).resolve("it_CSVReport.csv").toFile()).isFile();
-        assertThat(Paths.get(attributes.getOutputDirectory().toURI()).resolve("it_ToBeContextMapReport.svg").toFile()).isFile();
+        assertThat(Paths.get(attributes.getImagesDirectory().toURI()).resolve("it_ToBeContextMapReport.svg").toFile()).isFile();
     }
 }

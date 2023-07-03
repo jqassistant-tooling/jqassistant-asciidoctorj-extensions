@@ -31,26 +31,29 @@
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
                 <version>@asciidoctor.maven.version@</version>
-                <executions><execution>
-                    <id>output-html</id>
-                    <phase>verify</phase>
-                    <goals>
-                        <goal>process-asciidoc</goal>
-                    </goals>
-                    <configuration>
-                        <backend>html5</backend>
-                        <attributes>
-                            <jqassistant-report-path>${project.build.directory}/jqassistant/jqassistant-report.xml</jqassistant-report-path>
-                            <jqassistant-templates-path>custom</jqassistant-templates-path>
-                        </attributes>
-                        <logHandler>
-                            <outputToConsole>true</outputToConsole>
-                            <failIf>
-                                <severity>WARN</severity>
-                            </failIf>
-                        </logHandler>
-                    </configuration>
-                </execution>
+                <executions>
+                    <execution>
+                        <id>output-html</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>html5</backend>
+                            <attributes>
+                                <jqassistant-report-path>${project.build.directory}/jqassistant/jqassistant-report.xml</jqassistant-report-path>
+                                <jqassistant-templates-path>custom</jqassistant-templates-path>
+                                <imagesDir>images</imagesDir>
+                            </attributes>
+                            <preserveDirectories>true</preserveDirectories>
+                            <logHandler>
+                                <outputToConsole>true</outputToConsole>
+                                <failIf>
+                                    <severity>WARN</severity>
+                                </failIf>
+                            </logHandler>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>generate-pdf-doc</id>
                         <phase>verify</phase>
@@ -66,7 +69,9 @@
                                 <source-highlighter>rouge</source-highlighter>
                                 <pagenums/>
                                 <idseparator>-</idseparator>
+                                <imagesDir>images</imagesDir>
                             </attributes>
+                            <preserveDirectories>true</preserveDirectories>
                             <logHandler>
                                 <outputToConsole>true</outputToConsole>
                                 <failIf>

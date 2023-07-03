@@ -54,6 +54,16 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
 
         ProcessAttributes attributes = ProcessAttributesFactory.createProcessAttributesInclude(document, attributeMap);
 
+        if (attributes.getReportPath() == null) {
+            reader.pushInclude("Error while rendering " + target + ". Your report xml file location isn't set properly! Please set the destination of your jqassistant-report.xml via the global document attributes for your asciidoctor. Also check the logged warning for information about what exactly your ReportPath property is set to.",
+                    target,
+                    "",
+                    1,
+                    attributeMap);
+            LOGGER.warn("Failed to process include for {}", target);
+            return;
+        }
+
         RulesRoot root = fillDataStructure(attributes);
 
         reader.pushInclude(fillTemplates(root, attributes),
@@ -68,7 +78,7 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
     /**
      * Fills all templates in "templates" with the content of root.
      *
-     * @param root the data structure the templates are filled with
+     * @param root       the data structure the templates are filled with
      * @param attributes the ProcessAttribute instance. May optionally be filled with: templatesPath
      * @return the from template and root produced String
      */
@@ -77,22 +87,21 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
 
         List<String> tNames;
 
-        if(root.getConcepts().size() == 0 && root.getConstraints().size() == 0) {
+        if (root.getConcepts().size() == 0 && root.getConstraints().size() == 0) {
             tNames = List.of("NoResult");
-            LOGGER.info("Filters for concepts {} and constraints {} returned no matching Rules!", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
-        }
-        else {
+            LOGGER.debug("Filters for concepts {} and constraints {} returned no matching Rules!", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
+        } else {
             tNames = templateNames;
-            LOGGER.info("Starting to fill templates {}", tNames);
+            LOGGER.debug("Starting to fill templates {}", tNames);
         }
 
         for (String tName : tNames) {
             try {
                 templateRepo.findTemplate(attributes, tName).process(root, writer);
             } catch (TemplateException e) {
-                throw new IllegalArgumentException("Your \"" + tName + "\"-template seems to have an error in it's calls to the data structure! Refer to manual section \"Using the jqassistant-asciidoctor-extension\"." , e);
+                throw new IllegalArgumentException("Your \"" + tName + "\"-template seems to have an error in it's calls to the data structure! Refer to manual section \"Using the jqassistant-asciidoctor-extension\".", e);
             } catch (IOException e) {
-                throw new IllegalArgumentException("Your \"" + tName + "\"-template file can not be parsed to a freemarker template! Refer to manual section \"Using your own template\"." , e);
+                throw new IllegalArgumentException("Your \"" + tName + "\"-template file can not be parsed to a freemarker template! Refer to manual section \"Using your own template\".", e);
             }
         }
 
@@ -108,15 +117,22 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
     RulesRoot fillDataStructure(@NotNull ProcessAttributes attributes) {
         RulesRoot.RulesRootBuilder rootBuilder = RulesRoot.builder();
 
-        LOGGER.info("Starting to fill RulesRoot with for {} matching concepts and for {} matching constraints.", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
-        for (Concept concept :
-                repo.findConcepts(attributes)) {
-            rootBuilder.concept(RuleRootParser.createRuleRoot(concept, attributes.getOutputDirectory()));
+        LOGGER.debug("Starting to fill RulesRoot with for {} matching concepts and for {} matching constraints.", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
+
+        //Show concepts only if concepts filter exits or if no filter exists at all
+        if (attributes.getConceptIdFilter() != null || attributes.getConstraintIdFilter() == null) {
+            for (Concept concept :
+                    repo.findConcepts(attributes)) {
+                rootBuilder.concept(RuleRootParser.createRuleRoot(concept, attributes.getOutputDirectory(), attributes.getImagesDirectory()));
+            }
         }
 
-        for (Constraint constraint :
-                repo.findConstraints(attributes)) {
-            rootBuilder.constraint(RuleRootParser.createRuleRoot(constraint, attributes.getOutputDirectory()));
+        //Show constraints only if constraints filter exits or if no filter exists at all
+        if (attributes.getConstraintIdFilter() != null || attributes.getConceptIdFilter() == null) {
+            for (Constraint constraint :
+                    repo.findConstraints(attributes)) {
+                rootBuilder.constraint(RuleRootParser.createRuleRoot(constraint, attributes.getOutputDirectory(), attributes.getImagesDirectory()));
+            }
         }
 
         return rootBuilder.build();

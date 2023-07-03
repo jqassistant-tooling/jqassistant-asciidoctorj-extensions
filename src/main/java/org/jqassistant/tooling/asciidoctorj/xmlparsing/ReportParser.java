@@ -29,7 +29,7 @@ public class ReportParser {
     public ParsedReport parseReportXml(@NotNull String fileDestination) {
         ReportReader reportReader = ReportReader.getInstance();
 
-        LOGGER.info("Parsing xml-report from {}", fileDestination);
+        LOGGER.debug("Parsing xml-report from {}", fileDestination);
         JqassistantReport report = reportReader.read(new File(fileDestination));
         LOGGER.info("Successfully parsed xml-report from {}", fileDestination);
 

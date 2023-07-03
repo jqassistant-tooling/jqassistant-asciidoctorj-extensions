@@ -3,6 +3,7 @@ package org.jqassistant.tooling.asciidoctorj;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
+import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,11 @@ class IncludeProcessorTest {
         //System.out.println(asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept-e*\", constraint = \"*\"]", opt));
         //System.out.println(asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept\"]", opt));
 
-        String result = asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept-e*\", constraint = \"*\"]", opt);
+        Document doc = asciidoctor.load("include::jQAssistant:Rules[concepts = \"test-concept-e*\", constraints = \"*\"]", opt);
+        String result = doc.convert();
+        //String result = asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept-e*\", constraint = \"*\"]", opt);
+
+
         result = assertIsPartOfAndShorten(result, "test-constraint");
         result = assertIsPartOfAndShorten(result, "Test description 2");
         result = assertIsPartOfAndShorten(result, "Status: <span class=\"red\">FAILURE</span>, Severity: MAJOR");
@@ -43,9 +48,10 @@ class IncludeProcessorTest {
         result = assertIsPartOfAndShorten(result, "Test description");
         assertIsPartOfAndShorten(result, "Status: <span class=\"green\">SUCCESS</span>, Severity: INFO");
 
-        result = asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept\"]", opt);
+        result = asciidoctor.convert("include::jQAssistant:Rules[concepts = \"test-concept\"]", opt);
+        System.out.println(result);
 
-        result = assertIsPartOfAndShorten(result, "test-constraint");
+        assertThat(result).doesNotContain("test-constraint");
         result = assertIsPartOfAndShorten(result, "test-concept");
         result = assertIsPartOfAndShorten(result, "Test description");
         result = assertIsPartOfAndShorten(result, "Status: <span class=\"green\">SUCCESS</span>, Severity: INFO");
@@ -60,7 +66,7 @@ class IncludeProcessorTest {
     void testSummaryInclude() {
         //System.out.println(asciidoctor.convert("include::jQAssistant:Summary[concept = \"test-concept\", constraint = \"*\"]" , opt));
 
-        String result = asciidoctor.convert("include::jQAssistant:Summary[concept = \"test-concept\", constraint = \"*\"]" , opt);
+        String result = asciidoctor.convert("include::jQAssistant:Summary[concepts = \"test-concept\", constraints = \"*\"]" , opt);
 
         result = assertIsPartOfAndShorten(result, "table");
         result = assertIsPartOfAndShorten(result, "Id");

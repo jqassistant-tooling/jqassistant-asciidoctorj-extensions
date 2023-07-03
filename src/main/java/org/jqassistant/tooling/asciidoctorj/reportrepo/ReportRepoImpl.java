@@ -34,14 +34,14 @@ public class ReportRepoImpl implements ReportRepo {
 
     private void initialize(@NotNull ProcessAttributes attributes) {
         if (!isInitialized()) {
-            LOGGER.info("initializing reportRepo");
+            LOGGER.debug("initializing reportRepo");
             ParsedReport report = reportParser.parseReportXml(attributes.getReportPath());
             this.groups = report.getGroups();
             this.concepts = report.getConcepts();
             this.constraints = report.getConstraints();
 
             initialized = true;
-            LOGGER.info("successfully initialized reportRepo");
+            LOGGER.debug("successfully initialized reportRepo");
         }
     }
 
@@ -53,7 +53,7 @@ public class ReportRepoImpl implements ReportRepo {
 
         if (attributes.getConceptIdFilter() == null) {
             conceptSSet.addAll(concepts.values());
-            LOGGER.info("Giving back all concepts due to empty conceptIdFilter");
+            LOGGER.debug("Giving back all concepts due to empty conceptIdFilter");
             return conceptSSet;
         }
 
@@ -61,7 +61,7 @@ public class ReportRepoImpl implements ReportRepo {
 
         conceptSSet.addAll((Collection<Concept>) filterRulesById(concepts, id));
 
-        LOGGER.info("Giving back all concepts matching {}", attributes.getConceptIdFilter());
+        LOGGER.debug("Giving back all concepts matching {}", attributes.getConceptIdFilter());
 
         return conceptSSet;
     }
@@ -74,7 +74,7 @@ public class ReportRepoImpl implements ReportRepo {
 
         if (attributes.getConstraintIdFilter() == null) {
             constraintSSet.addAll(constraints.values());
-            LOGGER.info("Giving back all constraints due to empty constraintIdFilter");
+            LOGGER.debug("Giving back all constraints due to empty constraintIdFilter");
             return constraintSSet;
         }
 
@@ -82,7 +82,7 @@ public class ReportRepoImpl implements ReportRepo {
 
         constraintSSet.addAll((Collection<Constraint>) filterRulesById(constraints, id));
 
-        LOGGER.info("Giving back all constraints matching {}", attributes.getConstraintIdFilter());
+        LOGGER.debug("Giving back all constraints matching {}", attributes.getConstraintIdFilter());
 
         return constraintSSet;
     }

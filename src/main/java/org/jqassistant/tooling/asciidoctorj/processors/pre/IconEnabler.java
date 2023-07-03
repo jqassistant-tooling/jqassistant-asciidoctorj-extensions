@@ -46,6 +46,6 @@ public class IconEnabler extends Preprocessor {
         lines.addAll(0, List.of(addedLines));
         reader.restoreLines(lines);
 
-        LOGGER.info("Added icon configuration to top of the adoc");
+        LOGGER.debug("Added icon configuration to top of the adoc");
     }
 }

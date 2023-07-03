@@ -27,7 +27,7 @@ public class RuleRootParser {
      * @param outputDirectory the directory where the attachments from the rule reports are copied to
      * @return a by freemarker readable RuleRoot instance
      */
-    public static RuleRoot createRuleRoot(@NotNull ExecutableRule rule, @NotNull File outputDirectory) {
+    public static RuleRoot createRuleRoot(@NotNull ExecutableRule rule, @NotNull File outputDirectory, File imagesDirectory) {
         RuleRoot.RuleRootBuilder builder = RuleRoot.builder();
 
         builder.id(rule.getId());
@@ -51,23 +51,23 @@ public class RuleRootParser {
             builder.hasResult(true);
         }
 
-        if(rule.getReports() != Reports.EMPTY_REPORTS){
+        if(rule.getReports() != Reports.EMPTY_REPORTS && outputDirectory != null){
             builder.hasReports(true);
-            builder.reports(RuleRootParser.parseReports(rule.getReports(), outputDirectory));
+            builder.reports(RuleRootParser.parseReports(rule.getReports(), outputDirectory, imagesDirectory));
         }
         else {
             builder.reports(Reports.EMPTY_REPORTS);
         }
 
         if(rule instanceof Concept) {
-            LOGGER.info("Successfully parsed Concept {}.", rule.getId());
+            LOGGER.debug("Successfully parsed Concept {}.", rule.getId());
         }
         else if(rule instanceof Constraint) {
-            LOGGER.info("Successfully parsed Constraint {}.", rule.getId());
+            LOGGER.debug("Successfully parsed Constraint {}.", rule.getId());
         }
         else {
-            LOGGER.info("Successfully parsed Rule {}.", rule.getId());
-            LOGGER.warn("Please check implementation of this logger. The extension seems to be expanded, but the logger is not adapted!");
+            LOGGER.debug("Successfully parsed Rule {}.", rule.getId());
+            LOGGER.warn("If you are a user of this application please contact the developers of this plugin. If you are the developer, please check the implementation of this logger. The extension seems to be expanded, but the logger is not adapted!");
         }
 
         return builder.build();
@@ -79,11 +79,16 @@ public class RuleRootParser {
      * @param outputDirectory the location the attachments are copied to
      * @return the parse report with adapted links
      */
-    private static Reports parseReports(@NotNull Reports reports, @NotNull File outputDirectory) {
+    private static Reports parseReports(@NotNull Reports reports, @NotNull File outputDirectory, File imagesDirectory) {
         Reports.ReportsBuilder repBuilder = Reports.builder();
 
         for(URLWithLabel image : reports.getImages()) {
-            repBuilder.image(URLWithLabel.builder().label(image.getLabel()).link(copyAttachmentAndRelativizePath(image.getLink(), outputDirectory)).build());
+            if(imagesDirectory != null) {
+                repBuilder.image(URLWithLabel.builder().label(image.getLabel()).link(copyAttachmentAndRelativizePath(image.getLink(), imagesDirectory)).build());
+            }
+            else {
+                repBuilder.image(URLWithLabel.builder().label(image.getLabel()).link(copyAttachmentAndRelativizePath(image.getLink(), outputDirectory)).build());
+            }
         }
         for(URLWithLabel link : reports.getLinks()) {
             repBuilder.link(URLWithLabel.builder().label(link.getLabel()).link(copyAttachmentAndRelativizePath(link.getLink(), outputDirectory)).build());
@@ -92,7 +97,7 @@ public class RuleRootParser {
         return repBuilder.build();
     }
 
-    private static String copyAttachmentAndRelativizePath(@NotNull String link, @NotNull File outputDirectory){
+    private static String copyAttachmentAndRelativizePath(@NotNull String link, @NotNull File targetDirectory){
         URI uri;
         try {
             uri = new URI(link);
@@ -116,19 +121,19 @@ public class RuleRootParser {
             file = new File(uri);
         } catch (Exception e) {
             LOGGER.warn("Cannot find File from uri {}", uri);
-            return outputDirectory.getAbsoluteFile().toPath().relativize(path).toString();
+            return targetDirectory.getAbsoluteFile().toPath().relativize(path).toString();
         }
 /*
-        File attachmentDirectory = outputDirectory.toPath().resolve("attachments").toFile();
+        File attachmentDirectory = targetDirectory.toPath().resolve("attachments").toFile();
         try {
             FileUtils.forceMkdir(attachmentDirectory);
         } catch (IOException e1) {
-            LOGGER.warn("Cannot create attachment directory {} in output directory ({}). \n Putting attachments directly into output directory!", attachmentDirectory, outputDirectory);
+            LOGGER.warn("Cannot create attachment directory {} in output directory ({}). \n Putting attachments directly into output directory!", attachmentDirectory, targetDirectory);
             try {;
-                FileUtils.copyToDirectory(file, outputDirectory);
+                FileUtils.copyToDirectory(file, targetDirectory);
             } catch (IOException | IllegalArgumentException e2) {
-                LOGGER.warn("Cannot copy file {} to {}. Maybe the outputDirectory is assigned incorrectly", uri, outputDirectory);
-                return outputDirectory.getAbsoluteFile().toPath().relativize(path).toString();
+                LOGGER.warn("Cannot copy file {} to {}. Maybe the targetDirectory is assigned incorrectly", uri, targetDirectory);
+                return targetDirectory.getAbsoluteFile().toPath().relativize(path).toString();
             }
         }
 
@@ -140,16 +145,16 @@ public class RuleRootParser {
             throw new IllegalStateException(e);
         }
 
-        return outputDirectory.getAbsoluteFile().toPath().relativize(newPath).toString();
+        return targetDirectory.getAbsoluteFile().toPath().relativize(newPath).toString();
 */
         try {
-            FileUtils.copyToDirectory(file, outputDirectory);
+            FileUtils.copyToDirectory(file, targetDirectory);
         } catch (IOException | IllegalArgumentException e2) {
-            LOGGER.warn("Cannot copy file {} to {}. Maybe the outputDirectory is assigned incorrectly.", uri, outputDirectory);
-            return outputDirectory.getAbsoluteFile().toPath().relativize(path).toString();
+            LOGGER.warn("Cannot copy file {} to {}. Maybe the targetDirectory is assigned incorrectly.", uri, targetDirectory);
+            return targetDirectory.getAbsoluteFile().toPath().relativize(path).toString();
         }
 
-        LOGGER.info("Copied reports attachment file from {} to outputDirectory {}.", file.getAbsolutePath(), outputDirectory.getAbsolutePath());
+        LOGGER.debug("Copied reports attachment file from {} to targetDirectory {}.", file.getAbsolutePath(), targetDirectory.getAbsolutePath());
         return path.getFileName().toString();
 
     }

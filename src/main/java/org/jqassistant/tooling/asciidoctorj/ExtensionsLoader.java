@@ -19,19 +19,19 @@ public class ExtensionsLoader implements ExtensionRegistry {
 
     @Override
     public void register(Asciidoctor asciidoctor) {
-        LOGGER.info("creating empty report and template repos");
+        LOGGER.debug("creating empty report and template repos");
         ReportRepo reportRepository = new ReportRepoImpl(ReportParser.getInstance());
         TemplateRepo templateRepo = new TemplateRepoImpl();
 
         JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
 
-        LOGGER.info("creating and registering Processors");
+        LOGGER.debug("creating and registering Processors");
         javaExtensionRegistry.preprocessor(new IconEnabler(templateRepo));
         String registeredMessage = "registered {}";
-        LOGGER.info(registeredMessage, IconEnabler.class);
+        LOGGER.debug(registeredMessage, IconEnabler.class);
         javaExtensionRegistry.includeProcessor(new Summary(reportRepository, templateRepo));
-        LOGGER.info(registeredMessage, Summary.class);
+        LOGGER.debug(registeredMessage, Summary.class);
         javaExtensionRegistry.includeProcessor(new Rules(reportRepository, templateRepo));
-        LOGGER.info(registeredMessage, Rules.class);
+        LOGGER.debug(registeredMessage, Rules.class);
     }
 }
