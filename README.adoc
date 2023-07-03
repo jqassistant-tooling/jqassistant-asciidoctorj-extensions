@@ -121,7 +121,7 @@ The `jqassistant-asciidoctor-extension` provides a root element, that is then co
 ----
 <#list concepts as rule>  <1>
 [#jqassistant_${rule.id}]
-=== ${rule.id} <2>
+= ${rule.id} <2>
 ****
 <#if rule.status == "SUCCESS"> <2>
 TIP: ${rule.description} + <2>
