@@ -50,7 +50,7 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
 
     @Override
     public void process(Document document, PreprocessorReader reader, String target, Map<String, Object> attributeMap) {
-        LOGGER.info("Starting to process include for {}", target);
+        LOGGER.debug("Starting to process include for {}", target);
 
         ProcessAttributes attributes = ProcessAttributesFactory.createProcessAttributesInclude(document, attributeMap);
 
@@ -72,7 +72,7 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
                 1,
                 attributeMap);
 
-        LOGGER.info("Finished to process include for {}", target);
+        LOGGER.debug("Finished to process include for {}", target);
     }
 
     /**

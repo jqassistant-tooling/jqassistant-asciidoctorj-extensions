@@ -1,5 +1,9 @@
 package org.jqassistant.tooling.asciidoctorj;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.TimeZone;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
@@ -9,56 +13,53 @@ import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttribu
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.TimeZone;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class TemplateRepoTest {
-    private static TemplateRepo repo;
+
     private static Configuration cfg;
 
-    private static ProcessAttributes attributes;
-
     @BeforeAll
-    static void init() {
+    static void init() throws IOException {
         cfg = setupFreemarker();
     }
 
     @Test
-    void testDefaultLoading() throws IOException {
-        repo = new TemplateRepoImpl();
+    void defaultLoading() throws IOException {
+        TemplateRepo repo = new TemplateRepoImpl();
 
-        attributes = ProcessAttributes.builder().build();
-        setLoadingDestination("src/main/resources/defaulttemplates");
-
-        Template templateLoaded = repo.findTemplate(attributes, "RulesConcept");
+        Template template = repo.findTemplate(ProcessAttributes.builder().build(), "RulesConcept");
         Template templateExpected = cfg.getTemplate("RulesConcept");
-        assertThat(templateExpected).hasToString(templateLoaded.toString());
+        assertThat(templateExpected).hasToString(template.toString());
     }
 
     @Test
-    void testCustomLoadingAndFallback() throws IOException {
-        repo = new TemplateRepoImpl();
+    void customLoading() throws IOException {
+        TemplateRepo repo = new TemplateRepoImpl();
 
         //test custom loading
-        attributes = ProcessAttributes.builder().templatesPath("testing-custom-templates").build();
-        setLoadingDestination("src/test/resources/testing-custom-templates");
+        ProcessAttributes attributes = ProcessAttributes.builder().templatesPath("src/test/resources/testing-custom-templates").build();
+        Template template = repo.findTemplate(attributes, "IconEnabler");
 
-        Template templateLoaded = repo.findTemplate(attributes, "IconEnabler");
+        assertThat(template).isNotNull();
         Template templateExpected = cfg.getTemplate("IconEnabler");
-        assertThat(templateExpected).hasToString(templateLoaded.toString());
+        assertThat(templateExpected).doesNotHaveToString(template.toString());
+    }
 
-        //test fallback if custom does not exist
-        setLoadingDestination("src/main/resources/defaulttemplates");
+    @Test
+    void customLoadingAndFallback() throws IOException {
+        TemplateRepo repo = new TemplateRepoImpl();
 
-        templateLoaded = repo.findTemplate(attributes, "Summary");
-        templateExpected = cfg.getTemplate("Summary");
+        Template templateLoaded = repo.findTemplate(ProcessAttributes.builder().build(), "Summary");
+
+        Template templateExpected = cfg.getTemplate("Summary");
         assertThat(templateExpected).hasToString(templateLoaded.toString());
     }
 
-    private static Configuration setupFreemarker() {
+    /**
+     * Creates a configuration to load the default templates, used for assertions.
+     */
+    private static Configuration setupFreemarker() throws IOException {
         /*Setup Freemarker Configuration*/
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_32);
         cfg.setDefaultEncoding("UTF-8");
@@ -67,15 +68,7 @@ class TemplateRepoTest {
         cfg.setWrapUncheckedExceptions(true);
         cfg.setFallbackOnNullLoopVariable(false);
         cfg.setSQLDateAndTimeTimeZone(TimeZone.getDefault());
-
+        cfg.setDirectoryForTemplateLoading(new File("src/main/resources/defaulttemplates"));
         return cfg;
-    }
-
-    private static void setLoadingDestination(String path) {
-        try {
-            cfg.setDirectoryForTemplateLoading(new File(path));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

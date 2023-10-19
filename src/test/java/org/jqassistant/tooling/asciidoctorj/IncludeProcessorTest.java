@@ -18,22 +18,16 @@ class IncludeProcessorTest {
         asciidoctor = Asciidoctor.Factory.create();
         opt = Options.builder().attributes(
                 Attributes.builder()
-                        .attribute("jqassistant-templates-path", "testtemplates")
+                        .attribute("jqassistant-templates-path", "src/test/resources/testtemplates")
                         .attribute("jqassistant-report-path", "src/test/resources/testing-xml/test-report.xml")
                         .build())
                 .build();
-        //opt.setToDir(IncludeProcessorTest.class.getResource(IncludeProcessorTest.class.getSimpleName() + ".class").getPath().replace(IncludeProcessorTest.class.getSimpleName() + ".class", ""));
     }
 
     @Test
     void testRulesInclude() {
-        //System.out.println(asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept-e*\", constraint = \"*\"]", opt));
-        //System.out.println(asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept\"]", opt));
-
         Document doc = asciidoctor.load("include::jQAssistant:Rules[concepts = \"test-concept-e*\", constraints = \"*\"]", opt);
         String result = doc.convert();
-        //String result = asciidoctor.convert("include::jQAssistant:Rules[concept = \"test-concept-e*\", constraint = \"*\"]", opt);
-
 
         result = assertIsPartOfAndShorten(result, "test-constraint");
         result = assertIsPartOfAndShorten(result, "Test description 2");
@@ -49,7 +43,6 @@ class IncludeProcessorTest {
         assertIsPartOfAndShorten(result, "Status: <span class=\"green\">SUCCESS</span>, Severity: INFO");
 
         result = asciidoctor.convert("include::jQAssistant:Rules[concepts = \"test-concept\"]", opt);
-        System.out.println(result);
 
         assertThat(result).doesNotContain("test-constraint");
         result = assertIsPartOfAndShorten(result, "test-concept");
@@ -64,8 +57,6 @@ class IncludeProcessorTest {
 
     @Test
     void testSummaryInclude() {
-        //System.out.println(asciidoctor.convert("include::jQAssistant:Summary[concept = \"test-concept\", constraint = \"*\"]" , opt));
-
         String result = asciidoctor.convert("include::jQAssistant:Summary[concepts = \"test-concept\", constraints = \"*\"]" , opt);
 
         result = assertIsPartOfAndShorten(result, "table");

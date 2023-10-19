@@ -1,6 +1,11 @@
 package org.jqassistant.tooling.asciidoctorj.freemarker;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.TimeZone;
+
 import freemarker.cache.ClassTemplateLoader;
+import freemarker.cache.FileTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
@@ -11,13 +16,10 @@ import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttribu
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.TimeZone;
-
 public class TemplateRepoImpl implements TemplateRepo {
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateRepoImpl.class);
 
     Configuration cfg;
-    TemplateLoader customLoader;
     TemplateLoader defaultLoader;
 
     public TemplateRepoImpl() {
@@ -28,11 +30,17 @@ public class TemplateRepoImpl implements TemplateRepo {
     @Override
     public Template findTemplate(@NotNull ProcessAttributes attributes, @NotNull String templateName) {
         if(!cfg.isTemplateLoaderExplicitlySet()) {
-            if(attributes.getTemplatesPath() != null) {
-                customLoader = new ClassTemplateLoader(getClass().getClassLoader(), attributes.getTemplatesPath());
-                MultiTemplateLoader mtl = new MultiTemplateLoader(new TemplateLoader[] {customLoader, defaultLoader});
+            String templatesPath = attributes.getTemplatesPath();
+            if (templatesPath != null) {
+                TemplateLoader fileTemplateLoader;
+                try {
+                    fileTemplateLoader = new FileTemplateLoader(new File(templatesPath), false);
+                } catch (IOException e) {
+                    throw new IllegalArgumentException("Cannot locate templates path '" + templatesPath + "'.", e);
+                }
+                MultiTemplateLoader mtl = new MultiTemplateLoader(new TemplateLoader[]{fileTemplateLoader, defaultLoader});
                 cfg.setTemplateLoader(mtl);
-                LOGGER.info("Template loading location set to {}. If template is not defined in this location, the extension will default to the respective default template.", attributes.getTemplatesPath());
+                LOGGER.info("Template loading location set to {}. If template is not defined in this location, the extension will default to the respective default template.", templatesPath);
             }
             else {
                 cfg.setTemplateLoader(defaultLoader);

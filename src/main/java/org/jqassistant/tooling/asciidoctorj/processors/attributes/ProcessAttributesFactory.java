@@ -61,7 +61,6 @@ public class ProcessAttributesFactory {
      */
     private static void fillReportPath(@NotNull Document document, @NotNull ProcessAttributes.ProcessAttributesBuilder builder) {
         if(!(document.getAttributes().get(REPORT_PATH) instanceof String)) {
-            //throw new IllegalStateException("Your report xml file location isn't set properly! Please set the destination of your jqassistant-report.xml via the global document attributes for your asciidoctor. " + document.getAttributes().get(REPORT_PATH));
             LOGGER.warn("Your report xml file location isn't set properly! Please set the destination of your jqassistant-report.xml via the global document attributes for your asciidoctor. ReportPath attribute was: " + document.getAttributes().get(REPORT_PATH) + "; For more information check the readme.adoc for this plugin. This warning may occur while using the confluence publisher plugin. In that case you may ignore this warning unless your reports aren't rendered correctly!");
             builder.reportPath(null);
         }
@@ -73,7 +72,6 @@ public class ProcessAttributesFactory {
     private static void fillTemplatesPath(@NotNull Document document, @NotNull ProcessAttributes.ProcessAttributesBuilder builder) {
         if(document.getAttributes().get(TEMPLATES_PATH) != null && !(document.getAttributes().get(TEMPLATES_PATH) instanceof String)) {
             throw new IllegalStateException("Your templates folder location isn't a String! Please set the destination of your template folder to a String via the global document attributes for your asciidoctor. Or delete the attribute to use default templates. For questions, refer to the README.adoc");
-            //LOGGER.warn("Your templates folder location isn't a String! Please set the destination of your template folder to a String via the global document attributes for your asciidoctor. Or delete the attribute to use default templates. For questions, refer to the README.adoc");
         }
         else {
             builder.templatesPath((String) document.getAttributes().get(TEMPLATES_PATH));
@@ -106,6 +104,5 @@ public class ProcessAttributesFactory {
         if(document.getAttributes().get(IMAGES_DIR) instanceof String) {
             builder.imagesDirectory(Path.of(outDirectory).resolve(Path.of((String) document.getAttributes().get(IMAGES_DIR))).toFile());
         }
-        //LOGGER.info(document.getOptions().toString());
     }
 }
