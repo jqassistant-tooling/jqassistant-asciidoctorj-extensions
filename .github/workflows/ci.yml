@@ -4,12 +4,12 @@ name: CI
 on:
   push:
     branches:
-      - GH-action
+      - main
     tags-ignore:
       - "*"
   pull_request:
     branches:
-      - GH-action
+      - main
   workflow_dispatch: {}
 
 concurrency:
