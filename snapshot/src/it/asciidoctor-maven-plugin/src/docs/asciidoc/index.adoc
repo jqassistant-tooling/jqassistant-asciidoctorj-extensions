@@ -1,0 +1,12 @@
+= Report
+
+* <<./index/debt.adoc#, Technische Schulden>>
+
+== Summary
+
+include::jQAssistant:Summary[]
+
+== Rules
+
+include::jQAssistant:Rules[leveloffset=+2]
+

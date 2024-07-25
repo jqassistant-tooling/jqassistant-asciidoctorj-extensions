@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jqassistant-report xmlns="http://schema.jqassistant.org/report/v2.0">
+    <group id="test-group" date="2023-02-20T13:18:48">
+        <concept id="test-concept1">
+            <description>Test description</description>
+            <result>
+                <columns count="1" primary="Column 1">
+                    <column primary="true">Column 1</column>
+                </columns>
+                <rows count="1">
+                    <row>
+                        <column name="Column 1">
+                            <value>test-cell</value>
+                        </column>
+                    </row>
+                </rows>
+            </result>
+            <reports>
+                <image label="Ricki Boy">test.jpeg</image>
+                <link label="CSV">https://youtu.be/dQw4w9WgXcQ</link>
+            </reports>
+            <status>success</status>
+            <severity level="4">info</severity>
+            <duration>140</duration>
+        </concept>
+        <duration>140</duration>
+    </group>
+    <group id="test-group 2" date="2023-02-20T13:18:48">
+        <concept id="test-concept-empty-result">
+            <description>Test description</description>
+            <status>success</status>
+            <severity level="4">info</severity>
+            <duration>140</duration>
+        </concept>
+        <duration>140</duration>
+    </group>
+    <constraint id="test-constraint1">
+        <description>Test description 1</description>
+        <result>
+            <columns count="2" primary="Column 1">
+                <column primary="true">Column 1</column>
+                <column>Column 2</column>
+            </columns>
+            <rows count="2">
+                <row>
+                    <column name="Column 1">
+                        <value>test-cell 11</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-cell 12</value>
+                    </column>
+                </row>
+                <row>
+                    <column name="Column 1">
+                        <value>test-cell 21</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-cell 22</value>
+                    </column>
+                </row>
+            </rows>
+        </result>
+        <status>failure</status>
+        <severity level="2">major</severity>
+        <duration>221</duration>
+    </constraint>
+    <constraint id="test-constraint2">
+        <description>Test description 2</description>
+        <result>
+            <columns count="2" primary="Column 1">
+                <column primary="true">Column 1</column>
+                <column>Column 2</column>
+            </columns>
+            <rows count="2">
+                <row>
+                    <column name="Column 1">
+                        <value>test-cell 11</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-cell 12</value>
+                    </column>
+                </row>
+                <row>
+                    <column name="Column 1">
+                        <value>test-cell 21</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-cell 22</value>
+                    </column>
+                </row>
+            </rows>
+        </result>
+        <status>warning</status>
+        <severity level="2">minor</severity>
+        <duration>221</duration>
+    </constraint>
+    <constraint id="test-constraint3">
+        <description>Test description 3</description>
+        <result>
+            <columns count="2" primary="Column 1">
+                <column primary="true">Column 1</column>
+                <column>Column 2</column>
+            </columns>
+            <rows count="2">
+                <row>
+                    <column name="Column 1">
+                        <value>test-cell 11</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-cell 12</value>
+                    </column>
+                </row>
+                <row>
+                    <column name="Column 1">
+                        <value>test-cell 21</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-cell 22</value>
+                    </column>
+                </row>
+            </rows>
+        </result>
+        <status>failure</status>
+        <severity level="2">major</severity>
+        <duration>221</duration>
+    </constraint>
+</jqassistant-report>

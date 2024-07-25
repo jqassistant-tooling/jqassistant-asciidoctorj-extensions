@@ -1,0 +1,5 @@
+def indexHtmlFile = new File(basedir, 'target/generated-docs/index.html')
+assert indexHtmlFile.exists()
+assert indexHtmlFile.text.contains("it:CSVReport")
+def indexPdfFile = new File(basedir, 'target/generated-docs/index.pdf')
+assert indexPdfFile.exists()

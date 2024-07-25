@@ -1,0 +1,5 @@
+jqassistant:
+  plugins:
+    - group-id: org.jqassistant.plugin
+      artifact-id: jqassistant-plantuml-report-plugin
+      version: 2.0.0

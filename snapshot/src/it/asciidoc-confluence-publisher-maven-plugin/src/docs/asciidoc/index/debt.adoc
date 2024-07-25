@@ -1,0 +1,9 @@
+= Debt
+
+== Summary
+
+include::jQAssistant:Summary[concepts = "it:CSVReport"]
+
+== Rules
+
+include::jQAssistant:Rules[constraints = "*", leveloffset=+2]

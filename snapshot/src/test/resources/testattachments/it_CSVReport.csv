@@ -1,0 +1,3 @@
+"GroupId","ArtifactId","Version","Type"
+"org.jqassistant.contrib.asciidoctorj.it","asciidoctor-maven-plugin","1.0.0-SNAPSHOT","jar"
+"org.jqassistant.contrib.asciidoctorj.it","asciidoctor-maven-plugin","1.0.0-SNAPSHOT","test-jar"
