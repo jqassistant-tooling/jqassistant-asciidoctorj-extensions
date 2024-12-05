@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.jqassistant.tooling.common</groupId>
         <artifactId>parent</artifactId>
-        <version>2.3.0-SNAPSHOT</version>
+        <version>2.6.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.jqassistant.tooling.asciidoctorj</groupId>
@@ -39,10 +39,13 @@
   </scm>
 
     <properties>
-        <asciidoctorj.version>2.5.9</asciidoctorj.version>
-        <asciidoctor.maven.version>2.2.4</asciidoctor.maven.version>
+        <asciidoctorj.version>2.5.13</asciidoctorj.version>
+        <asciidoctor.maven.version>3.0.0</asciidoctor.maven.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <!-- SonarQube -->
+        <sonar.organization>jqassistant-tooling</sonar.organization>
+        <sonar.projectKey>jqassistant-tooling_jqassistant-asciidoctor-extensions</sonar.projectKey>
     </properties>
 
     <dependencies>
