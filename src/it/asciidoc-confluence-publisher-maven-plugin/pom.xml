@@ -30,7 +30,7 @@
             <plugin>
                 <groupId>org.sahli.asciidoc.confluence.publisher</groupId>
                 <artifactId>asciidoc-confluence-publisher-maven-plugin</artifactId>
-                <version>0.19.0</version>
+                <version>0.25.0</version>
                 <configuration>
                     <rootConfluenceUrl>https://my-confluence</rootConfluenceUrl>
                     <username>username</username>
@@ -67,11 +67,6 @@
                         <groupId>@project.groupId@</groupId>
                         <artifactId>@project.artifactId@</artifactId>
                         <version>@project.version@</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.asciidoctor</groupId>
-                        <artifactId>asciidoctorj</artifactId>
-                        <version>2.5.9</version>
                     </dependency>
                 </dependencies>
             </plugin>

@@ -6,6 +6,7 @@ import io.smallrye.common.constraint.NotNull;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.extension.Preprocessor;
 import org.asciidoctor.extension.PreprocessorReader;
+import org.asciidoctor.extension.Reader;
 import org.jqassistant.tooling.asciidoctorj.freemarker.TemplateRepo;
 import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttributes;
 import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttributesFactory;
@@ -27,7 +28,7 @@ public class IconEnabler extends Preprocessor {
     }
 
     @Override
-    public void process(Document document, PreprocessorReader reader) {
+    public Reader process(Document document, PreprocessorReader reader) {
         ProcessAttributes attributes = ProcessAttributesFactory.createProcessAttributesPre(document);
 
         Writer writer = new StringWriter();
@@ -47,5 +48,6 @@ public class IconEnabler extends Preprocessor {
         reader.restoreLines(lines);
 
         LOGGER.debug("Added icon configuration to top of the adoc");
+        return reader;
     }
 }

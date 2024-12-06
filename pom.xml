@@ -39,8 +39,8 @@
   </scm>
 
     <properties>
-        <asciidoctorj.version>2.5.13</asciidoctorj.version>
-        <asciidoctor.maven.version>3.0.0</asciidoctor.maven.version>
+        <asciidoctorj.version>3.0.0</asciidoctorj.version>
+        <asciidoctor.maven.version>3.1.1</asciidoctor.maven.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <!-- SonarQube -->
