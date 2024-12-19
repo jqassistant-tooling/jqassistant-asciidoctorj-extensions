@@ -17,17 +17,17 @@ As an example of how to use the plugin, you can take a look at the following mav
     <plugin>
         <groupId>org.asciidoctor</groupId>
         <artifactId>asciidoctor-maven-plugin</artifactId>
-        <version>2.2.2</version>
+        <version>3.1.1</version>
         <configuration>
             <attributes>
                 <jqassistant-report-path>
-                    ${project.build.directory}/jqassistant/jqassistant-report.xml <1>
+                    ${project.build.directory}/jqassistant/jqassistant-report.xml <!--1-->
                 </jqassistant-report-path>
                 <jqassistant-templates-path>
-                    your-custom-template-jar-or-folder-name <2>
+                    your-custom-template-jar-or-folder-name <!--2-->
                 </jqassistant-templates-path>
                 <imagesDir>
-                    your-desired-folder-to-store-pictures-inside-your-output-directory <3>
+                    your-desired-folder-to-store-pictures-inside-your-output-directory <!--3-->
                 </imagesDir>
             </attributes>
         </configuration>
@@ -44,7 +44,7 @@ As an example of how to use the plugin, you can take a look at the following mav
             <dependency>
                 <groupId>org.jqassistant.tooling.asciidoctorj</groupId>
                 <artifactId>jqassistant-asciidoctorj-extensions</artifactId>
-                <version>1.0.0</version> <4>
+                <version>1.1.0</version> <!--4-->
             </dependency>
         </dependencies>
     </plugin>
