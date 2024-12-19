@@ -70,7 +70,7 @@
             <!-- required by JRuby, cannot handle Snakeyaml 2.0 -->
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.33</version>
+            <version>2.3</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
