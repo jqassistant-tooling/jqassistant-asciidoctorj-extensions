@@ -188,12 +188,3 @@ image::${labeledImage.link}[${labeledImage.label}]
 |===
 ----
 
-== Changelog
-
-== 1.0.1
-
-* fixed an https://github.com/jqassistant-tooling/jqassistant-asciidoctorj-extensions/issues/13[issue] where custom templates have not been loaded from the configured directory
-
-== 1.0.0
-
-* Initial release
