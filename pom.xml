@@ -67,13 +67,6 @@
             <version>${asciidoctorj.version}</version>
         </dependency>
         <dependency>
-            <!-- required by JRuby, cannot handle Snakeyaml 2.0 -->
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>2.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.33</version>
