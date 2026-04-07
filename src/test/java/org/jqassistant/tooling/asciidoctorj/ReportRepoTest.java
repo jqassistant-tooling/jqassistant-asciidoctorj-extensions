@@ -20,6 +20,7 @@ class ReportRepoTest {
 
     private static Concept tce1, tce2;
     private static Constraint tca1;
+    private static String someExistingFile;
 
     @BeforeAll
     static void init() {
@@ -29,18 +30,19 @@ class ReportRepoTest {
         tce1 = Concept.builder().id("TestConceptId").build();
         tce2 = Concept.builder().id("TestConceptId2").build();
         tca1 = Constraint.builder().id("TestConstraintId").build();
+        someExistingFile = "pom.xml";
 
         parsedReport.addConcept(tce1);
         parsedReport.addConcept(tce2);
         parsedReport.addConstraint(tca1);
-        when(parser.parseReportXml("mock-report")).thenReturn(parsedReport);
+        when(parser.parseReportXml(someExistingFile)).thenReturn(parsedReport);
 
         testRepo = new ReportRepoImpl(parser);
     }
 
     @Test
     void testFindConceptsByIdWildcard() {
-        ProcessAttributes attributes1 = ProcessAttributes.builder().reportPath("mock-report").conceptIdFilter("Test*").build();
+        ProcessAttributes attributes1 = ProcessAttributes.builder().reportPath(someExistingFile).conceptIdFilter("Test*").build();
 
         assertThat(testRepo.findConcepts(attributes1).toArray()).hasSize(2);
         assertThat(testRepo.findConcepts(attributes1).toArray()).containsAll(List.of(tce1, tce2));
@@ -48,7 +50,7 @@ class ReportRepoTest {
 
     @Test
     void testFindConceptsById() {
-        ProcessAttributes attributes2 = ProcessAttributes.builder().reportPath("mock-report").conceptIdFilter("TestConceptId2").constraintIdFilter("").build();
+        ProcessAttributes attributes2 = ProcessAttributes.builder().reportPath(someExistingFile).conceptIdFilter("TestConceptId2").constraintIdFilter("").build();
 
         assertThat (testRepo.findConcepts(attributes2).toArray()).hasSize(1);
         assertThat (testRepo.findConcepts(attributes2).toArray()).contains(tce2);
@@ -57,7 +59,7 @@ class ReportRepoTest {
 
     @Test
     void testFindConstraintsById() {
-        ProcessAttributes attributes3 = ProcessAttributes.builder().reportPath("mock-report").constraintIdFilter("TestConstraintId").build();
+        ProcessAttributes attributes3 = ProcessAttributes.builder().reportPath(someExistingFile).constraintIdFilter("TestConstraintId").build();
 
         assertThat (testRepo.findConstraints(attributes3).toArray()).hasSize(1);
         assertThat (testRepo.findConstraints(attributes3).toArray()).contains(tca1);
