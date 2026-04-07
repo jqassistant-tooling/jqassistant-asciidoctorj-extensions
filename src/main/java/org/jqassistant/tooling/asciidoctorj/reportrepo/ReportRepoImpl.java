@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.io.File;
 
 @Getter
 public class ReportRepoImpl implements ReportRepo {
@@ -35,13 +36,26 @@ public class ReportRepoImpl implements ReportRepo {
     private void initialize(@NotNull ProcessAttributes attributes) {
         if (!isInitialized()) {
             LOGGER.debug("initializing reportRepo");
-            ParsedReport report = reportParser.parseReportXml(attributes.getReportPath());
-            this.groups = report.getGroups();
-            this.concepts = report.getConcepts();
-            this.constraints = report.getConstraints();
 
-            initialized = true;
-            LOGGER.debug("successfully initialized reportRepo");
+            String reportPath = attributes.getReportPath();
+            java.io.File reportFile = new File(reportPath);
+
+            if (reportFile.exists() && reportFile.isFile()) {
+
+                ParsedReport report = reportParser.parseReportXml(attributes.getReportPath());
+                this.groups = report.getGroups();
+                this.concepts = report.getConcepts();
+                this.constraints = report.getConstraints();
+
+                initialized = true;
+                LOGGER.debug("successfully initialized reportRepo");
+
+            } else {
+
+                String warning = "jQAssistant-Report-File not found at: " + reportPath + ". Any rule includes will remain empty.";
+                LOGGER.warn(warning);
+
+            }
         }
     }
 
