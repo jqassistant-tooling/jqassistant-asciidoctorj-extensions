@@ -25,9 +25,9 @@ public class ReportRepoImpl implements ReportRepo {
 
     private final ReportParser reportParser;
 
-    private Map<String, Group> groups = new HashMap<>();
-    private Map<String, Concept> concepts = new HashMap<>();
-    private Map<String, Constraint> constraints = new HashMap<>();
+    private  Map<String, Group> groups = new HashMap<>();
+    private  Map<String, Concept> concepts = new HashMap<>();
+    private  Map<String, Constraint> constraints = new HashMap<>();
 
     public ReportRepoImpl(@NotNull ReportParser reportParser) {
         this.reportParser = reportParser;
@@ -52,7 +52,7 @@ public class ReportRepoImpl implements ReportRepo {
 
             } else {
 
-                LOGGER.warn("jQAssistant-Report-File not found at: {}. Any rule includes will remain empty.", reportPath);
+                LOGGER.warn("jQAssistant Report XML not found at: {}. Any rule includes will remain empty.", reportPath);
 
             }
         }
