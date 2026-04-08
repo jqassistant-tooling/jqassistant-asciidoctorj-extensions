@@ -21,6 +21,7 @@ class ReportRepoTest {
     private static Concept tce1, tce2;
     private static Constraint tca1;
     private static String someExistingFile;
+    private static String nonExistingFile;
 
     @BeforeAll
     static void init() {
@@ -31,6 +32,7 @@ class ReportRepoTest {
         tce2 = Concept.builder().id("TestConceptId2").build();
         tca1 = Constraint.builder().id("TestConstraintId").build();
         someExistingFile = "src/test/resources/jqassistant-report.xml";
+        nonExistingFile = "non-existent-report.xml";
 
         parsedReport.addConcept(tce1);
         parsedReport.addConcept(tce2);
@@ -64,5 +66,14 @@ class ReportRepoTest {
         assertThat (testRepo.findConstraints(attributes3).toArray()).hasSize(1);
         assertThat (testRepo.findConstraints(attributes3).toArray()).contains(tca1);
         assertThat (testRepo.findConcepts(attributes3).toArray()).hasSize(2);
+    }
+
+    @Test
+    void testMissingReportXML() {
+        ProcessAttributes attributes4 = ProcessAttributes.builder().reportPath(nonExistingFile).conceptIdFilter("TestConceptId4").constraintIdFilter("TestConstraint4").build();
+
+        assertThat(testRepo.findConcepts(attributes4).toArray()).isEmpty();
+        assertThat(testRepo.findConstraints(attributes4).toArray()).isEmpty();
+
     }
 }

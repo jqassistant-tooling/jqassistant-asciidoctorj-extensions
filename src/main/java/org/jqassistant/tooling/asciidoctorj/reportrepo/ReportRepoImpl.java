@@ -1,6 +1,7 @@
 package org.jqassistant.tooling.asciidoctorj.reportrepo;
 
 import com.buschmais.jqassistant.core.rule.api.filter.RuleFilter;
+
 import io.smallrye.common.constraint.NotNull;
 import lombok.Getter;
 import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttributes;
@@ -25,9 +26,9 @@ public class ReportRepoImpl implements ReportRepo {
 
     private final ReportParser reportParser;
 
-    private  Map<String, Group> groups = new HashMap<>();
-    private  Map<String, Concept> concepts = new HashMap<>();
-    private  Map<String, Constraint> constraints = new HashMap<>();
+    private Map<String, Group> groups = new HashMap<>();
+    private Map<String, Concept> concepts = new HashMap<>();
+    private Map<String, Constraint> constraints = new HashMap<>();
 
     public ReportRepoImpl(@NotNull ReportParser reportParser) {
         this.reportParser = reportParser;
@@ -36,12 +37,10 @@ public class ReportRepoImpl implements ReportRepo {
     private void initialize(@NotNull ProcessAttributes attributes) {
         if (!isInitialized()) {
             LOGGER.debug("initializing reportRepo");
-
             String reportPath = attributes.getReportPath();
             File reportFile = new File(reportPath);
 
             if (reportFile.exists() && reportFile.isFile()) {
-
                 ParsedReport report = reportParser.parseReportXml(attributes.getReportPath());
                 this.groups = report.getGroups();
                 this.concepts = report.getConcepts();
@@ -49,11 +48,8 @@ public class ReportRepoImpl implements ReportRepo {
 
                 initialized = true;
                 LOGGER.debug("successfully initialized reportRepo");
-
             } else {
-
                 LOGGER.warn("jQAssistant Report XML not found at: {}. Any rule includes will remain empty.", reportPath);
-
             }
         }
     }
@@ -103,8 +99,10 @@ public class ReportRepoImpl implements ReportRepo {
     /**
      * filters all given rules by their id
      *
-     * @param ruleMap a map for all given rules: 1. element = id; 2. element = rule
-     * @param id      the id(-wildcard) to match against
+     * @param ruleMap
+     *         a map for all given rules: 1. element = id; 2. element = rule
+     * @param id
+     *         the id(-wildcard) to match against
      * @return all matching rules
      */
     private Collection<? extends Rule> filterRulesById(@NotNull Map<String, ? extends Rule> ruleMap, String id) {
