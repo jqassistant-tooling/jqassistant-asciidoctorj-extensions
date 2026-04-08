@@ -38,7 +38,7 @@ public class ReportRepoImpl implements ReportRepo {
             LOGGER.debug("initializing reportRepo");
 
             String reportPath = attributes.getReportPath();
-            java.io.File reportFile = new File(reportPath);
+            File reportFile = new File(reportPath);
 
             if (reportFile.exists() && reportFile.isFile()) {
 
@@ -52,8 +52,7 @@ public class ReportRepoImpl implements ReportRepo {
 
             } else {
 
-                String warning = "jQAssistant-Report-File not found at: " + reportPath + ". Any rule includes will remain empty.";
-                LOGGER.warn(warning);
+                LOGGER.warn("jQAssistant-Report-File not found at: {}. Any rule includes will remain empty.", reportPath);
 
             }
         }

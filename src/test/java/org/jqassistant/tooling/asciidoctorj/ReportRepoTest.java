@@ -30,7 +30,7 @@ class ReportRepoTest {
         tce1 = Concept.builder().id("TestConceptId").build();
         tce2 = Concept.builder().id("TestConceptId2").build();
         tca1 = Constraint.builder().id("TestConstraintId").build();
-        someExistingFile = "pom.xml";
+        someExistingFile = "src/test/resources/jqassistant-report.xml";
 
         parsedReport.addConcept(tce1);
         parsedReport.addConcept(tce2);
