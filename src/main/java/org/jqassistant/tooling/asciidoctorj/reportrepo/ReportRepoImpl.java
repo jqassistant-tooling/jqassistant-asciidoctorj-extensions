@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.io.File;
 
 @Getter
 public class ReportRepoImpl implements ReportRepo {
@@ -35,13 +36,20 @@ public class ReportRepoImpl implements ReportRepo {
     private void initialize(@NotNull ProcessAttributes attributes) {
         if (!isInitialized()) {
             LOGGER.debug("initializing reportRepo");
-            ParsedReport report = reportParser.parseReportXml(attributes.getReportPath());
-            this.groups = report.getGroups();
-            this.concepts = report.getConcepts();
-            this.constraints = report.getConstraints();
+            String reportPath = attributes.getReportPath();
+            File reportFile = new File(reportPath);
 
-            initialized = true;
-            LOGGER.debug("successfully initialized reportRepo");
+            if (reportFile.exists() && reportFile.isFile()) {
+                ParsedReport report = reportParser.parseReportXml(attributes.getReportPath());
+                this.groups = report.getGroups();
+                this.concepts = report.getConcepts();
+                this.constraints = report.getConstraints();
+
+                initialized = true;
+                LOGGER.debug("successfully initialized reportRepo");
+            } else {
+                LOGGER.warn("jQAssistant Report XML not found at: {}. Any rule includes will remain empty.", reportPath);
+            }
         }
     }
 
@@ -90,8 +98,10 @@ public class ReportRepoImpl implements ReportRepo {
     /**
      * filters all given rules by their id
      *
-     * @param ruleMap a map for all given rules: 1. element = id; 2. element = rule
-     * @param id      the id(-wildcard) to match against
+     * @param ruleMap
+     *         a map for all given rules: 1. element = id; 2. element = rule
+     * @param id
+     *         the id(-wildcard) to match against
      * @return all matching rules
      */
     private Collection<? extends Rule> filterRulesById(@NotNull Map<String, ? extends Rule> ruleMap, String id) {
