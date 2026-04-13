@@ -28,7 +28,7 @@ public class ReportRepoImpl implements ReportRepo {
         this.reportParser = reportParser;
     }
 
-    public void initialize(@NotNull ProcessAttributes attributes) {
+    private void initialize(@NotNull ProcessAttributes attributes) {
         if (!isInitialized()) {
             LOGGER.debug("initializing reportRepo");
             String reportPath = attributes.getReportPath();
