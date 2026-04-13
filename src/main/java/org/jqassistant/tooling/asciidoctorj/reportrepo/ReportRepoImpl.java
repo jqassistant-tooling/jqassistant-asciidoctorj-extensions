@@ -13,6 +13,8 @@ import org.jqassistant.tooling.asciidoctorj.xmlparsing.ReportParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.buschmais.jqassistant.core.rule.api.filter.RuleFilter.matches;
+
 @Getter
 public class ReportRepoImpl implements ReportRepo {
 
@@ -51,50 +53,25 @@ public class ReportRepoImpl implements ReportRepo {
     public SortedSet<Concept> findConcepts(ProcessAttributes attributes) {
         initialize(attributes);
 
-        return findExecutableRule(attributes.getConceptIdFilter(), concepts);
+        return findExecutableRule(concepts, attributes.getConceptIdFilter());
     }
 
     @Override
     public SortedSet<Constraint> findConstraints(ProcessAttributes attributes) {
         initialize(attributes);
 
-        return findExecutableRule(attributes.getConstraintIdFilter(), constraints);
+        return findExecutableRule(constraints, attributes.getConstraintIdFilter());
     }
 
-    public <T extends ExecutableRule> SortedSet<T> findExecutableRule(String idFilter, Map<String, T> ruleMap) {
+    public <T extends ExecutableRule> SortedSet<T> findExecutableRule(Map<String, T> ruleMap, String idFilter) {
 
         SortedSet<T> rulesSet = new TreeSet<>(Comparator.comparing(Rule::getId));
 
-        rulesSet.addAll((Collection<T>) filterRulesById(ruleMap, idFilter));
-
-        if (idFilter == null) {
-            LOGGER.debug("Giving back all rules due to empty ruleIdFilter");
-        } else {
-            LOGGER.debug("Giving back all rules matching {}", idFilter);
-        }
+        ruleMap.entrySet()
+                .stream()
+                .filter(entry -> idFilter == null || matches(entry.getKey(), idFilter))
+                .forEach(entry -> rulesSet.add(entry.getValue()));
 
         return rulesSet;
-    }
-
-    /**
-     * filters all given rules by their id
-     *
-     * @param ruleMap
-     *         a map for all given rules: 1. element = id; 2. element = rule
-     * @param id
-     *         the id(-wildcard) to match against
-     * @return all matching rules
-     */
-    private Collection<? extends Rule> filterRulesById(@NotNull Map<String, ? extends Rule> ruleMap, String id) {
-        if (id == null) {
-            return ruleMap.values();
-        }
-
-        Set<String> matchingIds = RuleFilter.match(ruleMap.keySet(), id);
-
-        List<Rule> matchingRules = new ArrayList<>();
-        matchingIds.forEach(s -> matchingRules.add(ruleMap.get(s)));
-
-        return matchingRules;
     }
 }
