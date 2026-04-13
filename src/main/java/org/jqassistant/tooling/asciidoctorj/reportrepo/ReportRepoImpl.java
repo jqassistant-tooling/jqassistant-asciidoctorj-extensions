@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.*;
 
 import com.buschmais.jqassistant.core.rule.api.filter.RuleFilter;
-
 import io.smallrye.common.constraint.NotNull;
 import lombok.Getter;
 import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttributes;
