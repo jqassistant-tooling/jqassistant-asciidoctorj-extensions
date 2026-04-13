@@ -1,13 +1,9 @@
 package org.jqassistant.tooling.asciidoctorj;
 
-import java.util.*;
-
 import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttributes;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.ReportRepo;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.ReportRepoImpl;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Concept;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Constraint;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Group;
 import org.jqassistant.tooling.asciidoctorj.xmlparsing.ParsedReport;
 import org.jqassistant.tooling.asciidoctorj.xmlparsing.ReportParser;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
