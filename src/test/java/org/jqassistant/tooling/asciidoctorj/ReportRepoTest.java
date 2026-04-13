@@ -1,5 +1,7 @@
 package org.jqassistant.tooling.asciidoctorj;
 
+import java.util.*;
+
 import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttributes;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.ReportRepo;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.ReportRepoImpl;
@@ -28,7 +30,7 @@ class ReportRepoTest {
 
     @BeforeAll
     static void init() {
-        tce1 = Concept.builder().id("TestConceptId").build();
+        tce1 = Concept.builder().id("TestConceptId1").build();
         tce2 = Concept.builder().id("TestConceptId2").build();
         tca1 = Constraint.builder().id("TestConstraintId").build();
     }
@@ -71,6 +73,7 @@ class ReportRepoTest {
         assertThat (testRepo.findConstraints(attributes).toArray()).contains(tca1);
         assertThat (testRepo.findConcepts(attributes).toArray()).hasSize(2);
     }
+
     @Test
     void testMissingReportXML() {
         ProcessAttributes attributes = ProcessAttributes.builder().reportPath(nonExistingFile).build();

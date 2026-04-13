@@ -1,30 +1,25 @@
 package org.jqassistant.tooling.asciidoctorj.reportrepo;
 
+import java.io.File;
+import java.util.*;
+
 import com.buschmais.jqassistant.core.rule.api.filter.RuleFilter;
+
 import io.smallrye.common.constraint.NotNull;
 import lombok.Getter;
 import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttributes;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Concept;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Constraint;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Group;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Rule;
+import org.jqassistant.tooling.asciidoctorj.reportrepo.model.*;
 import org.jqassistant.tooling.asciidoctorj.xmlparsing.ParsedReport;
 import org.jqassistant.tooling.asciidoctorj.xmlparsing.ReportParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.io.File;
-
 @Getter
 public class ReportRepoImpl implements ReportRepo {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportRepoImpl.class);
-
-    private boolean initialized = false;
-
     private final ReportParser reportParser;
-
+    private boolean initialized = false;
     private Map<String, Group> groups = new HashMap<>();
     private Map<String, Concept> concepts = new HashMap<>();
     private Map<String, Constraint> constraints = new HashMap<>();
@@ -33,7 +28,7 @@ public class ReportRepoImpl implements ReportRepo {
         this.reportParser = reportParser;
     }
 
-    private void initialize(@NotNull ProcessAttributes attributes) {
+    public void initialize(@NotNull ProcessAttributes attributes) {
         if (!isInitialized()) {
             LOGGER.debug("initializing reportRepo");
             String reportPath = attributes.getReportPath();
@@ -54,45 +49,32 @@ public class ReportRepoImpl implements ReportRepo {
     }
 
     @Override
-    public SortedSet<Concept> findConcepts(@NotNull ProcessAttributes attributes) {
+    public SortedSet<Concept> findConcepts(ProcessAttributes attributes) {
         initialize(attributes);
 
-        SortedSet<Concept> conceptSSet = new TreeSet<>(Comparator.comparing(Rule::getId));
-
-        if (attributes.getConceptIdFilter() == null) {
-            conceptSSet.addAll(concepts.values());
-            LOGGER.debug("Giving back all concepts due to empty conceptIdFilter");
-            return conceptSSet;
-        }
-
-        String id = attributes.getConceptIdFilter();
-
-        conceptSSet.addAll((Collection<Concept>) filterRulesById(concepts, id));
-
-        LOGGER.debug("Giving back all concepts matching {}", attributes.getConceptIdFilter());
-
-        return conceptSSet;
+        return findExecutableRule(attributes.getConceptIdFilter(), concepts);
     }
 
     @Override
-    public SortedSet<Constraint> findConstraints(@NotNull ProcessAttributes attributes) {
+    public SortedSet<Constraint> findConstraints(ProcessAttributes attributes) {
         initialize(attributes);
 
-        SortedSet<Constraint> constraintSSet = new TreeSet<>(Comparator.comparing(Rule::getId));
+        return findExecutableRule(attributes.getConstraintIdFilter(), constraints);
+    }
 
-        if (attributes.getConstraintIdFilter() == null) {
-            constraintSSet.addAll(constraints.values());
-            LOGGER.debug("Giving back all constraints due to empty constraintIdFilter");
-            return constraintSSet;
+    public <T extends ExecutableRule> SortedSet<T> findExecutableRule(String idFilter, Map<String, T> ruleMap) {
+
+        SortedSet<T> rulesSet = new TreeSet<>(Comparator.comparing(Rule::getId));
+
+        rulesSet.addAll((Collection<T>) filterRulesById(ruleMap, idFilter));
+
+        if (idFilter == null) {
+            LOGGER.debug("Giving back all rules due to empty ruleIdFilter");
+        } else {
+            LOGGER.debug("Giving back all rules matching {}", idFilter);
         }
 
-        String id = attributes.getConstraintIdFilter();
-
-        constraintSSet.addAll((Collection<Constraint>) filterRulesById(constraints, id));
-
-        LOGGER.debug("Giving back all constraints matching {}", attributes.getConstraintIdFilter());
-
-        return constraintSSet;
+        return rulesSet;
     }
 
     /**
