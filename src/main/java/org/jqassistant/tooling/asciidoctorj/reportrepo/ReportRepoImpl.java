@@ -1,30 +1,26 @@
 package org.jqassistant.tooling.asciidoctorj.reportrepo;
 
+import java.io.File;
+import java.util.*;
+
 import com.buschmais.jqassistant.core.rule.api.filter.RuleFilter;
 import io.smallrye.common.constraint.NotNull;
 import lombok.Getter;
 import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttributes;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Concept;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Constraint;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Group;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Rule;
+import org.jqassistant.tooling.asciidoctorj.reportrepo.model.*;
 import org.jqassistant.tooling.asciidoctorj.xmlparsing.ParsedReport;
 import org.jqassistant.tooling.asciidoctorj.xmlparsing.ReportParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.io.File;
+import static com.buschmais.jqassistant.core.rule.api.filter.RuleFilter.matches;
 
 @Getter
 public class ReportRepoImpl implements ReportRepo {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportRepoImpl.class);
-
-    private boolean initialized = false;
-
     private final ReportParser reportParser;
-
+    private boolean initialized = false;
     private Map<String, Group> groups = new HashMap<>();
     private Map<String, Concept> concepts = new HashMap<>();
     private Map<String, Constraint> constraints = new HashMap<>();
@@ -54,66 +50,28 @@ public class ReportRepoImpl implements ReportRepo {
     }
 
     @Override
-    public SortedSet<Concept> findConcepts(@NotNull ProcessAttributes attributes) {
+    public SortedSet<Concept> findConcepts(ProcessAttributes attributes) {
         initialize(attributes);
 
-        SortedSet<Concept> conceptSSet = new TreeSet<>(Comparator.comparing(Rule::getId));
-
-        if (attributes.getConceptIdFilter() == null) {
-            conceptSSet.addAll(concepts.values());
-            LOGGER.debug("Giving back all concepts due to empty conceptIdFilter");
-            return conceptSSet;
-        }
-
-        String id = attributes.getConceptIdFilter();
-
-        conceptSSet.addAll((Collection<Concept>) filterRulesById(concepts, id));
-
-        LOGGER.debug("Giving back all concepts matching {}", attributes.getConceptIdFilter());
-
-        return conceptSSet;
+        return findExecutableRule(concepts, attributes.getConceptIdFilter());
     }
 
     @Override
-    public SortedSet<Constraint> findConstraints(@NotNull ProcessAttributes attributes) {
+    public SortedSet<Constraint> findConstraints(ProcessAttributes attributes) {
         initialize(attributes);
 
-        SortedSet<Constraint> constraintSSet = new TreeSet<>(Comparator.comparing(Rule::getId));
-
-        if (attributes.getConstraintIdFilter() == null) {
-            constraintSSet.addAll(constraints.values());
-            LOGGER.debug("Giving back all constraints due to empty constraintIdFilter");
-            return constraintSSet;
-        }
-
-        String id = attributes.getConstraintIdFilter();
-
-        constraintSSet.addAll((Collection<Constraint>) filterRulesById(constraints, id));
-
-        LOGGER.debug("Giving back all constraints matching {}", attributes.getConstraintIdFilter());
-
-        return constraintSSet;
+        return findExecutableRule(constraints, attributes.getConstraintIdFilter());
     }
 
-    /**
-     * filters all given rules by their id
-     *
-     * @param ruleMap
-     *         a map for all given rules: 1. element = id; 2. element = rule
-     * @param id
-     *         the id(-wildcard) to match against
-     * @return all matching rules
-     */
-    private Collection<? extends Rule> filterRulesById(@NotNull Map<String, ? extends Rule> ruleMap, String id) {
-        if (id == null) {
-            return ruleMap.values();
-        }
+    public <T extends ExecutableRule> SortedSet<T> findExecutableRule(Map<String, T> ruleMap, String idFilter) {
 
-        Set<String> matchingIds = RuleFilter.match(ruleMap.keySet(), id);
+        SortedSet<T> rulesSet = new TreeSet<>(Comparator.comparing(Rule::getId));
 
-        List<Rule> matchingRules = new ArrayList<>();
-        matchingIds.forEach(s -> matchingRules.add(ruleMap.get(s)));
+        ruleMap.entrySet()
+                .stream()
+                .filter(entry -> idFilter == null || matches(entry.getKey(), idFilter))
+                .forEach(entry -> rulesSet.add(entry.getValue()));
 
-        return matchingRules;
+        return rulesSet;
     }
 }

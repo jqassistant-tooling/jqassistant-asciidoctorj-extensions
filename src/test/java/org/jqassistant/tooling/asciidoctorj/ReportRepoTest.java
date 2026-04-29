@@ -1,11 +1,9 @@
 package org.jqassistant.tooling.asciidoctorj;
 
 import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttributes;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.ReportRepo;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.ReportRepoImpl;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Concept;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Constraint;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Group;
 import org.jqassistant.tooling.asciidoctorj.xmlparsing.ParsedReport;
 import org.jqassistant.tooling.asciidoctorj.xmlparsing.ReportParser;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +25,7 @@ class ReportRepoTest {
 
     @BeforeAll
     static void init() {
-        tce1 = Concept.builder().id("TestConceptId").build();
+        tce1 = Concept.builder().id("TestConceptId1").build();
         tce2 = Concept.builder().id("TestConceptId2").build();
         tca1 = Constraint.builder().id("TestConstraintId").build();
     }
@@ -71,6 +68,7 @@ class ReportRepoTest {
         assertThat (testRepo.findConstraints(attributes).toArray()).contains(tca1);
         assertThat (testRepo.findConcepts(attributes).toArray()).hasSize(2);
     }
+
     @Test
     void testMissingReportXML() {
         ProcessAttributes attributes = ProcessAttributes.builder().reportPath(nonExistingFile).build();
