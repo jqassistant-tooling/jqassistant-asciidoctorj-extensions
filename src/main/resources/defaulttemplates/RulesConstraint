@@ -2,9 +2,6 @@
 [#jqassistant_${rule.id}]
 = ${rule.id}
 
-[cols="1", frame=none, grid=none, width="100%"]
-|===
-|
 <#if rule.status == "SUCCESS">
 TIP: ${rule.description} +
 Status: [green]#${rule.status}#, Severity: ${rule.severity}
@@ -18,7 +15,6 @@ Status: [red]#${rule.status}#, Severity: ${rule.severity}
 NOTE: ${rule.description} +
 Status: [grey]#${rule.status}#, Severity: ${rule.severity}
 </#if>
-|===
 
 <#if rule.hasReports>
 <#list rule.reports.links as labeledLink>
@@ -26,12 +22,12 @@ link:${labeledLink.link}[${labeledLink.label}]
 
 </#list>
 <#list rule.reports.images as labeledImage>
-[caption="", title=${labeledImage.label}]
+[caption="", title="${labeledImage.label}"]
 image::${labeledImage.link}[${labeledImage.label}]
 
 </#list>
 <#elseif rule.hasResult>
-[width="100%", opts="header"]
+[options="header, autowidth", role="stretch"]
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list>
 <#list rule.resultRows as row>
