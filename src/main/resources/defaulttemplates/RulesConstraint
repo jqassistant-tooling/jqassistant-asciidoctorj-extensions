@@ -1,7 +1,10 @@
 <#list constraints as rule>
 [#jqassistant_${rule.id}]
 = ${rule.id}
-****
+
+[cols="1", frame=none, grid=none, width="100%"]
+|===
+|
 <#if rule.status == "SUCCESS">
 TIP: ${rule.description} +
 Status: [green]#${rule.status}#, Severity: ${rule.severity}
@@ -15,6 +18,7 @@ Status: [red]#${rule.status}#, Severity: ${rule.severity}
 NOTE: ${rule.description} +
 Status: [grey]#${rule.status}#, Severity: ${rule.severity}
 </#if>
+|===
 
 <#if rule.hasReports>
 <#list rule.reports.links as labeledLink>
@@ -27,7 +31,7 @@ image::${labeledImage.link}[${labeledImage.label}]
 
 </#list>
 <#elseif rule.hasResult>
-[opts="header"]
+[width="100%", opts="header"]
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list>
 <#list rule.resultRows as row>
@@ -37,5 +41,5 @@ image::${labeledImage.link}[${labeledImage.label}]
 </#list>
 |===
 </#if>
-****
+
 </#list>
