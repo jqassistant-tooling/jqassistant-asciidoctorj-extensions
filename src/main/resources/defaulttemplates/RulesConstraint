@@ -1,19 +1,39 @@
 <#list constraints as rule>
 [#jqassistant_${rule.id}]
 = ${rule.id}
-
+****
 <#if rule.status == "SUCCESS">
-TIP: ${rule.description} +
+[TIP]
+====
+....
+${rule.description}
+....
 Status: [green]#${rule.status}#, Severity: ${rule.severity}
+====
 <#elseif rule.status == "WARNING">
-WARNING: ${rule.description} +
+[WARNING]
+====
+....
+${rule.description}
+....
 Status: [yellow]#${rule.status}#, Severity: ${rule.severity}
+====
 <#elseif rule.status == "FAILURE">
-CAUTION: ${rule.description} +
+[CAUTION]
+====
+....
+${rule.description}
+....
 Status: [red]#${rule.status}#, Severity: ${rule.severity}
+====
 <#else>
-NOTE: ${rule.description} +
+[NOTE]
+====
+....
+${rule.description}
+....
 Status: [grey]#${rule.status}#, Severity: ${rule.severity}
+====
 </#if>
 
 <#if rule.hasReports>
@@ -27,15 +47,15 @@ image::${labeledImage.link}[${labeledImage.label}]
 
 </#list>
 <#elseif rule.hasResult>
-[options="header, autowidth", role="stretch"]
+[%autowidth.stretch, options="header"]
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list>
 <#list rule.resultRows as row>
 <#list row as cell>
-|${cell}
+|${cell?replace(".", ".&#8203;")}
 </#list>
 </#list>
 |===
 </#if>
-
+****
 </#list>
