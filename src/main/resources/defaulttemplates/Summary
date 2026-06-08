@@ -1,9 +1,9 @@
-[cols="2,3a,1,1", opts="header"]
+[opts="header"]
 |===
 |Id |Description |Severity |Status
 <#list constraints as constraint>
 |<<jqassistant_${constraint.id}>>
-|----
+a|----
 ${constraint.description}
 ----
 |${constraint.severity}
