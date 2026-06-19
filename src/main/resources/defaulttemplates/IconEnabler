@@ -1,4 +1,4 @@
-:caution-caption: 🔥 ERROR
+:important-caption: ❌ FAILURE
 :tip-caption: ✅ SUCCESS
-:warning-caption: ⚠ WARNING
-:note-caption: ⚡ SKIPPED
+:caution-caption: ⚠️ WARNING
+:note-caption: ✅ SUCCESS

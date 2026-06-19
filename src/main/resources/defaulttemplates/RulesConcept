@@ -4,8 +4,8 @@
 ****
 <#assign statusConfig = {
   "SUCCESS": {"label": "TIP", "color": "green"},
-  "WARNING": {"label": "WARNING", "color": "yellow"},
-  "FAILURE": {"label": "CAUTION", "color": "red"}
+  "WARNING": {"label": "CAUTION", "color": "yellow"},
+  "FAILURE": {"label": "IMPORTANT", "color": "red"}
 }>
 
 <#assign current = statusConfig[rule.status]!{"label": "NOTE", "color": "grey"}>
