@@ -1,4 +1,5 @@
 <#list concepts as rule>
+
 [#jqassistant_${rule.id}]
 = ${rule.id}
 ****
@@ -15,7 +16,7 @@
 ....
 ${rule.description}
 ....
-Status: [${current.color}]#${rule.status}#, Severity: ${rule.severity}
+Severity: ${rule.severity}
 ====
 
 

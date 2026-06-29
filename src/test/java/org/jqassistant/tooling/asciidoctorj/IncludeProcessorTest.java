@@ -26,7 +26,7 @@ class IncludeProcessorTest {
 
     @Test
     void testRulesInclude() {
-        Document doc = asciidoctor.load("include::jQAssistant:Rules[concepts = \"test-concept-e*\", constraints = \"*\"]", opt);
+        Document doc = asciidoctor.load("include::jQAssistant:Rules[concepts = \"test-concept-e*\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]" , opt);
         String result = doc.convert();
 
         result = assertIsPartOfAndShorten(result, "test-constraint");
@@ -42,7 +42,7 @@ class IncludeProcessorTest {
         result = assertIsPartOfAndShorten(result, "Test description");
         assertIsPartOfAndShorten(result, "Status: <span class=\"green\">SUCCESS</span>, Severity: INFO");
 
-        result = asciidoctor.convert("include::jQAssistant:Rules[concepts = \"test-concept\"]", opt);
+        result = asciidoctor.convert("include::jQAssistant:Rules[concepts = \"test-concept\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]", opt);
 
         assertThat(result).doesNotContain("test-constraint");
         result = assertIsPartOfAndShorten(result, "test-concept");
@@ -57,7 +57,7 @@ class IncludeProcessorTest {
 
     @Test
     void testSummaryInclude() {
-        String result = asciidoctor.convert("include::jQAssistant:Summary[concepts = \"test-concept\", constraints = \"*\"]" , opt);
+        String result = asciidoctor.convert("include::jQAssistant:Summary[concepts = \"test-concept\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]" , opt);
 
         result = assertIsPartOfAndShorten(result, "table");
         result = assertIsPartOfAndShorten(result, "Id");

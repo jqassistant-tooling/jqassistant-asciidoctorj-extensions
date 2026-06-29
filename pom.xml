@@ -60,6 +60,10 @@
         </dependency>
         <dependency>
             <groupId>com.buschmais.jqassistant.core</groupId>
+            <artifactId>report</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.buschmais.jqassistant.core</groupId>
             <artifactId>schemata</artifactId>
         </dependency>
         <dependency>

@@ -2,7 +2,9 @@ package org.jqassistant.tooling.asciidoctorj.reportrepo;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import com.buschmais.jqassistant.core.report.api.model.Result;
 import com.buschmais.jqassistant.core.rule.api.filter.RuleFilter;
 import io.smallrye.common.constraint.NotNull;
 import lombok.Getter;
@@ -14,11 +16,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.buschmais.jqassistant.core.rule.api.filter.RuleFilter.matches;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toSet;
 
 @Getter
 public class ReportRepoImpl implements ReportRepo {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportRepoImpl.class);
+    private static final Set<String> STATUSES = stream(Result.Status.values()).map(Enum::toString).collect(toSet());
     private final ReportParser reportParser;
     private boolean initialized = false;
     private Map<String, Group> groups = new HashMap<>();
@@ -53,25 +58,54 @@ public class ReportRepoImpl implements ReportRepo {
     public SortedSet<Concept> findConcepts(ProcessAttributes attributes) {
         initialize(attributes);
 
-        return findExecutableRule(concepts, attributes.getConceptIdFilter());
+        return findExecutableRule(concepts, attributes.getConceptIdFilter(), attributes.getStatusFilter());
     }
 
     @Override
     public SortedSet<Constraint> findConstraints(ProcessAttributes attributes) {
         initialize(attributes);
 
-        return findExecutableRule(constraints, attributes.getConstraintIdFilter());
+        return findExecutableRule(constraints, attributes.getConstraintIdFilter(),attributes.getStatusFilter());
     }
 
-    public <T extends ExecutableRule> SortedSet<T> findExecutableRule(Map<String, T> ruleMap, String idFilter) {
+    public <T extends ExecutableRule> SortedSet<T> findExecutableRule(Map<String, T> ruleMap, String idFilter, String statusFilter) {
 
         SortedSet<T> rulesSet = new TreeSet<>(Comparator.comparing(Rule::getId));
+
+        Set<String> allowedStatus = parseStatusFilter(statusFilter);
 
         ruleMap.entrySet()
                 .stream()
                 .filter(entry -> idFilter == null || matches(entry.getKey(), idFilter))
-                .forEach(entry -> rulesSet.add(entry.getValue()));
+                .map(Map.Entry::getValue)
+                .filter(rule -> allowedStatus.isEmpty() || (rule.getStatus() != null && allowedStatus.contains(rule.getStatus().toUpperCase())))
+                .forEach(rulesSet::add);
 
         return rulesSet;
+    }
+
+    private Set<String> parseStatusFilter(String statusFilter) {
+
+        Set<String> allowedStatus = new HashSet<>();
+
+        if (statusFilter == null || statusFilter.isEmpty()) {
+            allowedStatus.add("WARNING");
+            allowedStatus.add("FAILURE");
+            return allowedStatus;
+        }
+
+        allowedStatus = stream(statusFilter.split(","))
+                .map(String::toUpperCase)
+                .map(String::trim)
+                .collect(toSet());
+
+        for (String status : allowedStatus) {
+            if (!STATUSES.contains(status)) {
+                throw new IllegalStateException(
+              String.format("Invalid status '%s' provided in status filter. Allowed values  are: %s", status, STATUSES )
+                );
+            }
+        }
+        return allowedStatus;
     }
 }

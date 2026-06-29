@@ -2,19 +2,14 @@
 |===
 |Rule |Status|Severity
 <#list constraints as constraint>
-a|<<jqassistant_${constraint.id}>>
-----
-${constraint.description}
-----
+
+|<<jqassistant_${constraint.id}>>
 |[<#if constraint.status == "SUCCESS">green<#elseif constraint.status == "FAILURE">red<#elseif constraint.status == "WARNING">yellow<#else>grey</#if>]#${constraint.status}#
 |${constraint.severity}
 </#list>
 <#list concepts as concept>
-a|<<jqassistant_${concept.id}>>
-----
-${concept.description}
-----
-|${concept.severity}
+|<<jqassistant_${concept.id}>>
 |[<#if concept.status == "SUCCESS">green<#elseif concept.status == "FAILURE">red<#elseif concept.status == "WARNING">yellow<#else>grey</#if>]#${concept.status}#
+|${concept.severity}
 </#list>
 |===

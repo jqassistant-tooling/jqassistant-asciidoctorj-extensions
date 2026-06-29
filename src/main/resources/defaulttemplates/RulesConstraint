@@ -1,11 +1,12 @@
 <#list constraints as rule>
+
 [#jqassistant_${rule.id}]
 = ${rule.id}
 ****
 <#assign statusConfig = {
-  "SUCCESS": {"label": "TIP", "color": "green"},
-  "WARNING": {"label": "CAUTION", "color": "yellow"},
-  "FAILURE": {"label": "IMPORTANT", "color": "red"}
+   "SUCCESS": {"label": "TIP", "color": "green"},
+   "WARNING": {"label": "CAUTION", "color": "yellow"},
+   "FAILURE": {"label": "IMPORTANT", "color": "red"}
 }>
 
 <#assign current = statusConfig[rule.status]!{"label": "NOTE", "color": "grey"}>
@@ -15,7 +16,6 @@
 ....
 ${rule.description}
 ....
-Status: [${current.color}]#${rule.status}#, Severity: ${rule.severity}
 ====
 
 <#if rule.hasReports>
@@ -29,15 +29,22 @@ image::${labeledImage.link}[${labeledImage.label}]
 
 </#list>
 <#elseif rule.hasResult>
+
 [%autowidth.stretch, options="header,autowrap"]
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list>
 <#list rule.resultRows as row>
 <#list row as cell>
+<#if cell?has_content && cell?trim != "">
 |${cell?replace(".", ".&#8203;")}
+<#else>
+|
+</#if>
 </#list>
 </#list>
 |===
 </#if>
+[.small]
+[grey]#${rule.id} | ${rule.severity}#
 ****
 </#list>

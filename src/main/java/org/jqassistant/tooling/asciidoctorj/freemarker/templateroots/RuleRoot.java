@@ -8,6 +8,11 @@ import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Reports;
 
 import java.util.List;
 
+import com.buschmais.jqassistant.core.rule.api.model.RuleException;
+import com.buschmais.jqassistant.core.rule.api.model.Severity;
+
+import static com.buschmais.jqassistant.core.rule.api.model.Severity.fromValue;
+
 @Builder
 @Getter
 public class RuleRoot implements Comparable<RuleRoot>{
@@ -33,8 +38,19 @@ public class RuleRoot implements Comparable<RuleRoot>{
 
     @Override
     public int compareTo(@NotNull RuleRoot other) {
-        if(this.getStatus().equals(other.getStatus())) {
+
+        if(this.status.equals(other.status)) {
+
+            if (!this.severity.equals(other.severity)) {
+                try {
+                    return Integer.compare(fromValue(this.severity).getLevel(), fromValue(other.severity).getLevel());
+                } catch (RuleException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
             return this.id.compareTo(other.id);
+
         }
         else if(this.getStatus().equals(statFail)) return -1;
         else if(other.getStatus().equals(statFail)) return 1;

@@ -4,4 +4,4 @@
 
 == Summary
 
-include::jQAssistant:Summary[]
+include::jQAssistant:Summary[status="SUCCESS,SKIPPED,WARNING,FAILURE"]

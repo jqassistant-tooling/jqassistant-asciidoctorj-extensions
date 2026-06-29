@@ -4,9 +4,9 @@
 
 == Summary
 
-include::jQAssistant:Summary[]
+include::jQAssistant:Summary[status="SUCCESS,SKIPPED,WARNING,FAILURE"]
 
 == Rules
 
-include::jQAssistant:Rules[leveloffset=+2]
+include::jQAssistant:Rules[status="SUCCESS,SKIPPED,WARNING,FAILURE", leveloffset=+2]
 

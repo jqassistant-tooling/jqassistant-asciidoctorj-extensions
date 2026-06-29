@@ -37,6 +37,7 @@ public class ProcessAttributesFactory {
         return builder
                 .conceptIdFilter((String) attributeMap.get("concepts"))
                 .constraintIdFilter((String) attributeMap.get("constraints"))
+                .statusFilter((String) attributeMap.get("status"))
                 .build();
     }
 
