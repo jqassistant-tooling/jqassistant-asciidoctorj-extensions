@@ -2,7 +2,7 @@
 
 == Summary
 
-include::jQAssistant:Summary[concepts = "it:CSVReport", status="SUCCESS,SKIPPED,WARNINGS,FAILURES"]
+include::jQAssistant:Summary[concepts = "it:CSVReport", status="SUCCESS,SKIPPED,WARNING,FAILURE"]
 
 == Rules
 
