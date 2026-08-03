@@ -14,6 +14,7 @@ public class ProcessAttributesFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessAttributesFactory.class);
 
     private static final String REPORT_PATH = "jqassistant-report-path";
+    private static final String BASELINE_PATH =
     private static final String TEMPLATES_PATH = "jqassistant-templates-path";
     private static final List<String> OUTPUT_DIRS = List.of("outdir", "to_dir");
     private static final String IMAGES_DIR = "imagesdir";

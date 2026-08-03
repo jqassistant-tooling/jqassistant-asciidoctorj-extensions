@@ -74,6 +74,7 @@
                 <configuration>
                     <attributes>
                         <jqassistant-report-path>${project.build.directory}/jqassistant/jqassistant-report.xml</jqassistant-report-path>
+                        <jqassistant-baseline>${project.build.directory}/jqassistant/jqassistant-baseline.xml</jqassistant-baseline>
                         <jqassistant-templates-path>${project.basedir}/src/docs/templates</jqassistant-templates-path>
                         <imagesDir>images</imagesDir>
                     </attributes>
