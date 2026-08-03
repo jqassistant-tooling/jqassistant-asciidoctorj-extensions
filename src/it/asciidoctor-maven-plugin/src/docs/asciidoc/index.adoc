@@ -1,10 +1,8 @@
-= Report
-
 == Summary
 
 include::jQAssistant:Summary[concepts = "it:CSVReport", constraints="*", status="SUCCESS,SKIPPED,WARNING,FAILURE"]
 
 == Rules
 
-include::jQAssistant:Rules[constraints="*", status="SUCCESS,SKIPPED,WARNING,FAILURE", leveloffset=+2]
+include::jQAssistant:Rules[concepts = "it:CSVReport", constraints="*", status="SUCCESS,SKIPPED,WARNING,FAILURE", leveloffset=+2]
 

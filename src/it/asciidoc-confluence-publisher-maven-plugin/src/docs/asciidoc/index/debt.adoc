@@ -1,7 +1,0 @@
-== Summary
-
-include::jQAssistant:Summary[status="SUCCESS,SKIPPED,WARNING,FAILURE"]
-
-== Rules
-
-include::jQAssistant:Rules[status="SUCCESS,SKIPPED,WARNING,FAILURE"]
