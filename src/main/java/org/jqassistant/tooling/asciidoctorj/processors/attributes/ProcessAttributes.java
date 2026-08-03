@@ -5,17 +5,17 @@ import java.io.File;
 public class ProcessAttributes {
     private final String conceptIdFilter;
     private final String constraintIdFilter;
-    private final String constraintStatusFilter;
+    private final String statusFilter;
 
     private final String reportPath;
     private final String templatesPath;
     private final File outputDirectory;
     private final File imagesDirectory;
 
-    private ProcessAttributes(String conceptIdFilter, String constraintIdFilter, String constraintStatusFilter, String reportPath, String templatesPath, File outputDirectory, File imagesDirectory) {
+    private ProcessAttributes(String conceptIdFilter, String constraintIdFilter, String statusFilter, String reportPath, String templatesPath, File outputDirectory, File imagesDirectory) {
         this.conceptIdFilter = conceptIdFilter;
         this.constraintIdFilter = constraintIdFilter;
-        this.constraintStatusFilter = constraintStatusFilter;
+        this.statusFilter = statusFilter;
         this.reportPath = reportPath;
         this.templatesPath = templatesPath;
         this.outputDirectory = outputDirectory;
@@ -34,7 +34,7 @@ public class ProcessAttributes {
         return this.constraintIdFilter;
     }
 
-    public String getStatusFilter() { return this.constraintStatusFilter; }
+    public String getStatusFilter() { return this.statusFilter; }
 
     public String getReportPath() {
         return this.reportPath;

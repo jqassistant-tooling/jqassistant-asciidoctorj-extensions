@@ -1,12 +1,10 @@
 = Report
 
-* <<./index/debt.adoc#, Technische Schulden>>
-
 == Summary
 
-include::jQAssistant:Summary[status="SUCCESS,SKIPPED,WARNING,FAILURE"]
+include::jQAssistant:Summary[concepts = "it:CSVReport", constraints="*", status="SUCCESS,SKIPPED,WARNING,FAILURE"]
 
 == Rules
 
-include::jQAssistant:Rules[status="SUCCESS,SKIPPED,WARNING,FAILURE", leveloffset=+2]
+include::jQAssistant:Rules[constraints="*", status="SUCCESS,SKIPPED,WARNING,FAILURE", leveloffset=+2]
 

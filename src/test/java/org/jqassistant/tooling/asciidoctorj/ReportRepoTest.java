@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ReportRepoTest {
     private static ReportRepoImpl testRepo;
 
-    private static Concept tce1, tce2;
+    private static Concept tce1, tce2, tce3;
     private static Constraint tca1, tca2;
     private static final String someExistingFile = "src/test/resources/jqassistant-report.xml";
     private static final String nonExistingFile = "non-existent-report.xml";
@@ -28,6 +28,7 @@ class ReportRepoTest {
     static void init() {
         tce1 = Concept.builder().id("TestConceptId1").status("failure").build();
         tce2 = Concept.builder().id("TestConceptId2").status("WARNING").build();
+        tce3 = Concept.builder().id("TestConceptId3").status("success").build();
         tca1 = Constraint.builder().id("TestConstraintId1").status("Failure").build();
         tca2 = Constraint.builder().id("TestConstraintId2").status("SUCCESS").build();
     }
@@ -39,6 +40,7 @@ class ReportRepoTest {
 
         parsedReport.addConcept(tce1);
         parsedReport.addConcept(tce2);
+        parsedReport.addConcept(tce3);
         parsedReport.addConstraint(tca1);
         parsedReport.addConstraint(tca2);
         when(parser.parseReportXml(someExistingFile)).thenReturn(parsedReport);
@@ -47,7 +49,7 @@ class ReportRepoTest {
     }
 
     @Test
-    void testFindConceptsByIdWildcard() {
+    void testFindConceptsByIdWildcardDefaultStatus() {
         ProcessAttributes attributes = ProcessAttributes.builder().reportPath(someExistingFile).conceptIdFilter("Test*").build();
 
         assertThat(testRepo.findConcepts(attributes).toArray()).hasSize(2);
@@ -55,7 +57,7 @@ class ReportRepoTest {
     }
 
     @Test
-    void testFindConceptsById() {
+    void testFindConceptsByIdDefaultStatus() {
         ProcessAttributes attributes = ProcessAttributes.builder().reportPath(someExistingFile).conceptIdFilter("TestConceptId2").constraintIdFilter("").build();
 
         assertThat (testRepo.findConcepts(attributes).toArray()).hasSize(1);
@@ -64,7 +66,7 @@ class ReportRepoTest {
     }
 
     @Test
-    void testFindConstraintsById() {
+    void testFindConstraintsByIdDefaultStatus() {
         ProcessAttributes attributes = ProcessAttributes.builder().reportPath(someExistingFile).constraintIdFilter("TestConstraintId1").build();
 
         assertThat (testRepo.findConstraints(attributes).toArray()).hasSize(1);
@@ -73,7 +75,7 @@ class ReportRepoTest {
     }
 
     @Test
-    void testMissingReportXML() {
+    void testMissingReportXMLDefaultStatus() {
         ProcessAttributes attributes = ProcessAttributes.builder().reportPath(nonExistingFile).build();
 
         assertThat(testRepo.findConcepts(attributes).toArray()).isEmpty();
@@ -90,6 +92,7 @@ class ReportRepoTest {
                 .build();
 
         assertThat(testRepo.findConstraints(attributes)).hasSize(1).contains(tca2);
+        assertThat(testRepo.findConcepts(attributes)).hasSize(1).contains(tce3);
     }
 
     @Test
@@ -100,6 +103,10 @@ class ReportRepoTest {
                 .build();
 
         assertThatThrownBy(() -> testRepo.findConstraints(attributes))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("Invalid status 'INVALID_STATUS' provided in status filter. Allowed values  are: [SUCCESS, SKIPPED, FAILURE, WARNING]");
+
+        assertThatThrownBy(() -> testRepo.findConcepts(attributes))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("Invalid status 'INVALID_STATUS' provided in status filter. Allowed values  are: [SUCCESS, SKIPPED, FAILURE, WARNING]");
     }

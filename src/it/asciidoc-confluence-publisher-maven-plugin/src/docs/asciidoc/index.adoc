@@ -1,7 +1,3 @@
 = Report
 
 * <<index/debt.adoc#, Technische Schulden>>
-
-== Summary
-
-include::jQAssistant:Summary[status="SUCCESS,SKIPPED,WARNING,FAILURE"]

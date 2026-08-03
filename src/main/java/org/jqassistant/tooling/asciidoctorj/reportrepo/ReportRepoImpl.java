@@ -89,8 +89,7 @@ public class ReportRepoImpl implements ReportRepo {
         Set<String> allowedStatus = new HashSet<>();
 
         if (statusFilter == null || statusFilter.isEmpty()) {
-            allowedStatus.add("WARNING");
-            allowedStatus.add("FAILURE");
+            allowedStatus = Set.of("WARNING","FAILURE");
             return allowedStatus;
         }
 

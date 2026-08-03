@@ -1,9 +1,0 @@
-= Debt
-
-== Summary
-
-include::jQAssistant:Summary[concepts = "it:CSVReport", status="SUCCESS,SKIPPED,WARNING,FAILURE"]
-
-== Rules
-
-include::jQAssistant:Rules[constraints = "*", leveloffset=+2]
