@@ -1,8 +1,12 @@
 File assetsDir = new File(basedir, 'target/asciidoc-confluence-publisher/assets')
+File subDir = assetsDir.listFiles()?.find { it.isDirectory() }
 
-File indexHtmlFile = assetsDir.listFiles()
-        ?.collect { dir -> new File(dir, 'index.html') }
-        ?.find { file -> file.exists() }
+def expectedFiles = ['index.html', 'it_CSVReport.csv', 'it_UndefinedComponentDependency.csv']
 
-assert indexHtmlFile.exists()
+expectedFiles.each { filename ->
+    File targetFile = new File(subDir, filename)
+    assert targetFile.exists() : "Expected file missing: ${targetFile.absolutePath}"
+}
+
+File indexHtmlFile = new File(subDir, 'index.html')
 assert indexHtmlFile.text.contains("it:CSVReport")
