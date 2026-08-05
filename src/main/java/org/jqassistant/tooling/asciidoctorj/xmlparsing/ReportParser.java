@@ -169,7 +169,18 @@ public class ReportParser {
             for (ColumnType cell : row.getColumn()) {
                 rowMap.put(cell.getName(), cell.getValue());
             }
-            builder.row(rowMap);
+
+            if (row.getHidden() == null) {
+                builder.row(rowMap);
+            } else {
+                HiddenType hidden = row.getHidden();
+
+                if (hidden.getBaseline() != null) {
+                    builder.baselineRow(rowMap);
+                } else if (hidden.getSuppression() != null) {
+                    builder.suppressedRow(rowMap);
+                }
+            }
         }
 
         return builder.build();

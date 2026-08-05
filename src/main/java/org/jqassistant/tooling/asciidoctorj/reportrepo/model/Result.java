@@ -20,4 +20,8 @@ public class Result {
     List<String> columnKeys;
     @Singular
     List<Map<String, String>> rows;
+    @Singular
+    List<Map<String, String>> baselineRows;
+    @Singular
+    List<Map<String, String>> suppressedRows;
 }

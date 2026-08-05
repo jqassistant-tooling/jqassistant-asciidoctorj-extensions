@@ -42,7 +42,7 @@
                 <column primary="true">Column 1</column>
                 <column>Column 2</column>
             </columns>
-            <rows count="2">
+            <rows count="4">
                 <row>
                     <column name="Column 1">
                         <value>test-cell 11</value>
@@ -57,6 +57,31 @@
                     </column>
                     <column name="Column 2">
                         <value>test-cell 22</value>
+                    </column>
+                </row>
+                <row key="suppressed">
+                    <hidden>
+                        <suppression>
+                            <reason>Example suppression</reason>
+                            <until>2050-12-31</until>
+                        </suppression>
+                    </hidden>
+                    <column name="Column 1">
+                        <value>test-cell 31 (supp)</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-cell 32 (supp)</value>
+                    </column>
+                </row>
+                <row key="baseline">
+                    <hidden>
+                        <baseline/>
+                    </hidden>
+                    <column name="Column 1">
+                        <value>test-cell 41 (base)</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-cell 42 (base)</value>
                     </column>
                 </row>
             </rows>
