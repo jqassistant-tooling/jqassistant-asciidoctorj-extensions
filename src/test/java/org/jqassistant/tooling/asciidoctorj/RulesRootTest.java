@@ -35,6 +35,8 @@ class RulesRootTest {
         Result res = Result.builder().columnKeys(List.of("Col1", "Col2"))
                 .row(Map.of("Col1", "Cell11", "Col2", "Cell12"))
                 .row(Map.of("Col1", "Cell21", "Col2", "Cell22"))
+                .baselineRow(Map.of("Col1", "Cell31-base", "Col2", "Cell32-base"))
+                .suppressedRow(Map.of("Col1", "Cell41-supp", "Col2", "Cell42-supp"))
                 .build();
         Reports reps = Reports.builder().link(URLWithLabel.builder().label("test link").link("https://youtu.be").build())
                 .image(URLWithLabel.builder().label("test image").link(RulesRootTest.class.getResource("/testattachments/it_ToBeContextMapReport.svg").toString()).build())
@@ -146,5 +148,21 @@ class RulesRootTest {
 
         assertThat(Paths.get(attributes.getOutputDirectory().toURI()).resolve("it_CSVReport.csv").toFile()).isFile();
         assertThat(Paths.get(attributes.getImagesDirectory().toURI()).resolve("it_ToBeContextMapReport.svg").toFile()).isFile();
+    }
+
+    @Test
+    void testParseBaselineResult() {
+        RuleRoot root = rulesRoot.getConstraints().first();
+
+        assertThat(root.isHasBaselineResult()).isTrue();
+        assertThat(root.getBaselineRows().get(0)).isEqualTo(List.of("Cell31-base", "Cell32-base"));
+    }
+
+    @Test
+    void testParseSuppressedResult() {
+        RuleRoot root = rulesRoot.getConstraints().first();
+
+        assertThat(root.isHasSuppressedResult()).isTrue();
+        assertThat(root.getSuppressedRows().get(0)).isEqualTo(List.of("Cell41-supp", "Cell42-supp"));
     }
 }

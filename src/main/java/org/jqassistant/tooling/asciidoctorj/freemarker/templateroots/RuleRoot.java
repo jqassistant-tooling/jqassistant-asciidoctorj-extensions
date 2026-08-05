@@ -13,6 +13,8 @@ import com.buschmais.jqassistant.core.rule.api.model.Severity;
 
 import static com.buschmais.jqassistant.core.rule.api.model.Severity.fromValue;
 
+// This class acts as an interface to the Freemaker templates.
+
 @Builder
 @Getter
 public class RuleRoot implements Comparable<RuleRoot>{
@@ -29,10 +31,16 @@ public class RuleRoot implements Comparable<RuleRoot>{
 
     private boolean hasReports;
     private boolean hasResult;
+    private boolean hasBaselineResult;
+    private boolean hasSuppressedResult;
 
     private List<String> resultColumnKeys;
     @Singular
     private List<List<String>> resultRows;
+    @Singular
+    private List<List<String>> baselineRows;
+    @Singular
+    private List<List<String>> suppressedRows;
 
     private Reports reports;
 
@@ -61,4 +69,7 @@ public class RuleRoot implements Comparable<RuleRoot>{
 
         throw new IllegalStateException("Rule Root should be comparable; statuses were: " + this.status + " " + other.status);
     }
+
+    //only to solve lombok builder-javadoc bug
+    public static class RuleRootBuilder {};
 }

@@ -1,5 +1,7 @@
 package org.jqassistant.tooling.asciidoctorj.freemarker.templateroots;
 
+import org.jqassistant.tooling.asciidoctorj.freemarker.templateroots.RuleRoot.RuleRootBuilder;
+
 import io.smallrye.common.constraint.NotNull;
 import org.apache.commons.io.FileUtils;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.*;
@@ -28,7 +30,7 @@ public class RuleRootParser {
      * @return a by freemarker readable RuleRoot instance
      */
     public static RuleRoot createRuleRoot(@NotNull ExecutableRule rule, @NotNull File outputDirectory, File imagesDirectory) {
-        RuleRoot.RuleRootBuilder builder = RuleRoot.builder();
+        RuleRootBuilder builder = RuleRoot.builder();
 
         builder.id(rule.getId());
         builder.description(rule.getDescription());
@@ -40,15 +42,11 @@ public class RuleRootParser {
         if(result != Result.EMPTY_RESULT) {
             List<String> resultKeys = rule.getResult().getColumnKeys();
 
-            builder.resultColumnKeys(resultKeys);
-            for (Map<String, String> row : rule.getResult().getRows()) {
-                List<String> rowContent = new ArrayList<>();
-                for (String key : resultKeys) {
-                    rowContent.add(row.get(key));
-                }
-                builder.resultRow(rowContent);
-            }
-            builder.hasResult(true);
+            parseVisibleResults(result, builder, resultKeys);
+
+            parseBaselineResults(result, builder, resultKeys);
+
+            parseSuppressedResults(result, builder, resultKeys);
         }
 
         if(rule.getReports() != Reports.EMPTY_REPORTS && outputDirectory != null){
@@ -157,5 +155,46 @@ public class RuleRootParser {
         LOGGER.debug("Copied reports attachment file from {} to targetDirectory {}.", file.getAbsolutePath(), targetDirectory.getAbsolutePath());
         return path.getFileName().toString();
 
+    }
+
+    private static void parseVisibleResults(Result result, RuleRootBuilder builder, List<String> resultKeys) {
+        if (result.getRows() != null && !result.getRows().isEmpty()) {
+            builder.resultColumnKeys(resultKeys);
+            for (Map<String, String> row : result
+                    .getRows()) {
+                List<String> rowContent = new ArrayList<>();
+                for (String key : resultKeys) {
+                    rowContent.add(row.get(key));
+                }
+                builder.resultRow(rowContent);
+            }
+            builder.hasResult(true);
+        }
+    }
+
+    private static void parseBaselineResults(Result result, RuleRootBuilder builder, List<String> resultKeys) {
+        if (result.getBaselineRows() != null && !result.getBaselineRows().isEmpty()) {
+            for (Map<String, String> baselineRow : result.getBaselineRows()) {
+                List<String> rowContent = new ArrayList<>();
+                for (String key : resultKeys) {
+                    rowContent.add(baselineRow.get(key));
+                }
+                builder.baselineRow(rowContent);
+            }
+            builder.hasBaselineResult(true);
+        }
+    }
+
+    private static void parseSuppressedResults(Result result, RuleRootBuilder builder, List<String> resultKeys) {
+        if (result.getSuppressedRows() != null && !result.getSuppressedRows().isEmpty()) {
+            for (Map<String, String> suppressedRow : result.getSuppressedRows()) {
+                List<String> rowContent = new ArrayList<>();
+                for (String key : resultKeys) {
+                    rowContent.add(suppressedRow.get(key));
+                }
+                builder.suppressedRow(rowContent);
+            }
+            builder.hasSuppressedResult(true);
+        }
     }
 }

@@ -40,6 +40,55 @@ image::${labeledImage.link}[${labeledImage.label}]
 </#list>
 </#list>
 |===
+
 </#if>
+
+<#if (rule.hasBaselineResult!false) || (rule.hasSuppressedResult!false)>
+<#if rule.hasBaselineResult!false>
+
+.Baseline Findings (${rule.baselineRows?size})
+[%collapsible]
+====
+[%autowidth.stretch, options="header,autowrap"]
+|===
+<#list rule.resultColumnKeys as key>|${key} </#list>
+<#list rule.baselineRows as row>
+<#list row as cell>
+<#if cell?has_content && cell?trim != "">
+|${cell?replace(".", ".&#8203;")}
+<#else>
+|
+</#if>
+</#list>
+</#list>
+|===
+====
+</#if>
+
+
+<#if rule.hasSuppressedResult!false>
+.Suppressed Findings (${rule.suppressedRows?size})
+[%collapsible]
+====
+[%autowidth.stretch, options="header,autowrap"]
+|===
+<#list rule.resultColumnKeys as key>|${key} </#list>
+<#list rule.suppressedRows as row>
+<#list row as cell>
+<#if cell?has_content && cell?trim != "">
+|${cell?replace(".", ".&#8203;")}
+<#else>
+|
+</#if>
+</#list>
+</#list>
+|===
+====
+</#if>
+
+</#if>
+
+[.small]
+[grey]#${rule.id} | ${rule.severity}#
 ****
 </#list>
