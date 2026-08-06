@@ -4,6 +4,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.Document;
+import org.jqassistant.tooling.asciidoctorj.processors.includes.Summary;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,12 +87,12 @@ class IncludeProcessorTest {
         result = assertIsPartOfAndShorten(result, "test-constraint");
         result = assertIsPartOfAndShorten(result, "Test description 2");
         result = assertIsPartOfAndShorten(result, "MAJOR");
-        result = assertIsPartOfAndShorten(result, "<span class=\"red\">FAILURE</span>");
+        result = assertIsPartOfAndShorten(result, "FAILURE</span>");
         result = assertIsPartOfAndShorten(result, "test-concept");
         result = assertIsPartOfAndShorten(result, "Test description");
         result = assertIsPartOfAndShorten(result, "INFO");
-        result = assertIsPartOfAndShorten(result, "<span class=\"green\">SUCCESS</span>");
-        assertIsPartOfAndShorten(result, "/table");
+        result = assertIsPartOfAndShorten(result, "SUCCESS");
+        assertIsPartOfAndShorten(result, "table");
     }
 
     @Test
@@ -110,6 +111,22 @@ class IncludeProcessorTest {
         rules = assertIsPartOfAndShorten(rules, "test-cell 21");
         rules = assertIsPartOfAndShorten(rules, "test-cell 22");
 
+        rules = assertIsPartOfAndShorten(rules, "Baseline Findings (1)");
+        rules = assertIsPartOfAndShorten(rules, "table");
+        rules = assertIsPartOfAndShorten(rules, "Column 1");
+        rules = assertIsPartOfAndShorten(rules, "Column 2");
+        rules = assertIsPartOfAndShorten(rules, "test-cell 41 (base)");
+        rules = assertIsPartOfAndShorten(rules, "test-cell 42 (base)");
+        rules = assertIsPartOfAndShorten(rules, "table");
+
+        rules = assertIsPartOfAndShorten(rules, "Suppressed Findings (1)");
+        rules = assertIsPartOfAndShorten(rules, "table");
+        rules = assertIsPartOfAndShorten(rules, "Column 1");
+        rules = assertIsPartOfAndShorten(rules, "Column 2");
+        rules = assertIsPartOfAndShorten(rules, "test-cell 31 (supp)");
+        rules = assertIsPartOfAndShorten(rules, "test-cell 32 (supp)");
+        rules = assertIsPartOfAndShorten(rules, "table");
+
         rules = assertIsPartOfAndShorten(rules, "test-constraint | MAJOR");
 
         rules = assertIsPartOfAndShorten(rules, "test-concept-empty-result");
@@ -124,25 +141,49 @@ class IncludeProcessorTest {
         String summary = asciidoctor.convert(
                 "include::jQAssistant:Summary[concepts = \"*\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]",
                 defaultOpt);
-
-        summary = assertIsPartOfAndShorten(summary, "<table");
+        //table with visible findings
+        summary = assertIsPartOfAndShorten(summary, "table");
         summary = assertIsPartOfAndShorten(summary, "Rule");
         summary = assertIsPartOfAndShorten(summary, "Status");
         summary = assertIsPartOfAndShorten(summary, "Severity");
 
-        summary = assertIsPartOfAndShorten(summary, "href=\"#jqassistant_test-constraint\"");
-        summary = assertIsPartOfAndShorten(summary, "<span class=\"red\">FAILURE</span>");
+        summary = assertIsPartOfAndShorten(summary, "test-constraint");
+        summary = assertIsPartOfAndShorten(summary, "FAILURE");
         summary = assertIsPartOfAndShorten(summary, "MAJOR");
 
-        summary = assertIsPartOfAndShorten(summary, "href=\"#jqassistant_test-concept\"");
-        summary = assertIsPartOfAndShorten(summary, "<span class=\"green\">SUCCESS</span>");
+        summary = assertIsPartOfAndShorten(summary, "test-concept");
+        summary = assertIsPartOfAndShorten(summary, "SUCCESS");
         summary = assertIsPartOfAndShorten(summary, "INFO");
 
-        summary = assertIsPartOfAndShorten(summary, "href=\"#jqassistant_test-concept-empty-result\"");
-        summary = assertIsPartOfAndShorten(summary, "<span class=\"green\">SUCCESS</span>");
+        summary = assertIsPartOfAndShorten(summary, "test-concept-empty-result");
+        summary = assertIsPartOfAndShorten(summary, "SUCCESS");
         summary = assertIsPartOfAndShorten(summary, "INFO");
+        summary = assertIsPartOfAndShorten(summary, "table");
 
-        assertIsPartOfAndShorten(summary, "</table>");
+        //Table with baseline findings
+        summary = assertIsPartOfAndShorten(summary, "Baseline Findings (1)");
+        summary = assertIsPartOfAndShorten(summary, "table");
+        summary = assertIsPartOfAndShorten(summary, "Rule");
+        summary = assertIsPartOfAndShorten(summary, "Status");
+        summary = assertIsPartOfAndShorten(summary, "Severity");
+
+        summary = assertIsPartOfAndShorten(summary, "test-constraint");
+        summary = assertIsPartOfAndShorten(summary, "FAILURE");
+        summary = assertIsPartOfAndShorten(summary, "MAJOR");
+        summary = assertIsPartOfAndShorten(summary, "table");
+
+        //Table with suppressed findings
+        summary = assertIsPartOfAndShorten(summary, "Suppressed Findings (1)");
+        summary = assertIsPartOfAndShorten(summary, "table");
+        summary = assertIsPartOfAndShorten(summary, "Rule");
+        summary = assertIsPartOfAndShorten(summary, "Status");
+        summary = assertIsPartOfAndShorten(summary, "Severity");
+
+        summary = assertIsPartOfAndShorten(summary, "test-constraint");
+        summary = assertIsPartOfAndShorten(summary, "FAILURE");
+        summary = assertIsPartOfAndShorten(summary, "MAJOR");
+
+        assertIsPartOfAndShorten(summary, "table");
     }
 
 
