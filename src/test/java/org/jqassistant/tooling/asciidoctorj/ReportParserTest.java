@@ -61,6 +61,9 @@ class ReportParserTest {
         assertThat(reports.getLinks()).hasSize(1);
         assertThat (reports.getLinks().get(0).getLabel()).isEqualTo("CSV");
         assertThat (reports.getLinks().get(0).getLink()).isEqualTo("https://youtu.be/dQw4w9WgXcQ");
+
+        assertThat(result.getSuppressedRows()).isEmpty();
+        assertThat(result.getBaselineRows()).isEmpty();
     }
 
     @Test
@@ -105,5 +108,10 @@ class ReportParserTest {
         assertThat (result.getRows()).hasSize(2);
         assertThat (result.getRows().get(0)).isEqualTo(Map.of("Column 1", "test-cell 11", "Column 2", "test-cell 12"));
         assertThat (result.getRows().get(1)).isEqualTo(Map.of("Column 1", "test-cell 21", "Column 2", "test-cell 22"));
+
+        assertThat(result.getBaselineRows()).hasSize(1);
+        assertThat(result.getSuppressedRows()).hasSize(1);
+        assertThat (result.getBaselineRows().get(0)).isEqualTo(Map.of("Column 1", "test-cell 41 (base)", "Column 2", "test-cell 42 (base)"));
+        assertThat (result.getSuppressedRows().get(0)).isEqualTo(Map.of("Column 1", "test-cell 31 (supp)", "Column 2", "test-cell 32 (supp)"));
     }
 }
