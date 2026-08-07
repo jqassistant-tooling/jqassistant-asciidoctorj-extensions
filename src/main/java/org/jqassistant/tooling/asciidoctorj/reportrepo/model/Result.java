@@ -23,5 +23,15 @@ public class Result {
     @Singular
     List<Map<String, String>> baselineRows;
     @Singular
-    List<Map<String, String>> suppressedRows;
+    List<HiddenRow> suppressedRows;
+
+    @Builder
+    @Getter
+    public static class HiddenRow {
+        @Singular
+        private Map<String, String> cells;
+        @Singular("meta")
+        private Map<String, String> metadata;
+
+    }
 }

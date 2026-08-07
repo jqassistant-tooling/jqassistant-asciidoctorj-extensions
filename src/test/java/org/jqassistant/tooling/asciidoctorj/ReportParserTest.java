@@ -110,8 +110,14 @@ class ReportParserTest {
         assertThat (result.getRows().get(1)).isEqualTo(Map.of("Column 1", "test-cell 21", "Column 2", "test-cell 22"));
 
         assertThat(result.getBaselineRows()).hasSize(1);
-        assertThat(result.getSuppressedRows()).hasSize(1);
-        assertThat (result.getBaselineRows().get(0)).isEqualTo(Map.of("Column 1", "test-cell 41 (base)", "Column 2", "test-cell 42 (base)"));
-        assertThat (result.getSuppressedRows().get(0)).isEqualTo(Map.of("Column 1", "test-cell 31 (supp)", "Column 2", "test-cell 32 (supp)"));
+        assertThat(result.getSuppressedRows()).hasSize(2);
+        assertThat (result.getBaselineRows().get(0)).isEqualTo(Map.of("Column 1", "test-cell 51 (base)", "Column 2", "test-cell 52 (base)"));
+        assertThat(result.getSuppressedRows().get(0).getCells()).isEqualTo(Map.of("Column 1", "test-cell 31 (supp)", "Column 2","test-cell 32 (supp)"));
+        assertThat(result.getSuppressedRows().get(0).getMetadata())
+                .containsEntry("reason", "Example suppression")
+                .containsEntry("until", "2050-12-31");
+
+        assertThat(result.getSuppressedRows().get(1).getCells()).isEqualTo(Map.of("Column 1", "test-cell 41 (suppW/oM)", "Column 2","test-cell 42 (suppW/oM)"));
+        assertThat(result.getSuppressedRows().get(1).getMetadata()).isEmpty();
     }
 }

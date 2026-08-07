@@ -36,7 +36,7 @@ class RulesRootTest {
                 .row(Map.of("Col1", "Cell11", "Col2", "Cell12"))
                 .row(Map.of("Col1", "Cell21", "Col2", "Cell22"))
                 .baselineRow(Map.of("Col1", "Cell31-base", "Col2", "Cell32-base"))
-                .suppressedRow(Map.of("Col1", "Cell41-supp", "Col2", "Cell42-supp"))
+                .suppressedRow(Result.HiddenRow.builder().cells(Map.of("Col1", "Cell41-supp", "Col2", "Cell42-supp")).metadata(Map.of("reason", "Example suppression", "until", "2050-12-31")).build())
                 .build();
         Reports reps = Reports.builder().link(URLWithLabel.builder().label("test link").link("https://youtu.be").build())
                 .image(URLWithLabel.builder().label("test image").link(RulesRootTest.class.getResource("/testattachments/it_ToBeContextMapReport.svg").toString()).build())
@@ -163,6 +163,12 @@ class RulesRootTest {
         RuleRoot root = rulesRoot.getConstraints().first();
 
         assertThat(root.isHasSuppressedResult()).isTrue();
-        assertThat(root.getSuppressedRows().get(0)).isEqualTo(List.of("Cell41-supp", "Cell42-supp"));
+        RuleRoot.HiddenRowRoot suppressedRow = root.getSuppressedRows().get(0);
+        assertThat(suppressedRow.getCells()).isEqualTo(List.of("Cell41-supp", "Cell42-supp"));
+        assertThat(suppressedRow.getMetadata().get("reason")).isEqualTo("Example suppression");
+        assertThat(suppressedRow.getMetadata().get("until")).isEqualTo("2050-12-31");
+
+
+
     }
 }

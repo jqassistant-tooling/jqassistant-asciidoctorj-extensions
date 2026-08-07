@@ -46,7 +46,6 @@ image::${labeledImage.link}[${labeledImage.label}]
 |===
 </#if>
 
-<#if (rule.hasBaselineResult!false) || (rule.hasSuppressedResult!false)>
 <#if rule.hasBaselineResult!false>
 
 .Baseline Findings (${rule.baselineRows?size})
@@ -70,25 +69,39 @@ image::${labeledImage.link}[${labeledImage.label}]
 
 
 <#if rule.hasSuppressedResult!false>
-.Suppressed Findings (${rule.suppressedRows?size})
+.Suppressions (${rule.suppressedRows?size})
 [%collapsible]
 ====
+<#assign metaKeys = []>
+<#list rule.suppressedRows as r>
+  <#if r.metadata??>
+    <#list r.metadata?keys as k>
+      <#if !metaKeys?seq_contains(k)>
+        <#assign metaKeys = metaKeys + [k]>
+      </#if>
+    </#list>
+  </#if>
+</#list>
+
 [%autowidth.stretch, options="header,autowrap"]
 |===
-<#list rule.resultColumnKeys as key>|${key} </#list>
+<#list rule.resultColumnKeys as key>|${key} </#list><#list metaKeys as k>|${k?cap_first} </#list>
+
 <#list rule.suppressedRows as row>
-<#list row as cell>
-<#if cell?has_content && cell?trim != "">
+<#list row.cells as cell>
+<#if cell?? && cell?trim != "">
 |${cell?replace(".", ".&#8203;")}
 <#else>
 |
 </#if>
 </#list>
+
+<#list metaKeys as k>
+|${(row.metadata[k])!""}
+</#list>
 </#list>
 |===
 ====
-</#if>
-
 </#if>
 
 </#if>

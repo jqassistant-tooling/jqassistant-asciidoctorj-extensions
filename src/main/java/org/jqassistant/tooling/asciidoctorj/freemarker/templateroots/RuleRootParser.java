@@ -187,12 +187,16 @@ public class RuleRootParser {
 
     private static void parseSuppressedResults(Result result, RuleRootBuilder builder, List<String> resultKeys) {
         if (result.getSuppressedRows() != null && !result.getSuppressedRows().isEmpty()) {
-            for (Map<String, String> suppressedRow : result.getSuppressedRows()) {
+            for (Result.HiddenRow suppressedRow : result.getSuppressedRows()) {
                 List<String> rowContent = new ArrayList<>();
                 for (String key : resultKeys) {
-                    rowContent.add(suppressedRow.get(key));
+                    rowContent.add(suppressedRow.getCells().get(key));
                 }
-                builder.suppressedRow(rowContent);
+
+                builder.suppressedRow(RuleRoot.HiddenRowRoot.builder()
+                        .cells(rowContent)
+                        .metadata(suppressedRow.getMetadata())
+                        .build());
             }
             builder.hasSuppressedResult(true);
         }
