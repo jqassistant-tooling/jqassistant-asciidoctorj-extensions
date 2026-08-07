@@ -7,9 +7,9 @@ import lombok.Singular;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Reports;
 
 import java.util.List;
+import java.util.Map;
 
 import com.buschmais.jqassistant.core.rule.api.model.RuleException;
-import com.buschmais.jqassistant.core.rule.api.model.Severity;
 
 import static com.buschmais.jqassistant.core.rule.api.model.Severity.fromValue;
 
@@ -40,9 +40,16 @@ public class RuleRoot implements Comparable<RuleRoot>{
     @Singular
     private List<List<String>> baselineRows;
     @Singular
-    private List<List<String>> suppressedRows;
+    private List<HiddenRowRoot> suppressedRows;
 
     private Reports reports;
+
+    @Builder
+    @Getter
+    public static class HiddenRowRoot {
+        private List<String> cells;
+        private Map<String, String> metadata;
+    }
 
     @Override
     public int compareTo(@NotNull RuleRoot other) {

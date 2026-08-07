@@ -111,20 +111,28 @@ class IncludeProcessorTest {
         rules = assertIsPartOfAndShorten(rules, "test-cell 21");
         rules = assertIsPartOfAndShorten(rules, "test-cell 22");
 
+        //verifying display of Hidden Findings
         rules = assertIsPartOfAndShorten(rules, "Baseline Findings (1)");
         rules = assertIsPartOfAndShorten(rules, "table");
         rules = assertIsPartOfAndShorten(rules, "Column 1");
         rules = assertIsPartOfAndShorten(rules, "Column 2");
-        rules = assertIsPartOfAndShorten(rules, "test-cell 41 (base)");
-        rules = assertIsPartOfAndShorten(rules, "test-cell 42 (base)");
+        rules = assertIsPartOfAndShorten(rules, "test-cell 51 (base)");
+        rules = assertIsPartOfAndShorten(rules, "test-cell 52 (base)");
         rules = assertIsPartOfAndShorten(rules, "table");
 
-        rules = assertIsPartOfAndShorten(rules, "Suppressed Findings (1)");
+        rules = assertIsPartOfAndShorten(rules, "Suppressions (2)");
         rules = assertIsPartOfAndShorten(rules, "table");
         rules = assertIsPartOfAndShorten(rules, "Column 1");
         rules = assertIsPartOfAndShorten(rules, "Column 2");
+        //verifying correct display of Suppression Metadata
+        rules = assertIsPartOfAndShorten(rules, "Reason");
+        rules = assertIsPartOfAndShorten(rules, "Until");
         rules = assertIsPartOfAndShorten(rules, "test-cell 31 (supp)");
         rules = assertIsPartOfAndShorten(rules, "test-cell 32 (supp)");
+        rules = assertIsPartOfAndShorten(rules, "Example suppression");
+        rules = assertIsPartOfAndShorten(rules, "2050-12-31");
+        rules = assertIsPartOfAndShorten(rules, "test-cell 41 (suppW/oM)");
+        rules = assertIsPartOfAndShorten(rules, "test-cell 42 (suppW/oM)");
         rules = assertIsPartOfAndShorten(rules, "table");
 
         rules = assertIsPartOfAndShorten(rules, "test-constraint | MAJOR");
@@ -173,7 +181,7 @@ class IncludeProcessorTest {
         summary = assertIsPartOfAndShorten(summary, "table");
 
         //Table with suppressed findings
-        summary = assertIsPartOfAndShorten(summary, "Suppressed Findings (1)");
+        summary = assertIsPartOfAndShorten(summary, "Suppressed Findings (2)");
         summary = assertIsPartOfAndShorten(summary, "table");
         summary = assertIsPartOfAndShorten(summary, "Rule");
         summary = assertIsPartOfAndShorten(summary, "Status");

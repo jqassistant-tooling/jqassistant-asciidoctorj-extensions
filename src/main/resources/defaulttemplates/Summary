@@ -13,70 +13,39 @@
 </#list>
 |===
 
+<#list constraints as constraint>
+  <#assign baselineCount = (constraint.hasBaselineResult!false)?then((constraint.baselineRows?size)!0, 0)>
+  <#assign suppressedCount = (constraint.hasSuppressedResult!false)?then((constraint.suppressedRows?size)!0, 0)>
 
-<#assign baselineCount = 0>
-<#list constraints as hidden><#if hidden.hasBaselineResult!false><#assign baselineCount += (hidden.baselineRows?size)!0></#if></#list>
-<#list concepts as hidden><#if hidden.hasBaselineResult!false><#assign baselineCount += (hidden.baselineRows?size)!0></#if></#list>
+  <#if (baselineCount > 0) || (suppressedCount > 0)>
 
-<#assign suppressedCount = 0>
-<#list constraints as hidden><#if hidden.hasSuppressedResult!false><#assign suppressedCount += (hidden.suppressedRows?size)!0></#if></#list>
-<#list concepts as hidden><#if hidden.hasSuppressedResult!false><#assign suppressedCount += (hidden.suppressedRows?size)!0></#if></#list>
-
-
-
-<#if (baselineCount > 0) || (suppressedCount > 0)>
-
-
-<#if (baselineCount > 0)>
+    <#if (baselineCount > 0) && constraint.hasBaselineResult!false>
 .Baseline Findings (${baselineCount})
 [%collapsible]
 ====
 [%autowidth.stretch, options="header,autowrap"]
 |===
 |Rule |Status |Severity
-
-<#list constraints as constraint>
-  <#if constraint.hasBaselineResult!false>
 |<<jqassistant_${constraint.id},${constraint.id}>> (${constraint.baselineRows?size})
 |${constraint.status}
 |${constraint.severity}
-  </#if>
-</#list>
-<#list concepts as concept>
-  <#if concept.hasBaselineResult!false>
-|<<jqassistant_${concept.id},${concept.id}>> (${concept.baselineRows?size})
-|${concept.status}
-|${concept.severity}
-  </#if>
-</#list>
 |===
-</#if>
 ====
+    </#if>
 
-<#if (suppressedCount > 0)>
+    <#if (suppressedCount > 0) && constraint.hasSuppressedResult!false>
 .Suppressed Findings (${suppressedCount})
 [%collapsible]
 ====
 [%autowidth.stretch, options="header,autowrap"]
 |===
 |Rule |Status |Severity
-
-<#list constraints as constraint>
-  <#if constraint.hasSuppressedResult!false>
 |<<jqassistant_${constraint.id},${constraint.id}>> (${constraint.suppressedRows?size})
 |${constraint.status}
 |${constraint.severity}
-  </#if>
-</#list>
-<#list concepts as concept>
-  <#if concept.hasSuppressedResult!false>
-|<<jqassistant_${concept.id},${concept.id}>> (${concept.suppressedRows?size})
-|${concept.status}
-|${concept.severity}
-  </#if>
-</#list>
 |===
-</#if>
-
 ====
-</#if>
+    </#if>
+
+  </#if>
+</#list>

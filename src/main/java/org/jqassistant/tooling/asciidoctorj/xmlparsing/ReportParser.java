@@ -169,7 +169,6 @@ public class ReportParser {
             for (ColumnType cell : row.getColumn()) {
                 rowMap.put(cell.getName(), cell.getValue());
             }
-
             if (row.getHidden() == null) {
                 builder.row(rowMap);
             } else {
@@ -177,8 +176,21 @@ public class ReportParser {
 
                 if (hidden.getBaseline() != null) {
                     builder.baselineRow(rowMap);
-                } else if (hidden.getSuppression() != null) {
-                    builder.suppressedRow(rowMap);
+                }
+                if (hidden.getSuppression() != null) {
+                    SuppressionType suppression = hidden.getSuppression();
+
+                    Map<String, String> meta = new HashMap<>();
+                    if (suppression.getReason() != null) {
+                        meta.put("reason", suppression.getReason());
+                    }
+                    if (suppression.getUntil() != null) {
+                        meta.put("until", String.valueOf(suppression.getUntil()));
+                    }
+                    builder.suppressedRow(Result.HiddenRow.builder()
+                            .cells(rowMap)
+                            .metadata(meta)
+                            .build());
                 }
             }
         }
