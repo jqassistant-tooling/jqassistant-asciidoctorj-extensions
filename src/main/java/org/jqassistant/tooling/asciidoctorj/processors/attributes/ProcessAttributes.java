@@ -5,15 +5,17 @@ import java.io.File;
 public class ProcessAttributes {
     private final String conceptIdFilter;
     private final String constraintIdFilter;
+    private final String statusFilter;
 
     private final String reportPath;
     private final String templatesPath;
     private final File outputDirectory;
     private final File imagesDirectory;
 
-    private ProcessAttributes(String conceptIdFilter, String constraintIdFilter, String reportPath, String templatesPath, File outputDirectory, File imagesDirectory) {
+    private ProcessAttributes(String conceptIdFilter, String constraintIdFilter, String statusFilter, String reportPath, String templatesPath, File outputDirectory, File imagesDirectory) {
         this.conceptIdFilter = conceptIdFilter;
         this.constraintIdFilter = constraintIdFilter;
+        this.statusFilter = statusFilter;
         this.reportPath = reportPath;
         this.templatesPath = templatesPath;
         this.outputDirectory = outputDirectory;
@@ -31,6 +33,8 @@ public class ProcessAttributes {
     public String getConstraintIdFilter() {
         return this.constraintIdFilter;
     }
+
+    public String getStatusFilter() { return this.statusFilter; }
 
     public String getReportPath() {
         return this.reportPath;
@@ -51,6 +55,7 @@ public class ProcessAttributes {
     public static class ProcessAttributesBuilder {
         private String conceptIdFilter;
         private String constraintIdFilter;
+        private String statusFilter;
         private String reportPath;
         private String templatesPath;
         private File outputDirectory;
@@ -66,6 +71,11 @@ public class ProcessAttributes {
 
         public ProcessAttributesBuilder constraintIdFilter(String constraintIdFilter) {
             this.constraintIdFilter = constraintIdFilter;
+            return this;
+        }
+
+        public ProcessAttributesBuilder statusFilter(String statusFilter) {
+            this.statusFilter = statusFilter;
             return this;
         }
 
@@ -90,11 +100,12 @@ public class ProcessAttributes {
         }
 
         public ProcessAttributes build() {
-            return new ProcessAttributes(this.conceptIdFilter, this.constraintIdFilter, this.reportPath, this.templatesPath, this.outputDirectory, this.imagesDirectory);
+            return new ProcessAttributes(this.conceptIdFilter, this.constraintIdFilter, this.statusFilter, this.reportPath, this.templatesPath, this.outputDirectory, this.imagesDirectory);
         }
 
         public String toString() {
-            return "ProcessAttributes.ProcessAttributesBuilder(conceptIdFilter=" + this.conceptIdFilter + ", constraintIdFilter=" + this.constraintIdFilter + ", reportPath=" + this.reportPath + ", templatesPath=" + this.templatesPath + ", outputDirectory=" + this.outputDirectory + ", imagesDirectory=" + this.imagesDirectory + ")";
+            return "ProcessAttributes.ProcessAttributesBuilder(conceptIdFilter=" + this.conceptIdFilter + ", constraintIdFilter=" + this.constraintIdFilter + ", statusFilter=" + this.statusFilter
+                    + ", reportPath=" + this.reportPath + ", templatesPath=" + this.templatesPath + ", outputDirectory=" + this.outputDirectory + ", imagesDirectory=" + this.imagesDirectory + ")";
         }
     }
 }

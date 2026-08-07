@@ -1,12 +1,8 @@
-= Report
-
-* <<./index/debt.adoc#, Technische Schulden>>
-
 == Summary
 
-include::jQAssistant:Summary[]
+include::jQAssistant:Summary[concepts = "it:CSVReport", constraints="*", status="SUCCESS,SKIPPED,WARNING,FAILURE"]
 
 == Rules
 
-include::jQAssistant:Rules[leveloffset=+2]
+include::jQAssistant:Rules[concepts = "it:CSVReport", constraints="*", status="SUCCESS,SKIPPED,WARNING,FAILURE", leveloffset=+2]
 

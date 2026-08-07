@@ -40,6 +40,8 @@
   </scm>
 
     <properties>
+        <!-- TODO to be replaced by according version of parent if available -->
+        <jqassistant.version>2.10.0-M2</jqassistant.version>
         <asciidoctorj.version>3.0.1</asciidoctorj.version>
         <asciidoctor.maven.version>3.1.1</asciidoctor.maven.version>
         <maven.compiler.source>11</maven.compiler.source>
@@ -57,6 +59,10 @@
         <dependency>
             <groupId>com.buschmais.jqassistant.core</groupId>
             <artifactId>rule</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.buschmais.jqassistant.core</groupId>
+            <artifactId>report</artifactId>
         </dependency>
         <dependency>
             <groupId>com.buschmais.jqassistant.core</groupId>

@@ -1,20 +1,24 @@
 <#list concepts as rule>
+
 [#jqassistant_${rule.id}]
 = ${rule.id}
 ****
-<#if rule.status == "SUCCESS">
-TIP: ${rule.description} +
-Status: [green]#${rule.status}#, Severity: ${rule.severity}
-<#elseif rule.status == "WARNING">
-WARNING: ${rule.description} +
-Status: [yellow]#${rule.status}#, Severity: ${rule.severity}
-<#elseif rule.status == "FAILURE">
-CAUTION: ${rule.description} +
-Status: [red]#${rule.status}#, Severity: ${rule.severity}
-<#else>
-NOTE: ${rule.description} +
-Status: [grey]#${rule.status}#, Severity: ${rule.severity}
-</#if>
+<#assign statusConfig = {
+  "SUCCESS": {"label": "TIP", "color": "green"},
+  "WARNING": {"label": "CAUTION", "color": "yellow"},
+  "FAILURE": {"label": "IMPORTANT", "color": "red"}
+}>
+
+<#assign current = statusConfig[rule.status]!{"label": "NOTE", "color": "grey"}>
+
+[${current.label}]
+====
+....
+${rule.description}
+....
+Severity: ${rule.severity}
+====
+
 
 <#if rule.hasReports>
 <#list rule.reports.links as labeledLink>
@@ -27,12 +31,12 @@ image::${labeledImage.link}[${labeledImage.label}]
 
 </#list>
 <#elseif rule.hasResult>
-[opts="header"]
+[%autowidth.stretch, options="header"]
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list>
 <#list rule.resultRows as row>
 <#list row as cell>
-|${cell}
+|${cell?replace(".", ".&#8203;")}
 </#list>
 </#list>
 |===
