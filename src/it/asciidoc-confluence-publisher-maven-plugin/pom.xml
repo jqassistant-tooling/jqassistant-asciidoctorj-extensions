@@ -52,7 +52,6 @@
                             <convertOnly>true</convertOnly>
                             <attributes>
                                 <jqassistant-report-path>${project.build.directory}/jqassistant/jqassistant-report.xml</jqassistant-report-path>
-                                <jqassistant-baseline>${project.build.directory}/jqassistant/jqassistant-baseline.xml</jqassistant-baseline>
                             </attributes>
 <!--                            <logHandler>
                                 <outputToConsole>true</outputToConsole>
