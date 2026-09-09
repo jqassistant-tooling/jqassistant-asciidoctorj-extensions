@@ -30,7 +30,7 @@ image::${labeledImage.link}[${labeledImage.label}]
 </#list>
 
 <#elseif rule.hasResult || (rule.hasBaselineResult!false) || (rule.hasSuppressedResult!false)>
-<-------------------------------------VISIBLE FINDINGS--------------------------------------->
+<#------------------------------------- VISIBLE FINDINGS --------------------------------------->
 <#if rule.hasResult>
 [%autowidth.stretch, options="header,autowrap"]
 |===
@@ -46,7 +46,7 @@ image::${labeledImage.link}[${labeledImage.label}]
 </#list>
 |===
 </#if>
-<--------------------------------FINDINGS HIDDEN BY BASELINE---------------------------------->
+<#-------------------------------- FINDINGS HIDDEN BY BASELINE ---------------------------------->
 <#if rule.hasBaselineResult!false>
 .Baseline Findings (${rule.baselineRows?size})
 [%collapsible]
@@ -66,7 +66,7 @@ image::${labeledImage.link}[${labeledImage.label}]
 |===
 ====
 </#if>
-<---------------------------------------SUPPRESSIONS------------------------------------------->
+<#--------------------------------------- SUPPRESSIONS ------------------------------------------->
 <#if rule.hasSuppressedResult!false>
 .Suppressions (${rule.suppressedRows?size})
 [%collapsible]
