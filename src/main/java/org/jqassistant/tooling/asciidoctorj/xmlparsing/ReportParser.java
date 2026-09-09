@@ -1,15 +1,15 @@
 package org.jqassistant.tooling.asciidoctorj.xmlparsing;
 
+import java.io.File;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 import io.smallrye.common.constraint.NotNull;
 import org.jqassistant.schema.report.v2.*;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.util.List;
-import java.time.LocalDate;
-import java.util.Optional;
 
 public class ReportParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportParser.class);
@@ -40,7 +40,8 @@ public class ReportParser {
     /**
      * creates a ParsedReport instance from a JqassistantReport instance
      *
-     * @param report a JqassistantReport (received from a ReportReader)
+     * @param report
+     *         a JqassistantReport (received from a ReportReader)
      * @return a ParsedReport created from JqassistantReport instance
      */
     private ParsedReport parseReport(@NotNull JqassistantReport report) {
@@ -57,8 +58,10 @@ public class ReportParser {
     /**
      * Adds the Rule that is generated from a node to a ParsedReport and returns it.
      *
-     * @param parsedReport the ParsedReport that will be amended
-     * @param node the node that will be parsed
+     * @param parsedReport
+     *         the ParsedReport that will be amended
+     * @param node
+     *         the node that will be parsed
      * @return the Rule that was generated from the node
      */
     private Rule parseNode(@NotNull ParsedReport parsedReport, @NotNull ReferencableRuleType node) {
@@ -96,36 +99,46 @@ public class ReportParser {
     /**
      * Adds the given Group to the ParsedReport. Also parses sub-rules of the groupNode. These will be added to the ParsedReport and filled into the corresponding place in a Group that will be returned.
      *
-     * @param parsedReport the ParsedReport that will be amended
-     * @param groupNode the GroupNode that will be parsed
+     * @param parsedReport
+     *         the ParsedReport that will be amended
+     * @param groupNode
+     *         the GroupNode that will be parsed
      * @return the Group that is generated from the node
      */
     private Group parseGroup(@NotNull ParsedReport parsedReport, @NotNull GroupType groupNode) {
-        Group.GroupBuilder<?, ?> groupBuilder = Group.builder().id(groupNode.getId()).duration(groupNode.getDuration());
+        Group.GroupBuilder<?, ?> groupBuilder = Group.builder()
+                .id(groupNode.getId())
+                .duration(groupNode.getDuration());
 
         List<ReferencableRuleType> childNodes = groupNode.getGroupOrConceptOrConstraint();
         for (ReferencableRuleType childNode : childNodes) {
             Rule rule = parseNode(parsedReport, childNode);
 
-            if (rule instanceof Group) groupBuilder.subGroup((Group) rule);
-            else if (rule instanceof Concept) groupBuilder.nestedConcept((Concept) rule);
-            else if (rule instanceof Constraint) groupBuilder.nestedConstraint((Constraint) rule);
+            if (rule instanceof Group)
+                groupBuilder.subGroup((Group) rule);
+            else if (rule instanceof Concept)
+                groupBuilder.nestedConcept((Concept) rule);
+            else if (rule instanceof Constraint)
+                groupBuilder.nestedConstraint((Constraint) rule);
         }
 
         return groupBuilder.build();
     }
 
-
     /**
      * Adds the given Concept to the ParsedReport. Also returns the parsed Concept
      *
-     * @param conceptNode the Node from which the Concept will be generated
+     * @param conceptNode
+     *         the Node from which the Concept will be generated
      * @return the Concept that is generated from the node
      */
     private Concept parseConcept(@NotNull ConceptType conceptNode) {
         return Concept.builder()
-                .status(conceptNode.getStatus().getValue().value())
-                .severity(conceptNode.getSeverity().getValue())
+                .status(conceptNode.getStatus()
+                        .getValue()
+                        .value())
+                .severity(conceptNode.getSeverity()
+                        .getValue())
                 .id(conceptNode.getId())
                 .description(conceptNode.getDescription())
                 .duration(conceptNode.getDuration())
@@ -137,13 +150,17 @@ public class ReportParser {
     /**
      * Adds the given Constraint to the ParsedReport. Also returns the parsed Constraint
      *
-     * @param constraintNode the Node from which the Constraint will be generated
+     * @param constraintNode
+     *         the Node from which the Constraint will be generated
      * @return the Constraint that is generated from the node
      */
     private Constraint parseConstraint(@NotNull ConstraintType constraintNode) {
         return Constraint.builder()
-                .status(constraintNode.getStatus().getValue().value())
-                .severity(constraintNode.getSeverity().getValue())
+                .status(constraintNode.getStatus()
+                        .getValue()
+                        .value())
+                .severity(constraintNode.getSeverity()
+                        .getValue())
                 .id(constraintNode.getId())
                 .description(constraintNode.getDescription())
                 .duration(constraintNode.getDuration())
@@ -155,28 +172,29 @@ public class ReportParser {
     /**
      * give back the parsed Result from resultType (node)
      *
-     * @param resultNode the Node from which the Result will be generated
+     * @param resultNode
+     *         the Node from which the Result will be generated
      * @return the Result that is generated from the node
      */
     private Result parseResult(@NotNull ResultType resultNode) {
-        if (resultNode == null) return Result.EMPTY_RESULT;
+        if (resultNode == null)
+            return Result.EMPTY_RESULT;
 
         Result.ResultBuilder resultBuilder = Result.builder();
-        resultBuilder.columnKeys(resultNode.getColumns().getColumn());
+        resultBuilder.columnKeys(resultNode.getColumns()
+                .getColumn());
 
-        for (RowType row : resultNode.getRows().getRow()) {
-            Row.RowBuilder rowBuilder = Row.builder();
+        for (RowType row : resultNode.getRows()
+                .getRow()) {
+            Result.Row.RowBuilder rowBuilder = Result.Row.builder();
 
             for (ColumnType column : row.getColumn()) {
-                rowBuilder.columns(
-                        column.getName(),
-                        Row.Column.builder()
-                                .value(column.getValue())
-                                .build()
-                );
+                rowBuilder.columns(column.getName(), Result.Row.Column.builder()
+                        .value(column.getValue())
+                        .build());
             }
 
-            Row resultRow = rowBuilder.build();
+            Result.Row resultRow = rowBuilder.build();
 
             if (row.getHidden() == null) {
                 resultBuilder.row(resultRow);
@@ -190,14 +208,14 @@ public class ReportParser {
                     SuppressionType suppression = hidden.getSuppression();
 
                     Result.SuppressedRow.SuppressedRowBuilder suppressedRow = Result.SuppressedRow.builder()
-                            .row(resultRow);
+                            .columns(resultRow.getColumns());
 
                     if (suppression.getReason() != null) {
                         suppressedRow.reason(Optional.ofNullable(suppression.getReason()));
                     }
                     if (suppression.getUntil() != null) {
                         suppressedRow.until(Optional.ofNullable(suppression.getUntil())
-                                        .map(xmlCal -> LocalDate.of(xmlCal.getYear(), xmlCal.getMonth(), xmlCal.getDay())));
+                                .map(xmlCal -> LocalDate.of(xmlCal.getYear(), xmlCal.getMonth(), xmlCal.getDay())));
                     }
                     resultBuilder.suppressedRow(suppressedRow.build());
                 }
@@ -210,20 +228,27 @@ public class ReportParser {
     /**
      * give back the parsed Reports from reportsType (node)
      *
-     * @param reportsNode the Node from which the Reports will be generated
+     * @param reportsNode
+     *         the Node from which the Reports will be generated
      * @return the Reports that is generated from the node
      */
     private Reports parseReports(@NotNull ReportsType reportsNode) {
-        if (reportsNode == null) return Reports.EMPTY_REPORTS;
+        if (reportsNode == null)
+            return Reports.EMPTY_REPORTS;
 
         Reports.ReportsBuilder reports = Reports.builder();
 
         for (AbstractReportType imageOrLink : reportsNode.getImageOrLink()) {
-            if(imageOrLink instanceof ImageType) {
-                reports.image(URLWithLabel.builder().label(imageOrLink.getLabel()).link(imageOrLink.getValue()).build());
-            }
-            else if(imageOrLink instanceof LinkType){
-                reports.link(URLWithLabel.builder().label(imageOrLink.getLabel()).link(imageOrLink.getValue()).build());
+            if (imageOrLink instanceof ImageType) {
+                reports.image(URLWithLabel.builder()
+                        .label(imageOrLink.getLabel())
+                        .link(imageOrLink.getValue())
+                        .build());
+            } else if (imageOrLink instanceof LinkType) {
+                reports.link(URLWithLabel.builder()
+                        .label(imageOrLink.getLabel())
+                        .link(imageOrLink.getValue())
+                        .build());
 
             }
         }

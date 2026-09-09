@@ -48,7 +48,7 @@ image::${labeledImage.link}[${labeledImage.label}]
 </#if>
 <#-------------------------------- FINDINGS HIDDEN BY BASELINE ---------------------------------->
 <#if rule.hasBaselineResult!false>
-.Baseline Findings (${rule.baselineRows?size})
+.Baseline (${rule.baselineRows?size})
 [%collapsible]
 ====
 [%autowidth.stretch, options="header,autowrap"]
@@ -75,7 +75,7 @@ image::${labeledImage.link}[${labeledImage.label}]
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list>|Reason |Until
 <#list rule.suppressedRows as suppression>
-<#list suppression.suppressedRow.columns as column>
+<#list suppression.columns as column>
 <#if column?has_content && column?trim != "">
 |${column?replace(".", ".&#8203;")}
 <#else>

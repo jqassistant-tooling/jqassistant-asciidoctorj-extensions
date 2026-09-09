@@ -1,5 +1,11 @@
 package org.jqassistant.tooling.asciidoctorj.processors.includes;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.List;
+import java.util.Map;
+
 import freemarker.template.TemplateException;
 import io.smallrye.common.constraint.NotNull;
 import org.asciidoctor.ast.Document;
@@ -16,13 +22,6 @@ import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Constraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.List;
-import java.util.Map;
-
-
 public abstract class AbstractIncludeProcessor extends IncludeProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIncludeProcessor.class);
 
@@ -35,8 +34,8 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
 
     String target;
 
-
-    protected AbstractIncludeProcessor(@NotNull ReportRepo reportRepository, @NotNull TemplateRepo templateRepo, @NotNull String target, @NotNull List<String> templateNames) {
+    protected AbstractIncludeProcessor(@NotNull ReportRepo reportRepository, @NotNull TemplateRepo templateRepo, @NotNull String target,
+            @NotNull List<String> templateNames) {
         this.repo = reportRepository;
         this.templateRepo = templateRepo;
         this.templateNames = templateNames;
@@ -55,22 +54,16 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
         ProcessAttributes attributes = ProcessAttributesFactory.createProcessAttributesInclude(document, attributeMap);
 
         if (attributes.getReportPath() == null) {
-            reader.pushInclude("Error while rendering " + target + ". Your report xml file location isn't set properly! Please set the destination of your jqassistant-report.xml via the global document attributes for your asciidoctor. Also check the logged warning for information about what exactly your ReportPath property is set to.",
-                    target,
-                    "",
-                    1,
-                    attributeMap);
+            reader.pushInclude("Error while rendering " + target
+                            + ". Your report xml file location isn't set properly! Please set the destination of your jqassistant-report.xml via the global document attributes for your asciidoctor. Also check the logged warning for information about what exactly your ReportPath property is set to.",
+                    target, "", 1, attributeMap);
             LOGGER.warn("Failed to process include for {}", target);
             return;
         }
 
         RulesRoot root = fillDataStructure(attributes);
 
-        reader.pushInclude(fillTemplates(root, attributes),
-                target,
-                "",
-                1,
-                attributeMap);
+        reader.pushInclude(fillTemplates(root, attributes), target, "", 1, attributeMap);
 
         LOGGER.debug("Finished to process include for {}", target);
     }
@@ -78,8 +71,10 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
     /**
      * Fills all templates in "templates" with the content of root.
      *
-     * @param root       the data structure the templates are filled with
-     * @param attributes the ProcessAttribute instance. May optionally be filled with: templatesPath
+     * @param root
+     *         the data structure the templates are filled with
+     * @param attributes
+     *         the ProcessAttribute instance. May optionally be filled with: templatesPath
      * @return the from template and root produced String
      */
     private String fillTemplates(@NotNull RulesRoot root, @NotNull ProcessAttributes attributes) {
@@ -87,9 +82,12 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
 
         List<String> tNames;
 
-        if (root.getConcepts().isEmpty() && root.getConstraints().isEmpty()) {
+        if (root.getConcepts()
+                .isEmpty() && root.getConstraints()
+                .isEmpty()) {
             tNames = List.of("NoResult");
-            LOGGER.debug("Filters for concepts {} and constraints {} returned no matching Rules!", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
+            LOGGER.debug("Filters for concepts {} and constraints {} returned no matching Rules!", attributes.getConceptIdFilter(),
+                    attributes.getConstraintIdFilter());
         } else {
             tNames = templateNames;
             LOGGER.debug("Starting to fill templates {}", tNames);
@@ -97,11 +95,16 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
 
         for (String tName : tNames) {
             try {
-                templateRepo.findTemplate(attributes, tName).process(root, writer);
+                templateRepo.findTemplate(attributes, tName)
+                        .process(root, writer);
             } catch (TemplateException e) {
-                throw new IllegalArgumentException("Your \"" + tName + "\"-template seems to have an error in it's calls to the data structure! Refer to manual section \"Using the jqassistant-asciidoctor-extension\".", e);
+                throw new IllegalArgumentException("Your \"" + tName
+                        + "\"-template seems to have an error in it's calls to the data structure! Refer to manual section \"Using the jqassistant-asciidoctor-extension\".",
+                        e);
             } catch (IOException e) {
-                throw new IllegalArgumentException("Your \"" + tName + "\"-template file can not be parsed to a freemarker template! Refer to manual section \"Using your own template\".", e);
+                throw new IllegalArgumentException(
+                        "Your \"" + tName + "\"-template file can not be parsed to a freemarker template! Refer to manual section \"Using your own template\".",
+                        e);
             }
         }
 
@@ -111,26 +114,26 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
     /**
      * build the data structure needed to fill the template
      *
-     * @param attributes the ProcessAttribute instance. Should at least contain: reportPath, outputDirectory! May optionally be filled with: conceptIdFilter, constraintIdFilter
+     * @param attributes
+     *         the ProcessAttribute instance. Should at least contain: reportPath, outputDirectory! May optionally be filled with: conceptIdFilter, constraintIdFilter
      * @return rootElement for data-structure
      */
     RulesRoot fillDataStructure(@NotNull ProcessAttributes attributes) {
         RulesRoot.RulesRootBuilder rootBuilder = RulesRoot.builder();
 
-        LOGGER.debug("Starting to fill RulesRoot with for {} matching concepts and for {} matching constraints.", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
+        LOGGER.debug("Starting to fill RulesRoot with for {} matching concepts and for {} matching constraints.", attributes.getConceptIdFilter(),
+                attributes.getConstraintIdFilter());
 
         //Show concepts only if concepts filter exits or if no filter exists at all
         if (attributes.getConceptIdFilter() != null || attributes.getConstraintIdFilter() == null) {
-            for (Concept concept :
-                    repo.findConcepts(attributes)) {
+            for (Concept concept : repo.findConcepts(attributes)) {
                 rootBuilder.concept(RuleRootParser.createRuleRoot(concept, attributes.getOutputDirectory(), attributes.getImagesDirectory()));
             }
         }
 
         //Show constraints only if constraints filter exits or if no filter exists at all
         if (attributes.getConstraintIdFilter() != null || attributes.getConceptIdFilter() == null) {
-            for (Constraint constraint :
-                    repo.findConstraints(attributes)) {
+            for (Constraint constraint : repo.findConstraints(attributes)) {
                 rootBuilder.constraint(RuleRootParser.createRuleRoot(constraint, attributes.getOutputDirectory(), attributes.getImagesDirectory()));
             }
         }

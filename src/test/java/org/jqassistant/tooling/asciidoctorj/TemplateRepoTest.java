@@ -28,7 +28,8 @@ class TemplateRepoTest {
     void defaultLoading() throws IOException {
         TemplateRepo repo = new TemplateRepoImpl();
 
-        Template template = repo.findTemplate(ProcessAttributes.builder().build(), "RulesConcept");
+        Template template = repo.findTemplate(ProcessAttributes.builder()
+                .build(), "RulesConcept");
         Template templateExpected = cfg.getTemplate("RulesConcept");
         assertThat(templateExpected).hasToString(template.toString());
     }
@@ -38,7 +39,9 @@ class TemplateRepoTest {
         TemplateRepo repo = new TemplateRepoImpl();
 
         //test custom loading
-        ProcessAttributes attributes = ProcessAttributes.builder().templatesPath("src/test/resources/testing-custom-templates").build();
+        ProcessAttributes attributes = ProcessAttributes.builder()
+                .templatesPath("src/test/resources/testing-custom-templates")
+                .build();
         Template template = repo.findTemplate(attributes, "IconEnabler");
 
         assertThat(template).isNotNull();
@@ -50,7 +53,8 @@ class TemplateRepoTest {
     void customLoadingAndFallback() throws IOException {
         TemplateRepo repo = new TemplateRepoImpl();
 
-        Template templateLoaded = repo.findTemplate(ProcessAttributes.builder().build(), "Summary");
+        Template templateLoaded = repo.findTemplate(ProcessAttributes.builder()
+                .build(), "Summary");
 
         Template templateExpected = cfg.getTemplate("Summary");
         assertThat(templateExpected).hasToString(templateLoaded.toString());

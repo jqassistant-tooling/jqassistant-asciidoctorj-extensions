@@ -1,11 +1,11 @@
 package org.jqassistant.tooling.asciidoctorj.freemarker.templateroots;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
-
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 @Builder
 @Getter

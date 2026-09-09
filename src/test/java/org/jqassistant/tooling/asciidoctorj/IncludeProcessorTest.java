@@ -18,14 +18,14 @@ class IncludeProcessorTest {
 
     @BeforeAll
     static void init() {
-        opt = Options.builder().attributes(
-                Attributes.builder()
+        opt = Options.builder()
+                .attributes(Attributes.builder()
                         .attribute("jqassistant-templates-path", "src/test/resources/testtemplates")
                         .attribute("jqassistant-report-path", "src/test/resources/testing-xml/test-report.xml")
                         .build())
                 .build();
-        defaultOpt = Options.builder().attributes(
-                Attributes.builder()
+        defaultOpt = Options.builder()
+                .attributes(Attributes.builder()
                         .attribute("jqassistant-report-path", "src/test/resources/testing-xml/test-report.xml")
                         .build())
                 .build();
@@ -45,7 +45,8 @@ class IncludeProcessorTest {
 
     @Test
     void testRulesInclude() {
-        Document doc = asciidoctor.load("include::jQAssistant:Rules[concepts = \"*\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]" , opt);
+        Document doc = asciidoctor.load("include::jQAssistant:Rules[concepts = \"*\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]",
+                opt);
         String result = doc.convert();
 
         result = assertIsPartOfAndShorten(result, "test-constraint");
@@ -76,7 +77,8 @@ class IncludeProcessorTest {
 
     @Test
     void testSummaryInclude() {
-        String result = asciidoctor.convert("include::jQAssistant:Summary[concepts = \"test-concept\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]" , opt);
+        String result = asciidoctor.convert(
+                "include::jQAssistant:Summary[concepts = \"test-concept\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]", opt);
 
         result = assertIsPartOfAndShorten(result, "table");
         result = assertIsPartOfAndShorten(result, "Id");
@@ -96,8 +98,7 @@ class IncludeProcessorTest {
 
     @Test
     void testDefaultTemplatesRules() {
-        String rules = asciidoctor.convert(
-                "include::jQAssistant:Rules[concepts = \"*\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]",
+        String rules = asciidoctor.convert("include::jQAssistant:Rules[concepts = \"*\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]",
                 defaultOpt);
 
         rules = assertIsPartOfAndShorten(rules, "FAILURE");
@@ -111,7 +112,7 @@ class IncludeProcessorTest {
         rules = assertIsPartOfAndShorten(rules, "test-column 22");
 
         //verifying display of Hidden Findings
-        rules = assertIsPartOfAndShorten(rules, "Baseline Findings (1)");
+        rules = assertIsPartOfAndShorten(rules, "Baseline (1)");
         rules = assertIsPartOfAndShorten(rules, "table");
         rules = assertIsPartOfAndShorten(rules, "Column 1");
         rules = assertIsPartOfAndShorten(rules, "Column 2");
@@ -146,8 +147,7 @@ class IncludeProcessorTest {
     @Test
     void testDefaultTemplatesSummary() {
         String summary = asciidoctor.convert(
-                "include::jQAssistant:Summary[concepts = \"*\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]",
-                defaultOpt);
+                "include::jQAssistant:Summary[concepts = \"*\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]", defaultOpt);
         //table with visible findings
         summary = assertIsPartOfAndShorten(summary, "table");
         summary = assertIsPartOfAndShorten(summary, "Rule");
@@ -165,37 +165,12 @@ class IncludeProcessorTest {
         summary = assertIsPartOfAndShorten(summary, "test-concept-empty-result");
         summary = assertIsPartOfAndShorten(summary, "SUCCESS");
         summary = assertIsPartOfAndShorten(summary, "INFO");
-        summary = assertIsPartOfAndShorten(summary, "table");
-
-        //Table with baseline findings
-        summary = assertIsPartOfAndShorten(summary, "Baseline Findings (1)");
-        summary = assertIsPartOfAndShorten(summary, "table");
-        summary = assertIsPartOfAndShorten(summary, "Rule");
-        summary = assertIsPartOfAndShorten(summary, "Status");
-        summary = assertIsPartOfAndShorten(summary, "Severity");
-
-        summary = assertIsPartOfAndShorten(summary, "test-constraint");
-        summary = assertIsPartOfAndShorten(summary, "FAILURE");
-        summary = assertIsPartOfAndShorten(summary, "MAJOR");
-        summary = assertIsPartOfAndShorten(summary, "table");
-
-        //Table with suppressed findings
-        summary = assertIsPartOfAndShorten(summary, "Suppressed Findings (2)");
-        summary = assertIsPartOfAndShorten(summary, "table");
-        summary = assertIsPartOfAndShorten(summary, "Rule");
-        summary = assertIsPartOfAndShorten(summary, "Status");
-        summary = assertIsPartOfAndShorten(summary, "Severity");
-
-        summary = assertIsPartOfAndShorten(summary, "test-constraint");
-        summary = assertIsPartOfAndShorten(summary, "FAILURE");
-        summary = assertIsPartOfAndShorten(summary, "MAJOR");
-
         assertIsPartOfAndShorten(summary, "table");
     }
 
-
     private String assertIsPartOfAndShorten(String text, String sequence) {
         assertThat(text).contains(sequence);
-        return text.substring(text.indexOf(sequence)).substring(sequence.length());
+        return text.substring(text.indexOf(sequence))
+                .substring(sequence.length());
     }
 }

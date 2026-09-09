@@ -1,13 +1,13 @@
 package org.jqassistant.tooling.asciidoctorj.xmlparsing;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import io.smallrye.common.constraint.NotNull;
 import lombok.Getter;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Concept;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Constraint;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Group;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * stores the parsed report temporarily from parsing the report until transfer to ReportRepository
