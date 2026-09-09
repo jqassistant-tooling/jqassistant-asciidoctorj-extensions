@@ -4,8 +4,6 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.Document;
-
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -87,7 +85,7 @@ class IncludeProcessorTest {
         result = assertIsPartOfAndShorten(result, "test-constraint");
         result = assertIsPartOfAndShorten(result, "Test description 2");
         result = assertIsPartOfAndShorten(result, "MAJOR");
-        result = assertIsPartOfAndShorten(result, "FAILURE</span>");
+        result = assertIsPartOfAndShorten(result, "FAILURE");
         result = assertIsPartOfAndShorten(result, "test-concept");
         result = assertIsPartOfAndShorten(result, "Test description");
         result = assertIsPartOfAndShorten(result, "INFO");

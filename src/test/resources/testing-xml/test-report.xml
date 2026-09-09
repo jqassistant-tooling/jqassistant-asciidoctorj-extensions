@@ -95,6 +95,42 @@
                         <value>test-column 52 (base)</value>
                     </column>
                 </row>
+                <row key="suppressed">
+                    <hidden>
+                        <suppression>
+                            <reason>Example suppression</reason>
+                            <until>2050-12-31</until>
+                        </suppression>
+                    </hidden>
+                    <column name="Column 1">
+                        <value>test-cell 31 (supp)</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-cell 32 (supp)</value>
+                    </column>
+                </row>
+                <row key="suppdessed-without-metadata">
+                    <hidden>
+                        <suppression/>
+                    </hidden>
+                    <column name="Column 1">
+                        <value>test-cell 41 (suppW/oM)</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-cell 42 (suppW/oM)</value>
+                    </column>
+                </row>
+                <row key="baseline">
+                    <hidden>
+                        <baseline/>
+                    </hidden>
+                    <column name="Column 1">
+                        <value>test-cell 51 (base)</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-cell 52 (base)</value>
+                    </column>
+                </row>
             </rows>
         </result>
         <status>failure</status>
