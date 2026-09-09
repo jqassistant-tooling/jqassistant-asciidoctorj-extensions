@@ -2,10 +2,9 @@ package org.jqassistant.tooling.asciidoctorj.reportrepo;
 
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.buschmais.jqassistant.core.report.api.model.Result;
-import com.buschmais.jqassistant.core.rule.api.filter.RuleFilter;
+
 import io.smallrye.common.constraint.NotNull;
 import lombok.Getter;
 import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttributes;
@@ -23,7 +22,8 @@ import static java.util.stream.Collectors.toSet;
 public class ReportRepoImpl implements ReportRepo {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportRepoImpl.class);
-    private static final Set<String> STATUSES = stream(Result.Status.values()).map(Enum::toString).collect(toSet());
+    private static final Set<String> STATUSES = stream(Result.Status.values()).map(Enum::toString)
+            .collect(toSet());
     private final ReportParser reportParser;
     private boolean initialized = false;
     private Map<String, Group> groups = new HashMap<>();
@@ -65,7 +65,7 @@ public class ReportRepoImpl implements ReportRepo {
     public SortedSet<Constraint> findConstraints(ProcessAttributes attributes) {
         initialize(attributes);
 
-        return findExecutableRule(constraints, attributes.getConstraintIdFilter(),attributes.getStatusFilter());
+        return findExecutableRule(constraints, attributes.getConstraintIdFilter(), attributes.getStatusFilter());
     }
 
     public <T extends ExecutableRule> SortedSet<T> findExecutableRule(Map<String, T> ruleMap, String idFilter, String statusFilter) {
@@ -78,7 +78,8 @@ public class ReportRepoImpl implements ReportRepo {
                 .stream()
                 .filter(entry -> idFilter == null || matches(entry.getKey(), idFilter))
                 .map(Map.Entry::getValue)
-                .filter(rule -> allowedStatus.isEmpty() || (rule.getStatus() != null && allowedStatus.contains(rule.getStatus().toUpperCase())))
+                .filter(rule -> allowedStatus.isEmpty() || (rule.getStatus() != null && allowedStatus.contains(rule.getStatus()
+                        .toUpperCase())))
                 .forEach(rulesSet::add);
 
         return rulesSet;
@@ -89,20 +90,17 @@ public class ReportRepoImpl implements ReportRepo {
         Set<String> allowedStatus = new HashSet<>();
 
         if (statusFilter == null || statusFilter.isEmpty()) {
-            allowedStatus = Set.of("WARNING","FAILURE");
+            allowedStatus = Set.of("WARNING", "FAILURE");
             return allowedStatus;
         }
 
-        allowedStatus = stream(statusFilter.split(","))
-                .map(String::toUpperCase)
+        allowedStatus = stream(statusFilter.split(",")).map(String::toUpperCase)
                 .map(String::trim)
                 .collect(toSet());
 
         for (String status : allowedStatus) {
             if (!STATUSES.contains(status)) {
-                throw new IllegalStateException(
-              String.format("Invalid status '%s' provided in status filter. Allowed values  are: %s", status, STATUSES )
-                );
+                throw new IllegalStateException(String.format("Invalid status '%s' provided in status filter. Allowed values  are: %s", status, STATUSES));
             }
         }
         return allowedStatus;

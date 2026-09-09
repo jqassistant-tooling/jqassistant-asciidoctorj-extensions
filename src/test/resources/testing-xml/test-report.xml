@@ -10,7 +10,7 @@
                 <rows count="1">
                     <row>
                         <column name="Column 1">
-                            <value>test-cell</value>
+                            <value>test-column</value>
                         </column>
                     </row>
                 </rows>
@@ -42,21 +42,57 @@
                 <column primary="true">Column 1</column>
                 <column>Column 2</column>
             </columns>
-            <rows count="2">
+            <rows count="4">
                 <row>
                     <column name="Column 1">
-                        <value>test-cell 11</value>
+                        <value>test-column 11</value>
                     </column>
                     <column name="Column 2">
-                        <value>test-cell 12</value>
+                        <value>test-column 12</value>
                     </column>
                 </row>
                 <row>
                     <column name="Column 1">
-                        <value>test-cell 21</value>
+                        <value>test-column 21</value>
                     </column>
                     <column name="Column 2">
-                        <value>test-cell 22</value>
+                        <value>test-column 22</value>
+                    </column>
+                </row>
+                <row key="suppressed">
+                    <hidden>
+                        <suppression>
+                            <reason>Example suppression</reason>
+                            <until>2050-12-31</until>
+                        </suppression>
+                    </hidden>
+                    <column name="Column 1">
+                        <value>test-column 31 (supp)</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-column 32 (supp)</value>
+                    </column>
+                </row>
+                <row key="suppdessed-without-metadata">
+                    <hidden>
+                        <suppression/>
+                    </hidden>
+                    <column name="Column 1">
+                        <value>test-column 41 (suppW/oM)</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-column 42 (suppW/oM)</value>
+                    </column>
+                </row>
+                <row key="baseline">
+                    <hidden>
+                        <baseline/>
+                    </hidden>
+                    <column name="Column 1">
+                        <value>test-column 51 (base)</value>
+                    </column>
+                    <column name="Column 2">
+                        <value>test-column 52 (base)</value>
                     </column>
                 </row>
             </rows>

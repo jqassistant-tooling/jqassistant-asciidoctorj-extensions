@@ -1,9 +1,9 @@
 package org.jqassistant.tooling.asciidoctorj.xmlparsing;
 
 import java.io.File;
-import java.util.HashMap;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import io.smallrye.common.constraint.NotNull;
 import org.jqassistant.schema.report.v2.*;
@@ -180,21 +180,49 @@ public class ReportParser {
         if (resultNode == null)
             return Result.EMPTY_RESULT;
 
-        Result.ResultBuilder builder = Result.builder();
-
-        builder.columnKeys(resultNode.getColumns()
+        Result.ResultBuilder resultBuilder = Result.builder();
+        resultBuilder.columnKeys(resultNode.getColumns()
                 .getColumn());
 
         for (RowType row : resultNode.getRows()
                 .getRow()) {
-            Map<String, String> rowMap = new HashMap<>();
-            for (ColumnType cell : row.getColumn()) {
-                rowMap.put(cell.getName(), cell.getValue());
+            Result.Row.RowBuilder rowBuilder = Result.Row.builder();
+
+            for (ColumnType column : row.getColumn()) {
+                rowBuilder.columns(column.getName(), Result.Row.Column.builder()
+                        .value(column.getValue())
+                        .build());
             }
-            builder.row(rowMap);
+
+            Result.Row resultRow = rowBuilder.build();
+
+            if (row.getHidden() == null) {
+                resultBuilder.row(resultRow);
+            } else {
+                HiddenType hidden = row.getHidden();
+
+                if (hidden.getBaseline() != null) {
+                    resultBuilder.baselineRow(resultRow);
+                }
+                if (hidden.getSuppression() != null) {
+                    SuppressionType suppression = hidden.getSuppression();
+
+                    Result.SuppressedRow.SuppressedRowBuilder suppressedRow = Result.SuppressedRow.builder()
+                            .columns(resultRow.getColumns());
+
+                    if (suppression.getReason() != null) {
+                        suppressedRow.reason(Optional.ofNullable(suppression.getReason()));
+                    }
+                    if (suppression.getUntil() != null) {
+                        suppressedRow.until(Optional.ofNullable(suppression.getUntil())
+                                .map(xmlCal -> LocalDate.of(xmlCal.getYear(), xmlCal.getMonth(), xmlCal.getDay())));
+                    }
+                    resultBuilder.suppressedRow(suppressedRow.build());
+                }
+            }
         }
 
-        return builder.build();
+        return resultBuilder.build();
     }
 
     /**

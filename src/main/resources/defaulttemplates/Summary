@@ -2,7 +2,6 @@
 |===
 |Rule |Status|Severity
 <#list constraints as constraint>
-
 |<<jqassistant_${constraint.id}>>
 |[<#if constraint.status == "SUCCESS">green<#elseif constraint.status == "FAILURE">red<#elseif constraint.status == "WARNING">yellow<#else>grey</#if>]#${constraint.status}#
 |${constraint.severity}

@@ -50,7 +50,7 @@ public final class ReportReader {
      * Read the report file.
      *
      * @param reportFile
-     *            The report file.
+     *         The report file.
      * @return The {@link JqassistantReport}.
      */
     public JqassistantReport read(File reportFile) {
@@ -64,21 +64,26 @@ public final class ReportReader {
     }
 
     private <T> T withPluginClassLoader(Supplier<T> supplier) {
-        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-        ClassLoader pluginClassLoader = this.getClass().getClassLoader();
+        ClassLoader contextClassLoader = Thread.currentThread()
+                .getContextClassLoader();
+        ClassLoader pluginClassLoader = this.getClass()
+                .getClassLoader();
         try {
             // TCCL must be set for JAXB and Java 11
-            Thread.currentThread().setContextClassLoader(pluginClassLoader);
+            Thread.currentThread()
+                    .setContextClassLoader(pluginClassLoader);
             return supplier.get();
         } finally {
-            Thread.currentThread().setContextClassLoader(contextClassLoader);
+            Thread.currentThread()
+                    .setContextClassLoader(contextClassLoader);
         }
     }
 
     private JqassistantReport unmarshal(InputStream stream) throws JAXBException, XMLStreamException {
         XMLStreamReader xmlStreamReader = new NamespaceMappingStreamReader(inputFactory.createXMLStreamReader(stream), getTargetNamespace());
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        return unmarshaller.unmarshal(xmlStreamReader, JqassistantReport.class).getValue();
+        return unmarshaller.unmarshal(xmlStreamReader, JqassistantReport.class)
+                .getValue();
     }
 
     /**
@@ -87,10 +92,11 @@ public final class ReportReader {
      *
      * @return The target namespace.
      * @throws JAXBException
-     *             If the root element cannot be determined.
+     *         If the root element cannot be determined.
      */
     private String getTargetNamespace() throws JAXBException {
-        return ((JAXBRIContext) this.jaxbContext).getElementName(JqassistantReport.class).getNamespaceURI();
+        return ((JAXBRIContext) this.jaxbContext).getElementName(JqassistantReport.class)
+                .getNamespaceURI();
     }
 
     /**

@@ -5,6 +5,6 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder(toBuilder = true)
 @Getter
-public class Concept extends AbstractExecutableRule{
+public class Concept extends AbstractExecutableRule {
 
 }

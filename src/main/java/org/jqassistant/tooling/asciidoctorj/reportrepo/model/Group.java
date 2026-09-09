@@ -1,10 +1,10 @@
 package org.jqassistant.tooling.asciidoctorj.reportrepo.model;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Singular;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
 
 @SuperBuilder(toBuilder = true)
 @Getter
