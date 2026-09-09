@@ -2,15 +2,13 @@ package org.jqassistant.tooling.asciidoctorj;
 
 import org.assertj.core.api.Assertions;
 import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttributes;
+import org.jqassistant.tooling.asciidoctorj.reportrepo.model.*;
 import org.jqassistant.tooling.asciidoctorj.xmlparsing.ParsedReport;
 import org.jqassistant.tooling.asciidoctorj.xmlparsing.ReportParser;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Concept;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Constraint;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Reports;
-import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,7 +47,8 @@ class ReportParserTest {
         assertThat(result.getColumnKeys()).hasSize(1);
         assertThat(result.getColumnKeys().get(0)).isEqualTo("Column 1");
         assertThat(result.getRows()).hasSize(1);
-        assertThat(result.getRows().get(0)).isEqualTo(Map.of("Column 1", "test-cell"));
+        assertThat(result.getRows()
+                .get(0).getColumns()).isEqualTo(Map.of("Column 1", Row.Column.builder().value("test-column").build()));
 
         Reports reports = testConcept.getReports();
         assertThat (reports.getImages()).hasSize(2);
@@ -94,30 +93,47 @@ class ReportParserTest {
     void parseResultConstraint() {
         Constraint testConstraint = report.getConstraints().get("test-constraint");
         assertThat(testConstraint.getDescription()).isEqualTo("Test description 2");
-        assertThat (testConstraint.getSeverity()).isEqualTo("major");
-        assertThat (testConstraint.getStatus()).isEqualTo("failure");
-        assertThat (testConstraint.getDuration()).isEqualTo(221);
+        assertThat(testConstraint.getSeverity()).isEqualTo("major");
+        assertThat(testConstraint.getStatus()).isEqualTo("failure");
+        assertThat(testConstraint.getDuration()).isEqualTo(221);
 
-        assertThat (testConstraint.getReports()).isEqualTo(Reports.EMPTY_REPORTS);
+        assertThat(testConstraint.getReports()).isEqualTo(Reports.EMPTY_REPORTS);
 
         Result result = testConstraint.getResult();
-        assertThat (result.getColumnKeys()).hasSize(2);
-        assertThat (result.getColumnKeys().get(0)).isEqualTo("Column 1");
-        assertThat (result.getColumnKeys().get(1)).isEqualTo("Column 2");
+        assertThat(result.getColumnKeys()).hasSize(2);
+        assertThat(result.getColumnKeys().get(0)).isEqualTo("Column 1");
+        assertThat(result.getColumnKeys().get(1)).isEqualTo("Column 2");
 
-        assertThat (result.getRows()).hasSize(2);
-        assertThat (result.getRows().get(0)).isEqualTo(Map.of("Column 1", "test-cell 11", "Column 2", "test-cell 12"));
-        assertThat (result.getRows().get(1)).isEqualTo(Map.of("Column 1", "test-cell 21", "Column 2", "test-cell 22"));
+        // Visible Findings
+        assertThat(result.getRows()).hasSize(2);
+        assertThat(result.getRows().get(0).getColumns()).isEqualTo(Map.of(
+                "Column 1", Row.Column.builder().value("test-column 11").build(),
+                "Column 2", Row.Column.builder().value("test-column 12").build()));
+        assertThat(result.getRows().get(1).getColumns()).isEqualTo(Map.of(
+                "Column 1", Row.Column.builder().value("test-column 21").build(),
+                "Column 2", Row.Column.builder().value("test-column 22").build()));
 
+        // Baseline Findings
         assertThat(result.getBaselineRows()).hasSize(1);
-        assertThat(result.getSuppressedRows()).hasSize(2);
-        assertThat (result.getBaselineRows().get(0)).isEqualTo(Map.of("Column 1", "test-cell 51 (base)", "Column 2", "test-cell 52 (base)"));
-        assertThat(result.getSuppressedRows().get(0).getCells()).isEqualTo(Map.of("Column 1", "test-cell 31 (supp)", "Column 2","test-cell 32 (supp)"));
-        assertThat(result.getSuppressedRows().get(0).getMetadata())
-                .containsEntry("reason", "Example suppression")
-                .containsEntry("until", "2050-12-31");
+        assertThat(result.getBaselineRows().get(0).getColumns()).isEqualTo(Map.of(
+                "Column 1", Row.Column.builder().value("test-column 51 (base)").build(),
+                "Column 2", Row.Column.builder().value("test-column 52 (base)").build()));
 
-        assertThat(result.getSuppressedRows().get(1).getCells()).isEqualTo(Map.of("Column 1", "test-cell 41 (suppW/oM)", "Column 2","test-cell 42 (suppW/oM)"));
-        assertThat(result.getSuppressedRows().get(1).getMetadata()).isEmpty();
+        // Suppression
+        assertThat(result.getSuppressedRows()).hasSize(2);
+
+        // Suppression with Metadata
+        assertThat(result.getSuppressedRows().get(0).getRow().getColumns()).isEqualTo(Map.of(
+                "Column 1", Row.Column.builder().value("test-column 31 (supp)").build(),
+                "Column 2", Row.Column.builder().value("test-column 32 (supp)").build()));
+        assertThat(result.getSuppressedRows().get(0).getReason()).contains("Example suppression");
+        assertThat(result.getSuppressedRows().get(0).getUntil()).contains(LocalDate.of(2050, 12, 31));
+
+        // Suppression without Metadata
+        assertThat(result.getSuppressedRows().get(1).getRow().getColumns()).isEqualTo(Map.of(
+                "Column 1", Row.Column.builder().value("test-column 41 (suppW/oM)").build(),
+                "Column 2", Row.Column.builder().value("test-column 42 (suppW/oM)").build()));
+        assertThat(result.getSuppressedRows().get(1).getReason()).isNull();
+        assertThat(result.getSuppressedRows().get(1).getUntil()).isNull();
     }
 }

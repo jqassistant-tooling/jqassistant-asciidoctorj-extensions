@@ -4,8 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Builder(toBuilder = true)
 @Getter
@@ -19,19 +20,19 @@ public class Result {
     @Singular
     List<String> columnKeys;
     @Singular
-    List<Map<String, String>> rows;
+    List<Row> rows;
     @Singular
-    List<Map<String, String>> baselineRows;
+    List<Row> baselineRows;
     @Singular
-    List<HiddenRow> suppressedRows;
+    List<SuppressedRow> suppressedRows;
 
     @Builder
     @Getter
-    public static class HiddenRow {
-        @Singular
-        private Map<String, String> cells;
-        @Singular("meta")
-        private Map<String, String> metadata;
+    public static class SuppressedRow {
 
+        private Row row;
+        //metadata
+        private Optional<String> reason;
+        private Optional<LocalDate> until;
     }
 }

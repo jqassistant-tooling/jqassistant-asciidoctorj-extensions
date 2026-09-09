@@ -4,7 +4,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.Document;
-import org.jqassistant.tooling.asciidoctorj.processors.includes.Summary;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,10 +54,10 @@ class IncludeProcessorTest {
         result = assertIsPartOfAndShorten(result, "Status: <span class=\"red\">FAILURE</span>, Severity: MAJOR");
         result = assertIsPartOfAndShorten(result, "Column 1");
         result = assertIsPartOfAndShorten(result, "Column 2");
-        result = assertIsPartOfAndShorten(result, "test-cell 11");
-        result = assertIsPartOfAndShorten(result, "test-cell 12");
-        result = assertIsPartOfAndShorten(result, "test-cell 21");
-        result = assertIsPartOfAndShorten(result, "test-cell 22");
+        result = assertIsPartOfAndShorten(result, "test-column 11");
+        result = assertIsPartOfAndShorten(result, "test-column 12");
+        result = assertIsPartOfAndShorten(result, "test-column 21");
+        result = assertIsPartOfAndShorten(result, "test-column 22");
         result = assertIsPartOfAndShorten(result, "test-concept-empty-result");
         result = assertIsPartOfAndShorten(result, "Test description");
         assertIsPartOfAndShorten(result, "Status: <span class=\"green\">SUCCESS</span>, Severity: INFO");
@@ -106,18 +106,18 @@ class IncludeProcessorTest {
 
         rules = assertIsPartOfAndShorten(rules, "Column 1");
         rules = assertIsPartOfAndShorten(rules, "Column 2");
-        rules = assertIsPartOfAndShorten(rules, "test-cell 11");
-        rules = assertIsPartOfAndShorten(rules, "test-cell 12");
-        rules = assertIsPartOfAndShorten(rules, "test-cell 21");
-        rules = assertIsPartOfAndShorten(rules, "test-cell 22");
+        rules = assertIsPartOfAndShorten(rules, "test-column 11");
+        rules = assertIsPartOfAndShorten(rules, "test-column 12");
+        rules = assertIsPartOfAndShorten(rules, "test-column 21");
+        rules = assertIsPartOfAndShorten(rules, "test-column 22");
 
         //verifying display of Hidden Findings
         rules = assertIsPartOfAndShorten(rules, "Baseline Findings (1)");
         rules = assertIsPartOfAndShorten(rules, "table");
         rules = assertIsPartOfAndShorten(rules, "Column 1");
         rules = assertIsPartOfAndShorten(rules, "Column 2");
-        rules = assertIsPartOfAndShorten(rules, "test-cell 51 (base)");
-        rules = assertIsPartOfAndShorten(rules, "test-cell 52 (base)");
+        rules = assertIsPartOfAndShorten(rules, "test-column 51 (base)");
+        rules = assertIsPartOfAndShorten(rules, "test-column 52 (base)");
         rules = assertIsPartOfAndShorten(rules, "table");
 
         rules = assertIsPartOfAndShorten(rules, "Suppressions (2)");
@@ -127,12 +127,12 @@ class IncludeProcessorTest {
         //verifying correct display of Suppression Metadata
         rules = assertIsPartOfAndShorten(rules, "Reason");
         rules = assertIsPartOfAndShorten(rules, "Until");
-        rules = assertIsPartOfAndShorten(rules, "test-cell 31 (supp)");
-        rules = assertIsPartOfAndShorten(rules, "test-cell 32 (supp)");
+        rules = assertIsPartOfAndShorten(rules, "test-column 31 (supp)");
+        rules = assertIsPartOfAndShorten(rules, "test-column 32 (supp)");
         rules = assertIsPartOfAndShorten(rules, "Example suppression");
         rules = assertIsPartOfAndShorten(rules, "2050-12-31");
-        rules = assertIsPartOfAndShorten(rules, "test-cell 41 (suppW/oM)");
-        rules = assertIsPartOfAndShorten(rules, "test-cell 42 (suppW/oM)");
+        rules = assertIsPartOfAndShorten(rules, "test-column 41 (suppW/oM)");
+        rules = assertIsPartOfAndShorten(rules, "test-column 42 (suppW/oM)");
         rules = assertIsPartOfAndShorten(rules, "table");
 
         rules = assertIsPartOfAndShorten(rules, "test-constraint | MAJOR");

@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.Singular;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Reports;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import com.buschmais.jqassistant.core.rule.api.model.RuleException;
 
@@ -36,20 +37,32 @@ public class RuleRoot implements Comparable<RuleRoot>{
 
     private List<String> resultColumnKeys;
     @Singular
-    private List<List<String>> resultRows;
+    private List<RowRoot> resultRows;
     @Singular
-    private List<List<String>> baselineRows;
+    private List<RowRoot> baselineRows;
     @Singular
-    private List<HiddenRowRoot> suppressedRows;
+    private List<SuppressedRowRoot> suppressedRows;
 
     private Reports reports;
 
+    //-------------------Subclasses----------------------
+
     @Builder
     @Getter
-    public static class HiddenRowRoot {
-        private List<String> cells;
-        private Map<String, String> metadata;
+    public static class RowRoot {
+        @Singular
+        private List<String> columns;
     }
+
+    @Builder
+    @Getter
+    public static class SuppressedRowRoot {
+        private RowRoot suppressedRow;
+        private Optional<String> reason;
+        private Optional<LocalDate> until;
+    }
+
+    //---------------------------------------------------
 
     @Override
     public int compareTo(@NotNull RuleRoot other) {
@@ -78,5 +91,5 @@ public class RuleRoot implements Comparable<RuleRoot>{
     }
 
     //only to solve lombok builder-javadoc bug
-    public static class RuleRootBuilder {};
+    public static class RuleRootBuilder {}
 }

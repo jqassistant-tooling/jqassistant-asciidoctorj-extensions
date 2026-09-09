@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.HashMap;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 public class ReportParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportParser.class);
@@ -160,42 +160,50 @@ public class ReportParser {
     private Result parseResult(@NotNull ResultType resultNode) {
         if (resultNode == null) return Result.EMPTY_RESULT;
 
-        Result.ResultBuilder builder = Result.builder();
-
-        builder.columnKeys(resultNode.getColumns().getColumn());
+        Result.ResultBuilder resultBuilder = Result.builder();
+        resultBuilder.columnKeys(resultNode.getColumns().getColumn());
 
         for (RowType row : resultNode.getRows().getRow()) {
-            Map<String, String> rowMap = new HashMap<>();
-            for (ColumnType cell : row.getColumn()) {
-                rowMap.put(cell.getName(), cell.getValue());
+            Row.RowBuilder rowBuilder = Row.builder();
+
+            for (ColumnType column : row.getColumn()) {
+                rowBuilder.columns(
+                        column.getName(),
+                        Row.Column.builder()
+                                .value(column.getValue())
+                                .build()
+                );
             }
+
+            Row resultRow = rowBuilder.build();
+
             if (row.getHidden() == null) {
-                builder.row(rowMap);
+                resultBuilder.row(resultRow);
             } else {
                 HiddenType hidden = row.getHidden();
 
                 if (hidden.getBaseline() != null) {
-                    builder.baselineRow(rowMap);
+                    resultBuilder.baselineRow(resultRow);
                 }
                 if (hidden.getSuppression() != null) {
                     SuppressionType suppression = hidden.getSuppression();
 
-                    Map<String, String> meta = new HashMap<>();
+                    Result.SuppressedRow.SuppressedRowBuilder suppressedRow = Result.SuppressedRow.builder()
+                            .row(resultRow);
+
                     if (suppression.getReason() != null) {
-                        meta.put("reason", suppression.getReason());
+                        suppressedRow.reason(Optional.ofNullable(suppression.getReason()));
                     }
                     if (suppression.getUntil() != null) {
-                        meta.put("until", String.valueOf(suppression.getUntil()));
+                        suppressedRow.until(Optional.ofNullable(suppression.getUntil())
+                                        .map(xmlCal -> LocalDate.of(xmlCal.getYear(), xmlCal.getMonth(), xmlCal.getDay())));
                     }
-                    builder.suppressedRow(Result.HiddenRow.builder()
-                            .cells(rowMap)
-                            .metadata(meta)
-                            .build());
+                    resultBuilder.suppressedRow(suppressedRow.build());
                 }
             }
         }
 
-        return builder.build();
+        return resultBuilder.build();
     }
 
     /**

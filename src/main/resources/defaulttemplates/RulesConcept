@@ -19,33 +19,35 @@ ${rule.description}
 Severity: ${rule.severity}
 ====
 
-
 <#if rule.hasReports>
 <#list rule.reports.links as labeledLink>
 link:${labeledLink.link}[${labeledLink.label}]
 
 </#list>
 <#list rule.reports.images as labeledImage>
-[caption="", title=${labeledImage.label}]
+[caption="", title="${labeledImage.label}"]
 image::${labeledImage.link}[${labeledImage.label}]
-
 </#list>
-<#elseif rule.hasResult>
-[%autowidth.stretch, options="header"]
+
+<#elseif rule.hasResult || (rule.hasBaselineResult!false) || (rule.hasSuppressedResult!false)>
+<-------------------------------------VISIBLE FINDINGS--------------------------------------->
+<#if rule.hasResult>
+[%autowidth.stretch, options="header,autowrap"]
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list>
 <#list rule.resultRows as row>
-<#list row as cell>
-|${cell?replace(".", ".&#8203;")}
+<#list row.columns as column>
+<#if column?has_content && column?trim != "">
+|${column?replace(".", ".&#8203;")}
+<#else>
+|
+</#if>
 </#list>
 </#list>
 |===
-
 </#if>
-
-<#if (rule.hasBaselineResult!false) || (rule.hasSuppressedResult!false)>
+<--------------------------------FINDINGS HIDDEN BY BASELINE---------------------------------->
 <#if rule.hasBaselineResult!false>
-
 .Baseline Findings (${rule.baselineRows?size})
 [%collapsible]
 ====
@@ -53,9 +55,9 @@ image::${labeledImage.link}[${labeledImage.label}]
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list>
 <#list rule.baselineRows as row>
-<#list row as cell>
-<#if cell?has_content && cell?trim != "">
-|${cell?replace(".", ".&#8203;")}
+<#list row.columns as column>
+<#if column?has_content && column?trim != "">
+|${column?replace(".", ".&#8203;")}
 <#else>
 |
 </#if>
@@ -64,30 +66,30 @@ image::${labeledImage.link}[${labeledImage.label}]
 |===
 ====
 </#if>
-
-
+<---------------------------------------SUPPRESSIONS------------------------------------------->
 <#if rule.hasSuppressedResult!false>
-.Suppressed Findings (${rule.suppressedRows?size})
+.Suppressions (${rule.suppressedRows?size})
 [%collapsible]
 ====
 [%autowidth.stretch, options="header,autowrap"]
 |===
-<#list rule.resultColumnKeys as key>|${key} </#list>
-<#list rule.suppressedRows as row>
-<#list row as cell>
-<#if cell?has_content && cell?trim != "">
-|${cell?replace(".", ".&#8203;")}
+<#list rule.resultColumnKeys as key>|${key} </#list>|Reason |Until
+<#list rule.suppressedRows as suppression>
+<#list suppression.suppressedRow.columns as column>
+<#if column?has_content && column?trim != "">
+|${column?replace(".", ".&#8203;")}
 <#else>
 |
 </#if>
 </#list>
+|${suppression.reason.orElse("")}
+|${suppression.until.orElse("")}
 </#list>
 |===
 ====
 </#if>
 
 </#if>
-
 [.small]
 [grey]#${rule.id} | ${rule.severity}#
 ****

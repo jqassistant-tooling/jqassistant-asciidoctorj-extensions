@@ -87,7 +87,7 @@ public abstract class AbstractIncludeProcessor extends IncludeProcessor {
 
         List<String> tNames;
 
-        if (root.getConcepts().size() == 0 && root.getConstraints().size() == 0) {
+        if (root.getConcepts().isEmpty() && root.getConstraints().isEmpty()) {
             tNames = List.of("NoResult");
             LOGGER.debug("Filters for concepts {} and constraints {} returned no matching Rules!", attributes.getConceptIdFilter(), attributes.getConstraintIdFilter());
         } else {

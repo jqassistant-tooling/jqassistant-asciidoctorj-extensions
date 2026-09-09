@@ -161,8 +161,8 @@ image::${labeledImage.link}[${labeledImage.label}]
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list> <7>
 <#list rule.resultRows as row> <8>
-<#list row as cell> <9>
-|${cell?replace(".", ".&#8203;")}
+<#list row as column> <9>
+|${column?replace(".", ".&#8203;")}
 </#list>
 </#list>
 |===
@@ -178,7 +178,7 @@ image::${labeledImage.link}[${labeledImage.label}]
 <6> Via `rule.hasResult` you can check whether the corresponding concept or constraint generated a result table to display. This table may contain things like dependencies or other related information.
 <7> You can access the header of your table using the `resultColumnKeys` identifier. This gives you a list of the column names for the table. (Consider using `hasResult` beforehand. See (4))
 <8> You can access a list of all rows via `resultRows`
-<9> You can access each individual cell (containing a string value) of one row via `<#list row as cell>` (each row itself is a list of Strings). In our example we listed each row via `<#list rule.resultRows as row>` and for each listed their cells (strings) via `<#list row as cell>`.
+<9> You can access each individual column (containing a string value) of one row via `<#list row as column>` (each row itself is a list of Strings). In our example we listed each row via `<#list rule.resultRows as row>` and for each listed their cells (strings) via `<#list row as column>`.
 
 .Default "Summary" template:
 [source, text]

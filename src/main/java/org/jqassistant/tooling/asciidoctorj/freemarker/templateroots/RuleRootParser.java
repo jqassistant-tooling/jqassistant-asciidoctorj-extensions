@@ -14,9 +14,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 public class RuleRootParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(RuleRootParser.class);
@@ -160,13 +159,8 @@ public class RuleRootParser {
     private static void parseVisibleResults(Result result, RuleRootBuilder builder, List<String> resultKeys) {
         if (result.getRows() != null && !result.getRows().isEmpty()) {
             builder.resultColumnKeys(resultKeys);
-            for (Map<String, String> row : result
-                    .getRows()) {
-                List<String> rowContent = new ArrayList<>();
-                for (String key : resultKeys) {
-                    rowContent.add(row.get(key));
-                }
-                builder.resultRow(rowContent);
+            for (Row row : result.getRows()) {
+                builder.resultRow(createRowRoot(row, resultKeys));
             }
             builder.hasResult(true);
         }
@@ -174,12 +168,8 @@ public class RuleRootParser {
 
     private static void parseBaselineResults(Result result, RuleRootBuilder builder, List<String> resultKeys) {
         if (result.getBaselineRows() != null && !result.getBaselineRows().isEmpty()) {
-            for (Map<String, String> baselineRow : result.getBaselineRows()) {
-                List<String> rowContent = new ArrayList<>();
-                for (String key : resultKeys) {
-                    rowContent.add(baselineRow.get(key));
-                }
-                builder.baselineRow(rowContent);
+            for (Row baselineRow : result.getBaselineRows()) {
+                builder.baselineRow(createRowRoot(baselineRow, resultKeys));
             }
             builder.hasBaselineResult(true);
         }
@@ -187,18 +177,26 @@ public class RuleRootParser {
 
     private static void parseSuppressedResults(Result result, RuleRootBuilder builder, List<String> resultKeys) {
         if (result.getSuppressedRows() != null && !result.getSuppressedRows().isEmpty()) {
-            for (Result.HiddenRow suppressedRow : result.getSuppressedRows()) {
-                List<String> rowContent = new ArrayList<>();
-                for (String key : resultKeys) {
-                    rowContent.add(suppressedRow.getCells().get(key));
-                }
+            for (Result.SuppressedRow suppressedRow : result.getSuppressedRows()) {
+               RuleRoot.SuppressedRowRoot.SuppressedRowRootBuilder suppressedRowRootBuilder = RuleRoot.SuppressedRowRoot.builder()
+                       .suppressedRow(createRowRoot(suppressedRow.getRow(), resultKeys)).reason(suppressedRow.getReason())
+                       .until(suppressedRow.getUntil());
 
-                builder.suppressedRow(RuleRoot.HiddenRowRoot.builder()
-                        .cells(rowContent)
-                        .metadata(suppressedRow.getMetadata())
-                        .build());
+                builder.suppressedRow(suppressedRowRootBuilder.build());
             }
             builder.hasSuppressedResult(true);
         }
+    }
+
+    private static RuleRoot.RowRoot createRowRoot(Row row, List<String> resultKeys) {
+        RuleRoot.RowRoot.RowRootBuilder rowRootBuilder = RuleRoot.RowRoot.builder();
+        for (String key : resultKeys) {
+            String value = Optional.ofNullable(row.getColumns())
+                    .map(cols -> cols.get(key))
+                    .map(Row.Column::getValue)
+                    .orElse("");
+            rowRootBuilder.column(value);
+        }
+        return rowRootBuilder.build();
     }
 }

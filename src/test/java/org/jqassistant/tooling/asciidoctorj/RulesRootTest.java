@@ -12,8 +12,11 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -28,20 +31,30 @@ class RulesRootTest {
     @BeforeAll
     static void init() throws URISyntaxException {
         attributes = ProcessAttributes.builder()
-                .outputDirectory(Paths.get(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv").toURI()).getParent().getParent().resolve("testoutputdirectory").toFile())
-                .imagesDirectory(Paths.get(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv").toURI()).getParent().getParent().resolve("testoutputdirectory").resolve("images").toFile())
+                .outputDirectory(Paths.get(Objects.requireNonNull(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv"))
+                        .toURI()).getParent().getParent().resolve("testoutputdirectory").toFile())
+                .imagesDirectory(Paths.get(Objects.requireNonNull(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv"))
+                        .toURI()).getParent().getParent().resolve("testoutputdirectory").resolve("images").toFile())
                 .build();
 
         Result res = Result.builder().columnKeys(List.of("Col1", "Col2"))
-                .row(Map.of("Col1", "Cell11", "Col2", "Cell12"))
-                .row(Map.of("Col1", "Cell21", "Col2", "Cell22"))
-                .baselineRow(Map.of("Col1", "Cell31-base", "Col2", "Cell32-base"))
-                .suppressedRow(Result.HiddenRow.builder().cells(Map.of("Col1", "Cell41-supp", "Col2", "Cell42-supp")).metadata(Map.of("reason", "Example suppression", "until", "2050-12-31")).build())
+                .row(Row.builder().columns(Map.of("Col1", Row.Column.builder().value("Cell11").build(), "Col2", Row.Column.builder().value("Cell12").build())).build())
+                .row(Row.builder().columns(Map.of("Col1", Row.Column.builder().value("Cell21").build(), "Col2", Row.Column.builder().value("Cell22").build())).build())
+                .baselineRow(Row.builder().columns(Map.of("Col1", Row.Column.builder().value("Cell31-base").build(), "Col2", Row.Column.builder().value("Cell32-base").build())).build())
+                .suppressedRow(Result.SuppressedRow.builder()
+                        .row(Row.builder().columns(Map.of("Col1", Row.Column.builder().value("Cell41-supp").build(), "Col2", Row.Column.builder().value("Cell42-supp").build())).build())
+                        .reason(Optional.of("Example suppression"))
+                        .until(Optional.of(LocalDate.of(2050, 12, 31)))
+                        .build())
                 .build();
         Reports reps = Reports.builder().link(URLWithLabel.builder().label("test link").link("https://youtu.be").build())
-                .image(URLWithLabel.builder().label("test image").link(RulesRootTest.class.getResource("/testattachments/it_ToBeContextMapReport.svg").toString()).build())
+                .image(URLWithLabel.builder().label("test image").link(
+                        Objects.requireNonNull(RulesRootTest.class.getResource("/testattachments/it_ToBeContextMapReport.svg"))
+                                .toString()).build())
                 .build();
-        Reports reps2 = Reports.builder().link(URLWithLabel.builder().label("test csv").link(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv").toString()).build())
+        Reports reps2 = Reports.builder().link(URLWithLabel.builder().label("test csv").link(
+                        Objects.requireNonNull(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv"))
+                                .toString()).build())
                 .build();
 
         Concept tce1 = Concept.builder().id("TestConceptId").description("Test Description")
@@ -97,8 +110,8 @@ class RulesRootTest {
         assertThat (root.isHasReports()).isTrue();
 
         assertThat (root.getResultColumnKeys()).isEqualTo(tca2.getResult().getColumnKeys());
-        assertThat (root.getResultRows().get(0)).isEqualTo(List.of("Cell11", "Cell12"));
-        assertThat (root.getResultRows().get(1)).isEqualTo(List.of("Cell21", "Cell22"));
+        assertThat (root.getResultRows().get(0).getColumns()).isEqualTo(List.of("Cell11", "Cell12"));
+        assertThat (root.getResultRows().get(1).getColumns()).isEqualTo(List.of("Cell21", "Cell22"));
     }
 
     @Test
@@ -155,7 +168,7 @@ class RulesRootTest {
         RuleRoot root = rulesRoot.getConstraints().first();
 
         assertThat(root.isHasBaselineResult()).isTrue();
-        assertThat(root.getBaselineRows().get(0)).isEqualTo(List.of("Cell31-base", "Cell32-base"));
+        assertThat(root.getBaselineRows().get(0).getColumns()).isEqualTo(List.of("Cell31-base", "Cell32-base"));
     }
 
     @Test
@@ -163,10 +176,10 @@ class RulesRootTest {
         RuleRoot root = rulesRoot.getConstraints().first();
 
         assertThat(root.isHasSuppressedResult()).isTrue();
-        RuleRoot.HiddenRowRoot suppressedRow = root.getSuppressedRows().get(0);
-        assertThat(suppressedRow.getCells()).isEqualTo(List.of("Cell41-supp", "Cell42-supp"));
-        assertThat(suppressedRow.getMetadata().get("reason")).isEqualTo("Example suppression");
-        assertThat(suppressedRow.getMetadata().get("until")).isEqualTo("2050-12-31");
+        RuleRoot.SuppressedRowRoot suppressedRow = root.getSuppressedRows().get(0);
+        assertThat(suppressedRow.getSuppressedRow().getColumns()).isEqualTo(List.of("Cell41-supp", "Cell42-supp"));
+        assertThat(suppressedRow.getReason()).contains("Example suppression");
+        assertThat(suppressedRow.getUntil()).contains(LocalDate.of(2050, 12, 31));
 
 
 

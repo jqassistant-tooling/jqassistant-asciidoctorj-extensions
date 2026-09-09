@@ -10,7 +10,7 @@
                 <rows count="1">
                     <row>
                         <column name="Column 1">
-                            <value>test-cell</value>
+                            <value>test-column</value>
                         </column>
                     </row>
                 </rows>
@@ -44,18 +44,18 @@
             <rows count="2">
                 <row>
                     <column name="Column 1">
-                        <value>test-cell 11</value>
+                        <value>test-column 11</value>
                     </column>
                     <column name="Column 2">
-                        <value>test-cell 12</value>
+                        <value>test-column 12</value>
                     </column>
                 </row>
                 <row>
                     <column name="Column 1">
-                        <value>test-cell 21</value>
+                        <value>test-column 21</value>
                     </column>
                     <column name="Column 2">
-                        <value>test-cell 22</value>
+                        <value>test-column 22</value>
                     </column>
                 </row>
             </rows>
@@ -74,18 +74,18 @@
             <rows count="2">
                 <row>
                     <column name="Column 1">
-                        <value>test-cell 11</value>
+                        <value>test-column 11</value>
                     </column>
                     <column name="Column 2">
-                        <value>test-cell 12</value>
+                        <value>test-column 12</value>
                     </column>
                 </row>
                 <row>
                     <column name="Column 1">
-                        <value>test-cell 21</value>
+                        <value>test-column 21</value>
                     </column>
                     <column name="Column 2">
-                        <value>test-cell 22</value>
+                        <value>test-column 22</value>
                     </column>
                 </row>
             </rows>
@@ -104,18 +104,18 @@
             <rows count="2">
                 <row>
                     <column name="Column 1">
-                        <value>test-cell 11</value>
+                        <value>test-column 11</value>
                     </column>
                     <column name="Column 2">
-                        <value>test-cell 12</value>
+                        <value>test-column 12</value>
                     </column>
                 </row>
                 <row>
                     <column name="Column 1">
-                        <value>test-cell 21</value>
+                        <value>test-column 21</value>
                     </column>
                     <column name="Column 2">
-                        <value>test-cell 22</value>
+                        <value>test-column 22</value>
                     </column>
                 </row>
             </rows>

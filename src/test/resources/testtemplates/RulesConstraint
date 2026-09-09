@@ -29,8 +29,8 @@ image::${labeledImage.link}[${labeledImage.label}]
 |===
 <#list rule.resultColumnKeys as key>|${key} </#list>
 <#list rule.resultRows as row>
-<#list row as cell>
-|${cell}
+<#list row.columns as column>
+|${column}
 </#list>
 </#list>
 |===
