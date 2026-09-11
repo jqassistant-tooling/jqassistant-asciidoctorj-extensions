@@ -107,6 +107,7 @@ class RulesRootTest {
                 .duration(512)
                 .result(Result.EMPTY_RESULT)
                 .reports(reps)
+                .verificationResult(VerificationResult.builder().success(true).rowCount(0).hiddenRowCount(0).build())
                 .build();
         Concept tce2 = Concept.builder()
                 .id("TestConceptId 2.1")
@@ -116,6 +117,7 @@ class RulesRootTest {
                 .duration(1451)
                 .result(Result.EMPTY_RESULT)
                 .reports(Reports.EMPTY_REPORTS)
+                .verificationResult(VerificationResult.builder().success(false).rowCount(0).hiddenRowCount(0).build())
                 .build();
         Concept tce3 = Concept.builder()
                 .id("TestConceptId 2")
@@ -125,6 +127,7 @@ class RulesRootTest {
                 .duration(1451)
                 .result(Result.EMPTY_RESULT)
                 .reports(Reports.EMPTY_REPORTS)
+                .verificationResult(VerificationResult.builder().success(false).rowCount(0).hiddenRowCount(0).build())
                 .build();
         Concept tce4 = Concept.builder()
                 .id("TestConceptId 4")
@@ -134,6 +137,7 @@ class RulesRootTest {
                 .duration(69)
                 .result(Result.EMPTY_RESULT)
                 .reports(reps2)
+                .verificationResult(VerificationResult.builder().success(true).rowCount(0).hiddenRowCount(0).build())
                 .build();
         Constraint tca1 = Constraint.builder()
                 .id("TestConstraintId")
@@ -143,6 +147,7 @@ class RulesRootTest {
                 .duration(42)
                 .result(res)
                 .reports(Reports.EMPTY_REPORTS)
+                .verificationResult(VerificationResult.builder().success(false).rowCount(2).hiddenRowCount(2).build())
                 .build();
         tca2 = Constraint.builder()
                 .id("TestConstraintId 2")
@@ -152,6 +157,7 @@ class RulesRootTest {
                 .duration(444)
                 .result(res)
                 .reports(reps)
+                .verificationResult(VerificationResult.builder().success(false).rowCount(2).hiddenRowCount(2).build())
                 .build();
 
         rulesRoot = RulesRoot.builder()
@@ -208,6 +214,9 @@ class RulesRootTest {
         assertThat(root.getResultRows()
                 .get(1)
                 .getColumns()).isEqualTo(List.of("Cell21", "Cell22"));
+        assertThat(!root.getVerificationResult().isSuccess());
+        assertThat(root.getVerificationResult().getRowCount()).isEqualTo(2);
+        assertThat(root.getVerificationResult().getHiddenRowCount()).isEqualTo(2);
     }
 
     @Test
@@ -266,12 +275,12 @@ class RulesRootTest {
         Reports reps = Reports.builder()
                 .link(URLWithLabel.builder()
                         .label("test csv")
-                        .link(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv")
+                        .link(Objects.requireNonNull(RulesRootTest.class.getResource("/testattachments/it_CSVReport.csv"))
                                 .toString())
                         .build())
                 .image(URLWithLabel.builder()
                         .label("test image")
-                        .link(RulesRootTest.class.getResource("/testattachments/it_ToBeContextMapReport.svg")
+                        .link(Objects.requireNonNull(RulesRootTest.class.getResource("/testattachments/it_ToBeContextMapReport.svg"))
                                 .toString())
                         .build())
                 .build();
@@ -283,6 +292,7 @@ class RulesRootTest {
                 .duration(69)
                 .result(Result.EMPTY_RESULT)
                 .reports(reps)
+                .verificationResult(VerificationResult.builder().success(true).rowCount(0).hiddenRowCount(0).build())
                 .build();
 
         FileUtils.forceMkdir(attributes.getOutputDirectory());

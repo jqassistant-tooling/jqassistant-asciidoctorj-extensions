@@ -150,21 +150,29 @@ class IncludeProcessorTest {
                 "include::jQAssistant:Summary[concepts = \"*\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]", defaultOpt);
         //table with visible findings
         summary = assertIsPartOfAndShorten(summary, "table");
-        summary = assertIsPartOfAndShorten(summary, "Rule");
         summary = assertIsPartOfAndShorten(summary, "Status");
         summary = assertIsPartOfAndShorten(summary, "Severity");
+        summary = assertIsPartOfAndShorten(summary, "Count");
+        summary = assertIsPartOfAndShorten(summary, "Rule");
 
-        summary = assertIsPartOfAndShorten(summary, "test-constraint");
-        summary = assertIsPartOfAndShorten(summary, "FAILURE");
+        summary = assertIsPartOfAndShorten(summary, "\uD83C\uDF27");
+        summary = assertIsPartOfAndShorten(summary, "✘");
+        summary = assertIsPartOfAndShorten(summary, "⚑");
         summary = assertIsPartOfAndShorten(summary, "MAJOR");
+        summary = assertIsPartOfAndShorten(summary, "2 (3)");
+        summary = assertIsPartOfAndShorten(summary, "test-constraint");
 
+        summary = assertIsPartOfAndShorten(summary, "☀");
+        summary = assertIsPartOfAndShorten(summary, "✔");
+        summary = assertIsPartOfAndShorten(summary, "INFO");
+        summary = assertIsPartOfAndShorten(summary, "1");
         summary = assertIsPartOfAndShorten(summary, "test-concept");
-        summary = assertIsPartOfAndShorten(summary, "SUCCESS");
-        summary = assertIsPartOfAndShorten(summary, "INFO");
 
-        summary = assertIsPartOfAndShorten(summary, "test-concept-empty-result");
-        summary = assertIsPartOfAndShorten(summary, "SUCCESS");
+        summary = assertIsPartOfAndShorten(summary, "☀");
+        summary = assertIsPartOfAndShorten(summary, "✔");
         summary = assertIsPartOfAndShorten(summary, "INFO");
+        summary = assertIsPartOfAndShorten(summary, "");
+        summary = assertIsPartOfAndShorten(summary, "test-concept-empty-result");
         assertIsPartOfAndShorten(summary, "table");
     }
 

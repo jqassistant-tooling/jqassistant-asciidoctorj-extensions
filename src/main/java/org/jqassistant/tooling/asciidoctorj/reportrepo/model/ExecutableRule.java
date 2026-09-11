@@ -8,4 +8,6 @@ public interface ExecutableRule extends Rule {
     Result getResult();
 
     Reports getReports();
+
+    VerificationResult getVerificationResult();
 }

@@ -40,6 +40,7 @@ public class RuleRootParser {
                 .toUpperCase());
         builder.severity(rule.getSeverity()
                 .toUpperCase());
+        builder.verificationResult(rule.getVerificationResult());
 
         Result result = rule.getResult();
 
@@ -71,7 +72,7 @@ public class RuleRootParser {
                     "If you are a user of this application please contact the developers of this plugin. If you are the developer, please check the implementation of this logger. The extension seems to be expanded, but the logger is not adapted!");
         }
 
-        return (RuleRoot) builder.build();
+        return builder.build();
     }
 
     /**

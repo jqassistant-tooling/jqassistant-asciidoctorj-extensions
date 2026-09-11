@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Reports;
+import org.jqassistant.tooling.asciidoctorj.reportrepo.model.VerificationResult;
 
 import static com.buschmais.jqassistant.core.rule.api.model.Severity.fromValue;
 
@@ -45,6 +46,7 @@ public class RuleRoot implements Comparable<RuleRoot> {
     private List<SuppressedRowRoot> suppressedRows;
 
     private Reports reports;
+    private VerificationResult verificationResult;
 
     //-------------------Subclasses----------------------
 
@@ -66,42 +68,43 @@ public class RuleRoot implements Comparable<RuleRoot> {
 
     @Override
     public int compareTo(@NotNull RuleRoot other) {
+        //Sorting for Status
+        if (!this.status.equals(other.status)) {
+            if (this.status.equals(statFail))
+                return -1;
+            if (other.status.equals(statFail))
+                return 1;
+            if (this.status.equals(statWarn))
+                return -1;
+            if (other.status.equals(statWarn))
+                return 1;
+            if (this.status.equals(statSuccess))
+                return -1;
+            if (other.status.equals(statSuccess))
+                return 1;
 
-        if (this.status.equals(other.status)) {
-
-            if (!this.severity.equals(other.severity)) {
-                try {
-                    return Integer.compare(fromValue(this.severity).getLevel(), fromValue(other.severity).getLevel());
-                } catch (RuleException e) {
-                    throw new RuntimeException(e);
-                }
+            throw new IllegalStateException("Rule Root should be comparable; statuses were: " + this.status + " " + other.status);
+        }
+        //Sorting for Severity
+        if (!this.severity.equals(other.severity)) {
+            try {
+                return Integer.compare(fromValue(this.severity).getLevel(), fromValue(other.severity).getLevel());
+            } catch (RuleException e) {
+                throw new RuntimeException(e);
             }
+        }
+        //Sorting for Violations
+        boolean thisFailed = this.verificationResult != null && !this.verificationResult.isSuccess();
+        boolean otherFailed = other.verificationResult != null && !other.verificationResult.isSuccess();
 
-            return this.id.compareTo(other.id);
-
-        } else if (this.getStatus()
-                .equals(statFail))
-            return -1;
-        else if (other.getStatus()
-                .equals(statFail))
-            return 1;
-        else if (this.getStatus()
-                .equals(statWarn))
-            return -1;
-        else if (other.getStatus()
-                .equals(statWarn))
-            return 1;
-        else if (this.getStatus()
-                .equals(statSuccess))
-            return -1;
-        else if (other.getStatus()
-                .equals(statSuccess))
-            return 1;
-
-        throw new IllegalStateException("Rule Root should be comparable; statuses were: " + this.status + " " + other.status);
+        if (thisFailed != otherFailed) {
+            return thisFailed ? -1 : 1;
+        }
+        //alphabetical sorting
+        return this.id.compareTo(other.id);
     }
 
-    //only to solve lombok builder-javadoc bug (source for solution: https://stackoverflow.com/questions/51947791/javadoc-cannot-find-symbol-error-when-using-lomboks-builder-annotation, also configuring an annotation processor in pom.xml might work: https://www.answeroverflow.com/m/1407016801644318731)
+    //only to solve lombok builder-javadoc bug (source for solution: https://stackoverflow.com/questions/51947791/javadoc-cannot-find-symbol-error-when-using-lomboks-builder-annotation)
     public static class RuleRootBuilder {
     }
 }

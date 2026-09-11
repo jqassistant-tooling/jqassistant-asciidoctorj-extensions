@@ -11,4 +11,5 @@ public abstract class AbstractExecutableRule extends AbstractRule implements Exe
 
     private Result result;
     private Reports reports;
+    private VerificationResult verificationResult;
 }

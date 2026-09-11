@@ -22,7 +22,7 @@ class ReportRepoTest {
 
     private static Concept tce1, tce2, tce3;
     private static Constraint tca1, tca2;
-    private static final String someExistingFile = "src/test/resources/jqassistant-report.xml";
+    private static final String someExistingFile = "src/test/resources/testing-xml/test-report.xml";
     private static final String nonExistingFile = "non-existent-report.xml";
 
     @BeforeAll

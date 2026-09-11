@@ -55,6 +55,14 @@ public class ReportParser {
         return parsedReport;
     }
 
+    private VerificationResult parseVerificationResult(@NotNull VerificationResultType node) {
+        return VerificationResult.builder()
+                .success(node.isSuccess())
+                .rowCount(node.getRowCount())
+                .hiddenRowCount(node.getHiddenRowCount())
+                .build();
+    }
+
     /**
      * Adds the Rule that is generated from a node to a ParsedReport and returns it.
      *
@@ -134,6 +142,7 @@ public class ReportParser {
      */
     private Concept parseConcept(@NotNull ConceptType conceptNode) {
         return Concept.builder()
+                .verificationResult(parseVerificationResult(conceptNode.getVerificationResult()))
                 .status(conceptNode.getStatus()
                         .getValue()
                         .value())
@@ -166,6 +175,7 @@ public class ReportParser {
                 .duration(constraintNode.getDuration())
                 .result(parseResult(constraintNode.getResult()))
                 .reports(parseReports(constraintNode.getReports()))
+                .verificationResult(parseVerificationResult(constraintNode.getVerificationResult()))
                 .build();
     }
 
@@ -186,7 +196,7 @@ public class ReportParser {
 
         for (RowType row : resultNode.getRows()
                 .getRow()) {
-            Result.Row.RowBuilder rowBuilder = Result.Row.builder();
+            Result.Row.RowBuilder<?, ?> rowBuilder = Result.Row.builder();
 
             for (ColumnType column : row.getColumn()) {
                 rowBuilder.columns(column.getName(), Result.Row.Column.builder()
