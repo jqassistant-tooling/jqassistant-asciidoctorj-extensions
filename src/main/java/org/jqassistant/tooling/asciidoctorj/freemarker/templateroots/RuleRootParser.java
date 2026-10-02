@@ -36,10 +36,8 @@ public class RuleRootParser {
 
         builder.id(rule.getId());
         builder.description(rule.getDescription());
-        builder.status(rule.getStatus()
-                .toUpperCase());
-        builder.severity(rule.getSeverity()
-                .toUpperCase());
+        builder.status(rule.getStatus());
+        builder.severity(rule.getSeverity());
         builder.verificationResult(rule.getVerificationResult());
 
         Result result = rule.getResult();

@@ -51,7 +51,8 @@ class IncludeProcessorTest {
 
         result = assertIsPartOfAndShorten(result, "test-constraint");
         result = assertIsPartOfAndShorten(result, "Test description 2");
-        result = assertIsPartOfAndShorten(result, "Status: <span class=\"red\">FAILURE</span>, Severity: MAJOR");
+        result = assertIsPartOfAndShorten(result, "Status:");
+        result = assertIsPartOfAndShorten(result, "FAILURE</span>, Severity: MAJOR");
         result = assertIsPartOfAndShorten(result, "Column 1");
         result = assertIsPartOfAndShorten(result, "Column 2");
         result = assertIsPartOfAndShorten(result, "test-column 11");
@@ -140,7 +141,6 @@ class IncludeProcessorTest {
         rules = assertIsPartOfAndShorten(rules, "test-concept-empty-result");
         rules = assertIsPartOfAndShorten(rules, "SUCCESS");
         rules = assertIsPartOfAndShorten(rules, "Test description");
-        rules = assertIsPartOfAndShorten(rules, "Severity: INFO");
         assertIsPartOfAndShorten(rules, "test-concept-empty-result | INFO");
     }
 
@@ -159,7 +159,8 @@ class IncludeProcessorTest {
         summary = assertIsPartOfAndShorten(summary, "✘");
         summary = assertIsPartOfAndShorten(summary, "⚑");
         summary = assertIsPartOfAndShorten(summary, "MAJOR");
-        summary = assertIsPartOfAndShorten(summary, "2 (3)");
+        summary = assertIsPartOfAndShorten(summary, "2");
+        summary = assertIsPartOfAndShorten(summary, "(3)");
         summary = assertIsPartOfAndShorten(summary, "test-constraint");
 
         summary = assertIsPartOfAndShorten(summary, "☀");

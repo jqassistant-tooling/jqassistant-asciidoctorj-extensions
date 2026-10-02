@@ -6,8 +6,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @Getter
 public abstract class AbstractExecutableRule extends AbstractRule implements ExecutableRule {
-    private String status;
-    private String severity;
+    private Status status;
+    private Severity severity;
 
     private Result result;
     private Reports reports;

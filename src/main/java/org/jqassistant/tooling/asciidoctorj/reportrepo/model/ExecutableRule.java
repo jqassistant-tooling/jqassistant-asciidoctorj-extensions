@@ -1,9 +1,9 @@
 package org.jqassistant.tooling.asciidoctorj.reportrepo.model;
 
 public interface ExecutableRule extends Rule {
-    String getStatus();
+    Status getStatus();
 
-    String getSeverity();
+    Severity getSeverity();
 
     Result getResult();
 

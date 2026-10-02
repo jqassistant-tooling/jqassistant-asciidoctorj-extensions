@@ -42,14 +42,14 @@
 <#assign isSuccess = (vr.getSuccess())!false>
 <#assign hiddenCount = vr.hiddenRowCount!0>
 <#assign rowCount = vr.rowCount!0>
-<#assign status = constraint.status!"">
+<#assign status = constraint.status.value!"">
 |<#if vr.success??><#if isSuccess>pass:[<span class="tooltip">☀<span class="tooltip-text">No violations found</span></span>]<#else>pass:[<span class="tooltip">🌧<span class="tooltip-text">Violations found</span></span>]</#if></#if> <#t>
 <#if status == "SUCCESS">pass:[<span class="tooltip"><span style="color:green;">✔</span><span class="tooltip-text">Success (Result evaluation according to warn-on-severity/fail-on-severity thresholds)</span></span>]<#t>
 <#elseif status == "FAILURE">pass:[<span class="tooltip"><span style="color:red;">✘</span><span class="tooltip-text">Failure (Result evaluation according to warn-on-severity/fail-on-severity thresholds)</span></span>]<#t>
 <#elseif status == "WARNING">pass:[<span class="tooltip"><span style="color:orange;">🞅</span><span class="tooltip-text">Warning (Result evaluation according to warn-on-severity/fail-on-severity thresholds)</span></span>]<#t>
 <#else>pass:[<span class="tooltip"><span style="color:gray;">${status}</span><span class="tooltip-text">Status: ${status}</span></span>]</#if><#t>
 <#if (hiddenCount > 0)> pass:[<span class="tooltip">⚑<span class="tooltip-text">Hidden Rows (Baseline or Suppression)</span></span>]</#if>
-|${constraint.severity!}
+|${constraint.severity.value!}
 |<#if (rowCount > 0)>${rowCount}</#if><#if (hiddenCount > 0)> pass:a[<span class="tooltip">(${hiddenCount})<span class="tooltip-text">Hidden Row Count</span></span>]</#if>
 |<<jqassistant_${constraint.id!}>>
 </#list>
@@ -58,14 +58,14 @@
 <#assign isSuccess = (vr.success)!false>
 <#assign hiddenCount = vr.hiddenRowCount!0>
 <#assign rowCount = vr.rowCount!0>
-<#assign status = concept.status!"">
+<#assign status = concept.status.value!"">
 |<#if vr.success??><#if isSuccess>pass:[<span class="tooltip">☀<span class="tooltip-text">No violations found</span></span>]<#else>pass:[<span class="tooltip">🌧<span class="tooltip-text">Violations found</span></span>]</#if></#if> <#t>
 <#if status == "SUCCESS">pass:[<span class="tooltip"><span style="color:green;">✔</span><span class="tooltip-text">Success</span></span>]<#t>
 <#elseif status == "FAILURE">pass:[<span class="tooltip"><span style="color:red;">✘</span><span class="tooltip-text">Failure</span></span>]<#t>
 <#elseif status == "WARNING">pass:[<span class="tooltip"><span style="color:orange;">🞅</span><span class="tooltip-text">Warning</span></span>]<#t>
 <#else>pass:[<span class="tooltip"><span style="color:gray;">${status}</span><span class="tooltip-text">Status: ${status}</span></span>]</#if><#t>
 <#if (hiddenCount > 0)> pass:[<span class="tooltip">⚑<span class="tooltip-text">Hidden Rows (Baseline or Suppression)</span></span>]</#if>
-|${concept.severity!}
+|${concept.severity.value!}
 |<#if (rowCount > 0)>${rowCount}</#if><#if (hiddenCount > 0)> pass:a[<span class="tooltip">(${hiddenCount})<span class="tooltip-text">Hidden Row Count</span></span>]</#if>
 |<<jqassistant_${concept.id!}>>
 </#list>
