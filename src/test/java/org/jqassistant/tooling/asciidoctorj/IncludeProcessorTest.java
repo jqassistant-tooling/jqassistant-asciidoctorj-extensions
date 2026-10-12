@@ -155,7 +155,7 @@ class IncludeProcessorTest {
         summary = assertIsPartOfAndShorten(summary, "Count");
         summary = assertIsPartOfAndShorten(summary, "Rule");
 
-        summary = assertIsPartOfAndShorten(summary, "\uD83C\uDF27");
+        summary = assertIsPartOfAndShorten(summary, "🌧");
         summary = assertIsPartOfAndShorten(summary, "✘");
         summary = assertIsPartOfAndShorten(summary, "⚑");
         summary = assertIsPartOfAndShorten(summary, "MAJOR");
@@ -172,9 +172,16 @@ class IncludeProcessorTest {
         summary = assertIsPartOfAndShorten(summary, "☀");
         summary = assertIsPartOfAndShorten(summary, "✔");
         summary = assertIsPartOfAndShorten(summary, "INFO");
-        summary = assertIsPartOfAndShorten(summary, "");
         summary = assertIsPartOfAndShorten(summary, "test-concept-empty-result");
-        assertIsPartOfAndShorten(summary, "table");
+        summary = assertIsPartOfAndShorten(summary, "table");
+
+        summary = assertIsPartOfAndShorten(summary, "Legend");
+        summary = assertIsPartOfAndShorten(summary, "🌧 Violations Found | ☀ No Violations Found");
+        summary = assertIsPartOfAndShorten(summary, "✘ Failure | \uD83D\uDF85 Warning | ✔ Success");
+        summary = assertIsPartOfAndShorten(summary, "(Result evaluation according to warn-on-severity/fail-on-severity thresholds)");
+        summary = assertIsPartOfAndShorten(summary, "⚑ Hidden Rows");
+
+        assertIsPartOfAndShorten(summary, "(Baseline or Suppression)");
     }
 
     private String assertIsPartOfAndShorten(String text, String sequence) {

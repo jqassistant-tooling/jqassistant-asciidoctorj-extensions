@@ -45,10 +45,9 @@ public class Result {
         }
     }
 
-
     @SuperBuilder
     @Getter
-    public static class SuppressedRow extends Row{
+    public static class SuppressedRow extends Row {
         private Optional<String> reason;
         private Optional<LocalDate> until;
     }

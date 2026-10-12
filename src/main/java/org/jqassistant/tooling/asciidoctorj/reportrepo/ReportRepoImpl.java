@@ -78,7 +78,9 @@ public class ReportRepoImpl implements ReportRepo {
                 .stream()
                 .filter(entry -> idFilter == null || matches(entry.getKey(), idFilter))
                 .map(Map.Entry::getValue)
-                .filter(rule -> allowedStatus.isEmpty() || (rule.getStatus() != null && allowedStatus.contains(rule.getStatus().getValue().toUpperCase())))
+                .filter(rule -> allowedStatus.isEmpty() || (rule.getStatus() != null && allowedStatus.contains(rule.getStatus()
+                        .getValue()
+                        .toUpperCase())))
                 .forEach(rulesSet::add);
 
         return rulesSet;

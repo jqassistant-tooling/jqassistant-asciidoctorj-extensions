@@ -12,8 +12,10 @@ public interface TemplateRepo {
      * If custom template location is set, it tries first to load the template from there.
      * If template does not exist there it loads the corresponding template from default location.
      *
-     * @param attributes may contain the templatesPath property (if not set on first call, the repo defaults to default template location)
-     * @param templateName file name of the wanted template
+     * @param attributes
+     *         may contain the templatesPath property (if not set on first call, the repo defaults to default template location)
+     * @param templateName
+     *         file name of the wanted template
      * @return the Template with corresponding name; either loaded from custom or default location
      */
     Template findTemplate(@NotNull ProcessAttributes attributes, @NotNull String templateName);
