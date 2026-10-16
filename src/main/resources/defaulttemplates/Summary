@@ -32,10 +32,10 @@
 </#list>
 |===
 
-[small]
---
-**Legend:** +
+.Legend
+[%collapsible]
+====
 🌧 Violations Found | ☀ No Violations Found +
 ✘ Failure | 🞅 Warning | ✔ Success _(Result evaluation according to warn-on-severity/fail-on-severity thresholds)_ +
 ⚑ Hidden Rows _(Baseline or Suppression)_
---
+====
