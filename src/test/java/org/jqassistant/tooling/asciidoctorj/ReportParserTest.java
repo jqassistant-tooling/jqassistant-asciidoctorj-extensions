@@ -48,9 +48,15 @@ class ReportParserTest {
         Concept testConcept = report.getConcepts()
                 .get("test-concept");
         assertThat(testConcept.getDescription()).isEqualTo("Test description");
-        assertThat(testConcept.getSeverity()).isEqualTo("info");
-        assertThat(testConcept.getStatus()).isEqualTo("success");
+        assertThat(testConcept.getSeverity().getValue()).isEqualTo("INFO");
+        assertThat(testConcept.getStatus().getValue()).isEqualTo("SUCCESS");
         assertThat(testConcept.getDuration()).isEqualTo(140);
+        assertThat(testConcept.getVerificationResult()
+                .getHiddenRowCount()).isEqualTo(0);
+        assertThat(testConcept.getVerificationResult()
+                .getRowCount()).isEqualTo(1);
+        assertThat(testConcept.getVerificationResult()
+                .isSuccess());
 
         Result result = testConcept.getResult();
         assertThat(result.getColumnKeys()).hasSize(1);
@@ -131,8 +137,8 @@ class ReportParserTest {
         Concept testConcept = report.getConcepts()
                 .get("test-concept-empty-result");
         assertThat(testConcept.getDescription()).isEqualTo("Test description");
-        assertThat(testConcept.getSeverity()).isEqualTo("info");
-        assertThat(testConcept.getStatus()).isEqualTo("success");
+        assertThat(testConcept.getSeverity().getValue()).isEqualTo("INFO");
+        assertThat(testConcept.getStatus().getValue()).isEqualTo("SUCCESS");
         assertThat(testConcept.getDuration()).isEqualTo(140);
 
         assertThat(testConcept.getResult()).isEqualTo(Result.EMPTY_RESULT);
@@ -140,13 +146,19 @@ class ReportParserTest {
     }
 
     @Test
-    void parseResultConstraint() {
+    void testConstraintStructure() {
         Constraint testConstraint = report.getConstraints()
                 .get("test-constraint");
         assertThat(testConstraint.getDescription()).isEqualTo("Test description 2");
-        assertThat(testConstraint.getSeverity()).isEqualTo("major");
-        assertThat(testConstraint.getStatus()).isEqualTo("failure");
+        assertThat(testConstraint.getSeverity().getValue()).isEqualTo("MAJOR");
+        assertThat(testConstraint.getStatus().getValue()).isEqualTo("FAILURE");
         assertThat(testConstraint.getDuration()).isEqualTo(221);
+        assertThat(testConstraint.getVerificationResult()
+                .getRowCount()).isEqualTo(2);
+        assertThat(testConstraint.getVerificationResult()
+                .getHiddenRowCount()).isEqualTo(3);
+        assertThat(testConstraint.getVerificationResult()
+                .isSuccess());
 
         assertThat(testConstraint.getReports()).isEqualTo(Reports.EMPTY_REPORTS);
 

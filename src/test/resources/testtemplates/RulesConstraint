@@ -3,16 +3,16 @@
 ****
 <#if rule.status == "SUCCESS">
 TIP: ${rule.description} +
-Status: [green]#${rule.status}#, Severity: ${rule.severity}
+Status: [green]#${rule.status.value}#, Severity: ${rule.severity.value}
 <#elseif rule.status == "WARNING">
 WARNING: ${rule.description} +
-Status: [yellow]#${rule.status}#, Severity: ${rule.severity}
+Status: [yellow]#${rule.status.value}#, Severity: ${rule.severity.value}
 <#elseif rule.status == "FAILURE">
 CAUTION: ${rule.description} +
-Status: [red]#${rule.status}#, Severity: ${rule.severity}
+Status: [red]#${rule.status.value}#, Severity: ${rule.severity.value}
 <#else>
 NOTE: ${rule.description} +
-Status: [grey]#${rule.status}#, Severity: ${rule.severity}
+Status: [grey]#${rule.status.value}#, Severity: ${rule.severity.value}
 </#if>
 
 <#if rule.hasReports>

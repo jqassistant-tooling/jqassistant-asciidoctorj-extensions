@@ -79,6 +79,7 @@ public class ReportRepoImpl implements ReportRepo {
                 .filter(entry -> idFilter == null || matches(entry.getKey(), idFilter))
                 .map(Map.Entry::getValue)
                 .filter(rule -> allowedStatus.isEmpty() || (rule.getStatus() != null && allowedStatus.contains(rule.getStatus()
+                        .getValue()
                         .toUpperCase())))
                 .forEach(rulesSet::add);
 
@@ -87,7 +88,7 @@ public class ReportRepoImpl implements ReportRepo {
 
     private Set<String> parseStatusFilter(String statusFilter) {
 
-        Set<String> allowedStatus = new HashSet<>();
+        Set<String> allowedStatus;
 
         if (statusFilter == null || statusFilter.isEmpty()) {
             allowedStatus = Set.of("WARNING", "FAILURE");

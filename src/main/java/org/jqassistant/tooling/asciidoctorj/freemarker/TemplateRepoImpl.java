@@ -29,7 +29,7 @@ public class TemplateRepoImpl implements TemplateRepo {
 
     @Override
     public Template findTemplate(@NotNull ProcessAttributes attributes, @NotNull String templateName) {
-        if(!cfg.isTemplateLoaderExplicitlySet()) {
+        if (!cfg.isTemplateLoaderExplicitlySet()) {
             String templatesPath = attributes.getTemplatesPath();
             if (templatesPath != null) {
                 TemplateLoader fileTemplateLoader;
@@ -38,11 +38,12 @@ public class TemplateRepoImpl implements TemplateRepo {
                 } catch (IOException e) {
                     throw new IllegalArgumentException("Cannot locate templates path '" + templatesPath + "'.", e);
                 }
-                MultiTemplateLoader mtl = new MultiTemplateLoader(new TemplateLoader[]{fileTemplateLoader, defaultLoader});
+                MultiTemplateLoader mtl = new MultiTemplateLoader(new TemplateLoader[] { fileTemplateLoader, defaultLoader });
                 cfg.setTemplateLoader(mtl);
-                LOGGER.info("Template loading location set to {}. If template is not defined in this location, the extension will default to the respective default template.", templatesPath);
-            }
-            else {
+                LOGGER.info(
+                        "Template loading location set to {}. If template is not defined in this location, the extension will default to the respective default template.",
+                        templatesPath);
+            } else {
                 cfg.setTemplateLoader(defaultLoader);
                 LOGGER.info("Template loading is set default templates. If you want to define your own templates, check the README.adoc for this extension");
             }
@@ -52,7 +53,8 @@ public class TemplateRepoImpl implements TemplateRepo {
         try {
             template = cfg.getTemplate(templateName);
         } catch (Exception e) {
-            throw new IllegalStateException("No valid Template with name \"" + templateName + "\" found neither in custom template location nor in default template location");
+            throw new IllegalStateException(
+                    "No valid Template with name \"" + templateName + "\" found neither in custom template location nor in default template location");
         }
         LOGGER.debug("Template {} loaded", templateName);
         return template;

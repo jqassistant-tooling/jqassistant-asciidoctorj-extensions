@@ -51,7 +51,8 @@ class IncludeProcessorTest {
 
         result = assertIsPartOfAndShorten(result, "test-constraint");
         result = assertIsPartOfAndShorten(result, "Test description 2");
-        result = assertIsPartOfAndShorten(result, "Status: <span class=\"red\">FAILURE</span>, Severity: MAJOR");
+        result = assertIsPartOfAndShorten(result, "Status:");
+        result = assertIsPartOfAndShorten(result, "FAILURE</span>, Severity: MAJOR");
         result = assertIsPartOfAndShorten(result, "Column 1");
         result = assertIsPartOfAndShorten(result, "Column 2");
         result = assertIsPartOfAndShorten(result, "test-column 11");
@@ -140,7 +141,6 @@ class IncludeProcessorTest {
         rules = assertIsPartOfAndShorten(rules, "test-concept-empty-result");
         rules = assertIsPartOfAndShorten(rules, "SUCCESS");
         rules = assertIsPartOfAndShorten(rules, "Test description");
-        rules = assertIsPartOfAndShorten(rules, "Severity: INFO");
         assertIsPartOfAndShorten(rules, "test-concept-empty-result | INFO");
     }
 
@@ -150,22 +150,38 @@ class IncludeProcessorTest {
                 "include::jQAssistant:Summary[concepts = \"*\", constraints = \"*\", status = \"SUCCESS, SKIPPED, FAILURE, WARNING\"]", defaultOpt);
         //table with visible findings
         summary = assertIsPartOfAndShorten(summary, "table");
-        summary = assertIsPartOfAndShorten(summary, "Rule");
         summary = assertIsPartOfAndShorten(summary, "Status");
         summary = assertIsPartOfAndShorten(summary, "Severity");
+        summary = assertIsPartOfAndShorten(summary, "Count");
+        summary = assertIsPartOfAndShorten(summary, "Rule");
 
-        summary = assertIsPartOfAndShorten(summary, "test-constraint");
-        summary = assertIsPartOfAndShorten(summary, "FAILURE");
+        summary = assertIsPartOfAndShorten(summary, "🌧");
+        summary = assertIsPartOfAndShorten(summary, "✘");
+        summary = assertIsPartOfAndShorten(summary, "⚑");
         summary = assertIsPartOfAndShorten(summary, "MAJOR");
+        summary = assertIsPartOfAndShorten(summary, "2");
+        summary = assertIsPartOfAndShorten(summary, "(3)");
+        summary = assertIsPartOfAndShorten(summary, "test-constraint");
 
+        summary = assertIsPartOfAndShorten(summary, "☀");
+        summary = assertIsPartOfAndShorten(summary, "✔");
+        summary = assertIsPartOfAndShorten(summary, "INFO");
+        summary = assertIsPartOfAndShorten(summary, "1");
         summary = assertIsPartOfAndShorten(summary, "test-concept");
-        summary = assertIsPartOfAndShorten(summary, "SUCCESS");
-        summary = assertIsPartOfAndShorten(summary, "INFO");
 
-        summary = assertIsPartOfAndShorten(summary, "test-concept-empty-result");
-        summary = assertIsPartOfAndShorten(summary, "SUCCESS");
+        summary = assertIsPartOfAndShorten(summary, "☀");
+        summary = assertIsPartOfAndShorten(summary, "✔");
         summary = assertIsPartOfAndShorten(summary, "INFO");
-        assertIsPartOfAndShorten(summary, "table");
+        summary = assertIsPartOfAndShorten(summary, "test-concept-empty-result");
+        summary = assertIsPartOfAndShorten(summary, "table");
+
+        summary = assertIsPartOfAndShorten(summary, "Legend");
+        summary = assertIsPartOfAndShorten(summary, "🌧 Violations Found | ☀ No Violations Found");
+        summary = assertIsPartOfAndShorten(summary, "✘ Failure | \uD83D\uDF85 Warning | ✔ Success");
+        summary = assertIsPartOfAndShorten(summary, "(Result evaluation according to warn-on-severity/fail-on-severity thresholds)");
+        summary = assertIsPartOfAndShorten(summary, "⚑ Hidden Rows");
+
+        assertIsPartOfAndShorten(summary, "(Baseline or Suppression)");
     }
 
     private String assertIsPartOfAndShorten(String text, String sequence) {

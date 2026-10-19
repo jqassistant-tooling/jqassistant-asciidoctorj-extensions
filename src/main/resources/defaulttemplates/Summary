@@ -1,14 +1,41 @@
 [%autowidth.stretch, options="header"]
 |===
-|Rule |Status|Severity
+|Status |Severity |Count |Rule
 <#list constraints as constraint>
-|<<jqassistant_${constraint.id}>>
-|[<#if constraint.status == "SUCCESS">green<#elseif constraint.status == "FAILURE">red<#elseif constraint.status == "WARNING">yellow<#else>grey</#if>]#${constraint.status}#
-|${constraint.severity}
+<#assign vr = constraint.getVerificationResult()>
+<#assign isSuccess = (vr.getSuccess())!false>
+<#assign hiddenCount = vr.hiddenRowCount!0>
+<#assign rowCount = vr.rowCount!0>
+<#assign status = constraint.status.value!"">
+
+
+
+|<#if vr.success??><#if isSuccess>☀<#else>🌧</#if></#if> <#t>
+<#if status == "SUCCESS">✔<#elseif status == "FAILURE">✘<#elseif status == "WARNING">🞅<#else>${status}</#if><#t>
+<#if (hiddenCount > 0)>⚑</#if>
+|${constraint.severity.value!}
+|<#if (rowCount > 0)>${rowCount}</#if><#if (hiddenCount > 0)>(${hiddenCount})</#if>
+|<<jqassistant_${constraint.id!}>>
 </#list>
 <#list concepts as concept>
-|<<jqassistant_${concept.id}>>
-|[<#if concept.status == "SUCCESS">green<#elseif concept.status == "FAILURE">red<#elseif concept.status == "WARNING">yellow<#else>grey</#if>]#${concept.status}#
-|${concept.severity}
+<#assign vr = concept.verificationResult>
+<#assign isSuccess = (vr.success)!false>
+<#assign hiddenCount = vr.hiddenRowCount!0>
+<#assign rowCount = vr.rowCount!0>
+<#assign status = concept.status.value!"">
+|<#if vr.success??><#if isSuccess>☀<#else>🌧</#if></#if><#t>
+<#if status == "SUCCESS">✔<#elseif status == "FAILURE">✘<#elseif status == "WARNING">🞅<#else>${status}</#if><#t>
+<#if (hiddenCount > 0)>⚑</#if>
+|${concept.severity.value!}
+|<#if (rowCount > 0)>${rowCount}</#if><#if (hiddenCount > 0)>(${hiddenCount})</#if>
+|<<jqassistant_${concept.id!}>>
 </#list>
 |===
+
+.Legend
+[%collapsible]
+====
+🌧 Violations Found | ☀ No Violations Found +
+✘ Failure | 🞅 Warning | ✔ Success _(Result evaluation according to warn-on-severity/fail-on-severity thresholds)_ +
+⚑ Hidden Rows _(Baseline or Suppression)_
+====

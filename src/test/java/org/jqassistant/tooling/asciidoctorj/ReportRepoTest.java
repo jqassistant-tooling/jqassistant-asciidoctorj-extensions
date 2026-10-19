@@ -6,6 +6,7 @@ import org.jqassistant.tooling.asciidoctorj.processors.attributes.ProcessAttribu
 import org.jqassistant.tooling.asciidoctorj.reportrepo.ReportRepoImpl;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Concept;
 import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Constraint;
+import org.jqassistant.tooling.asciidoctorj.reportrepo.model.Status;
 import org.jqassistant.tooling.asciidoctorj.xmlparsing.ParsedReport;
 import org.jqassistant.tooling.asciidoctorj.xmlparsing.ReportParser;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,30 +23,30 @@ class ReportRepoTest {
 
     private static Concept tce1, tce2, tce3;
     private static Constraint tca1, tca2;
-    private static final String someExistingFile = "src/test/resources/jqassistant-report.xml";
+    private static final String someExistingFile = "src/test/resources/testing-xml/test-report.xml";
     private static final String nonExistingFile = "non-existent-report.xml";
 
     @BeforeAll
     static void init() {
         tce1 = Concept.builder()
                 .id("TestConceptId1")
-                .status("failure")
+                .status(Status.builder().value("FAILURE").level(0).build())
                 .build();
         tce2 = Concept.builder()
                 .id("TestConceptId2")
-                .status("WARNING")
+                .status(Status.builder().value("WARNING").level(1).build())
                 .build();
         tce3 = Concept.builder()
                 .id("TestConceptId3")
-                .status("success")
+                .status(Status.builder().value("success").level(2).build())
                 .build();
         tca1 = Constraint.builder()
                 .id("TestConstraintId1")
-                .status("Failure")
+                .status(Status.builder().value("FAILURE").level(0).build())
                 .build();
         tca2 = Constraint.builder()
                 .id("TestConstraintId2")
-                .status("SUCCESS")
+                .status(Status.builder().value("success").level(2).build())
                 .build();
     }
 
