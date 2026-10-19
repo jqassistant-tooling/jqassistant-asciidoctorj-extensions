@@ -66,27 +66,27 @@ public class RuleRoot implements Comparable<RuleRoot> {
 
     @Override
     public int compareTo(@NotNull RuleRoot other) {
-        // Sorting by Status Level decreasing
-        int statusComparison = 0;
+        // Sorting by Status Level increasing
+        int statusComparison;
         statusComparison = Integer.compare(this.status.getLevel(), other.status.getLevel());
         if (statusComparison != 0) {
             return statusComparison;
         }
 
-        // Sorting by Severity Level decreasing
+        // Sorting by Severity Level increasing
         int severityComparison = Integer.compare(this.severity.getLevel(), other.severity.getLevel());
         if (severityComparison != 0) {
             return severityComparison;
         }
 
-        // Sorting by Violation true
+        // Sorting by Violation - priority true
         boolean thisFailed = this.verificationResult != null && !this.verificationResult.isSuccess();
         boolean otherFailed = other.verificationResult != null && !other.verificationResult.isSuccess();
         if (thisFailed != otherFailed) {
             return thisFailed ? -1 : 1;
         }
 
-        // Alphabetical sorting by ID
+        // Alphabetical sorting regarding ID
         return this.id.compareTo(other.id);
     }
 
