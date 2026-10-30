@@ -35,7 +35,8 @@
 .Legend
 [%collapsible]
 ====
-🌧 Violations Found | ☀ No Violations Found +
+_Constraints:_ 🌧 Violations Found | ☀ No Violations Found  +
+_Concepts:_ 🌧 No Matches Found | ☀ Matches Found +
 ✘ Failure | 🞅 Warning | ✔ Success _(Result evaluation according to warn-on-severity/fail-on-severity thresholds)_ +
 ⚑ Hidden Rows _(Baseline or Suppression)_
 ====
