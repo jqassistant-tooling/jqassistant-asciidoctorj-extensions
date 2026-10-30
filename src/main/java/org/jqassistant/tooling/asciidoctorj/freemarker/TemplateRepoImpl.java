@@ -23,7 +23,7 @@ public class TemplateRepoImpl implements TemplateRepo {
     TemplateLoader defaultLoader;
 
     public TemplateRepoImpl() {
-        defaultLoader = new ClassTemplateLoader(getClass().getClassLoader(), "defaulttemplates");
+        defaultLoader = new ClassTemplateLoader(getClass().getClassLoader(), "templates");
         cfg = setupFreemarker();
     }
 
