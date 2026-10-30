@@ -3,12 +3,12 @@
   <context>
     <build>
       <name>jQAssistant AsciidoctorJ Extensions</name>
-      <timestamp>2026-09-24T10:17:10.763Z</timestamp>
+      <timestamp>2026-10-30T15:04:44.932Z</timestamp>
       <properties></properties>
     </build>
   </context>
-  <group id="jqassistant-tooling:Default" date="2026-09-24T10:18:59">
-    <group id="jqassistant-tooling-package:Default" date="2026-09-24T10:18:59">
+  <group id="jqassistant-tooling:Default" date="2026-10-30T15:06:26">
+    <group id="jqassistant-tooling-package:Default" date="2026-10-30T15:06:26">
       <concept id="jqassistant-tooling-maven:ParentProject" abstract="false">
         <description>Labels all Maven projects which declare "org.jqassistant.tooling.common:parent" as parent module with "Parent".</description>
         <result>
@@ -33,7 +33,7 @@
         </verificationResult>
         <status level="2">success</status>
         <severity level="4">info</severity>
-        <duration>134</duration>
+        <duration>136</duration>
       </concept>
       <constraint id="jqassistant-tooling-package:PackagesMustHaveGroupIdPrefix">
         <description>All package names used in a Maven project must start with the groupId.</description>
@@ -44,14 +44,14 @@
         </verificationResult>
         <status level="2">success</status>
         <severity level="2">major</severity>
-        <duration>193</duration>
+        <duration>151</duration>
         <required-concept id="jqassistant-tooling-maven:ParentProject">
           <status level="2">success</status>
         </required-concept>
       </constraint>
-      <duration>511</duration>
+      <duration>427</duration>
     </group>
-    <group id="jqassistant-tooling-maven:Default" date="2026-09-24T10:18:59">
+    <group id="jqassistant-tooling-maven:Default" date="2026-10-30T15:06:26">
       <constraint id="jqassistant-tooling-maven:GroupId">
         <description>The groupId for jQAssistant tooling Maven projects must follow the pattern 'org.jqassistant.tooling.&lt;project&gt;'.</description>
         <verificationResult>
@@ -61,7 +61,7 @@
         </verificationResult>
         <status level="2">success</status>
         <severity level="2">major</severity>
-        <duration>58</duration>
+        <duration>49</duration>
       </constraint>
       <constraint id="jqassistant-tooling-maven:MavenModulesMustUseParentGroupId">
         <description>All Maven projects must define the same groupId as the parent of the tooling project.</description>
@@ -72,7 +72,7 @@
         </verificationResult>
         <status level="2">success</status>
         <severity level="2">major</severity>
-        <duration>75</duration>
+        <duration>52</duration>
         <required-concept id="jqassistant-tooling-maven:ParentProject">
           <status level="2">success</status>
         </required-concept>
@@ -86,7 +86,7 @@
         </verificationResult>
         <status level="2">success</status>
         <severity level="2">major</severity>
-        <duration>92</duration>
+        <duration>63</duration>
         <required-concept id="jqassistant-tooling-maven:ParentProject">
           <status level="2">success</status>
         </required-concept>
@@ -100,7 +100,7 @@
         </verificationResult>
         <status level="2">success</status>
         <severity level="2">major</severity>
-        <duration>97</duration>
+        <duration>80</duration>
         <required-concept id="jqassistant-tooling-maven:ParentProject">
           <status level="2">success</status>
         </required-concept>
@@ -114,13 +114,13 @@
         </verificationResult>
         <status level="2">success</status>
         <severity level="2">major</severity>
-        <duration>173</duration>
+        <duration>130</duration>
         <required-concept id="jqassistant-tooling-maven:ParentProject">
           <status level="2">success</status>
         </required-concept>
       </constraint>
-      <duration>550</duration>
+      <duration>411</duration>
     </group>
-    <duration>554</duration>
+    <duration>414</duration>
   </group>
 </jqassistant-report>
