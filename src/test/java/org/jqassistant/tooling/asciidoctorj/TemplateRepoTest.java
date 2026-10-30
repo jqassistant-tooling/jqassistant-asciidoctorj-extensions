@@ -72,7 +72,7 @@ class TemplateRepoTest {
         cfg.setWrapUncheckedExceptions(true);
         cfg.setFallbackOnNullLoopVariable(false);
         cfg.setSQLDateAndTimeTimeZone(TimeZone.getDefault());
-        cfg.setDirectoryForTemplateLoading(new File("src/main/resources/defaulttemplates"));
+        cfg.setDirectoryForTemplateLoading(new File("src/main/resources/templates"));
         return cfg;
     }
 }

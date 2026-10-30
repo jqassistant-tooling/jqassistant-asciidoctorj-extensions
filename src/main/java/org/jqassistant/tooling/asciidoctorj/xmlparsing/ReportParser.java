@@ -55,6 +55,14 @@ public class ReportParser {
         return parsedReport;
     }
 
+    private VerificationResult parseVerificationResult(@NotNull VerificationResultType node) {
+        return VerificationResult.builder()
+                .success(node.isSuccess())
+                .rowCount(node.getRowCount())
+                .hiddenRowCount(node.getHiddenRowCount())
+                .build();
+    }
+
     /**
      * Adds the Rule that is generated from a node to a ParsedReport and returns it.
      *
@@ -134,11 +142,23 @@ public class ReportParser {
      */
     private Concept parseConcept(@NotNull ConceptType conceptNode) {
         return Concept.builder()
-                .status(conceptNode.getStatus()
-                        .getValue()
-                        .value())
-                .severity(conceptNode.getSeverity()
-                        .getValue())
+                .verificationResult(parseVerificationResult(conceptNode.getVerificationResult()))
+                .status(Status.builder()
+                        .value(conceptNode.getStatus()
+                                .getValue()
+                                .value()
+                                .toUpperCase())
+                        .level(conceptNode.getStatus()
+                                .getLevel()
+                                .intValue())
+                        .build())
+                .severity(Severity.builder()
+                        .value(conceptNode.getSeverity()
+                                .getValue()
+                                .toUpperCase())
+                        .level(conceptNode.getSeverity()
+                                .getLevel())
+                        .build())
                 .id(conceptNode.getId())
                 .description(conceptNode.getDescription())
                 .duration(conceptNode.getDuration())
@@ -156,16 +176,28 @@ public class ReportParser {
      */
     private Constraint parseConstraint(@NotNull ConstraintType constraintNode) {
         return Constraint.builder()
-                .status(constraintNode.getStatus()
-                        .getValue()
-                        .value())
-                .severity(constraintNode.getSeverity()
-                        .getValue())
+                .status(Status.builder()
+                        .value(constraintNode.getStatus()
+                                .getValue()
+                                .value()
+                                .toUpperCase())
+                        .level(constraintNode.getStatus()
+                                .getLevel()
+                                .intValue())
+                        .build())
+                .severity(Severity.builder()
+                        .value(constraintNode.getSeverity()
+                                .getValue()
+                                .toUpperCase())
+                        .level(constraintNode.getSeverity()
+                                .getLevel())
+                        .build())
                 .id(constraintNode.getId())
                 .description(constraintNode.getDescription())
                 .duration(constraintNode.getDuration())
                 .result(parseResult(constraintNode.getResult()))
                 .reports(parseReports(constraintNode.getReports()))
+                .verificationResult(parseVerificationResult(constraintNode.getVerificationResult()))
                 .build();
     }
 
@@ -186,7 +218,7 @@ public class ReportParser {
 
         for (RowType row : resultNode.getRows()
                 .getRow()) {
-            Result.Row.RowBuilder rowBuilder = Result.Row.builder();
+            Result.Row.RowBuilder<?, ?> rowBuilder = Result.Row.builder();
 
             for (ColumnType column : row.getColumn()) {
                 rowBuilder.columns(column.getName(), Result.Row.Column.builder()

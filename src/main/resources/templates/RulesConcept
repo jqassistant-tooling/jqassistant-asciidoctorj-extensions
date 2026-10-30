@@ -9,14 +9,13 @@
   "FAILURE": {"label": "IMPORTANT", "color": "red"}
 }>
 
-<#assign current = statusConfig[rule.status]!{"label": "NOTE", "color": "grey"}>
+<#assign current = statusConfig[rule.status.value]!{"label": "NOTE", "color": "grey"}>
 
 [${current.label}]
 ====
 ....
 ${rule.description}
 ....
-Severity: ${rule.severity}
 ====
 
 <#if rule.hasReports>
@@ -91,6 +90,6 @@ image::${labeledImage.link}[${labeledImage.label}]
 
 </#if>
 [.small]
-[grey]#${rule.id} | ${rule.severity}#
+[grey]#${rule.id} | ${rule.severity.value}#
 ****
 </#list>
